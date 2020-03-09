@@ -71,7 +71,7 @@ def geo_model():
 # driver function
 def runScript():
 
-    print("[WORKING] Attempting to run classification calculator - classification.py")
+    print("[WORKING] Attempting to run SVM classification calculator - classification_svm.py")
     # Create dictionary for storing return information
     # Create a counter for files
     finalResult = {}
