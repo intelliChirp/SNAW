@@ -184,22 +184,16 @@ function get_indices(){
 function downloadTxtFile(fileNumber){
 
     const element = document.createElement("a");
-    const elementA = document.createElement("b");
-    const elementB = document.createElement("c");
-    const elementG = document.createElement("d");
-    var listElements = [elementA, elementB, elementG];
 
-    var antInfoDictKeys = finalInfoDictionary[fileNumber][fileData][0]['data'];
-    var bioInfoDictKeys = finalInfoDictionary[fileNumber][fileData][1]['data'];
+    var infoDictKeys = finalInfoDictionary[fileNumber][fileData][0]['data'];
 
-    var geoInfoDictKeys = finalInfoDictionary[fileNumber][fileData][2]['data'];
 
     const csvWriter = createArrayCsvStringifier({
         header : ['CATEGORY', 'TIME'],
         path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
     });
     const data = [['Anthro:', ' ', ' ', 'Bio:', ' ', ' ', 'Geo:', ' ', ' '], ['CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME']]
-    for(var  keys = 0; keys < antInfoDictKeys.length; keys++) {
+    for(var  keys = 0; keys < infoDictKeys.length; keys++) {
         var csvArray = [];
         for (var dictCount = 0; dictCount < 3; dictCount++) {
             csvArray.push(finalInfoDictionary[fileNumber][fileData][dictCount]["data"][keys]["category"]);
