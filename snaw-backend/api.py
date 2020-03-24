@@ -10,6 +10,7 @@ from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
 import traceback
 
+
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
 
@@ -33,7 +34,8 @@ hit refresh upon uploading a file.
 '''
 @app.route('/')
 def home():
-
+    if not os.path.isdir('instance/upload'):
+        os.makedirs('instance/upload')
     for file in os.listdir('instance/upload/'):
             os.remove('instance/upload/'+file)
     return render_template("index.html")
