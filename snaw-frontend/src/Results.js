@@ -196,11 +196,14 @@ function downloadTxtFile(fileNumber){
     for(var  keys = 0; keys < infoDictKeys.length; keys++) {
         var csvArray = [];
         for (var dictCount = 0; dictCount < 3; dictCount++) {
+            //Adds information line by line in a CSV.
             csvArray.push(finalInfoDictionary[fileNumber][fileData][dictCount]["data"][keys]["category"]);
             csvArray.push(finalInfoDictionary[fileNumber][fileData][dictCount]["data"][keys]["time"]);
             csvArray.push(' ');
-            data.push(csvArray);
+
         }
+        data.push(csvArray);
+
     }
 
 
