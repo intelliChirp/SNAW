@@ -5,8 +5,12 @@ import os
 import sys
 import subprocess
 from get_spectrogram import runScript as get_spectrogram
-from classification import runScript as get_classification
+from classification import runScript as get_svm_classification
+from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
+import traceback
+
+
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
 
@@ -30,7 +34,8 @@ hit refresh upon uploading a file.
 '''
 @app.route('/')
 def home():
-
+    if not os.path.isdir('instance/upload'):
+        os.makedirs('instance/upload')
     for file in os.listdir('instance/upload/'):
             os.remove('instance/upload/'+file)
     return render_template("index.html")
@@ -104,8 +109,13 @@ be deleted.
 def classify():
     print("[WORKING] Flask is making call to classification.py - api.py")
     try:
-        result = get_classification()
-
+        print("trying to get classification")
+        try:
+            result = get_cnn_classification()
+        except Exception as e:
+            track = traceback.format_exc()
+            print(track)
+        print(result)
         print("[WORKING] Removing uploaded files - api.py")
         for file in os.listdir('instance/upload/'):
             os.remove('instance/upload/'+file)

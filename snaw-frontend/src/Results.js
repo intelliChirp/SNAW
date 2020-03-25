@@ -15,10 +15,8 @@ import ApplicationBar from "./components/ApplicationBar";
 import Grid from '@material-ui/core/Grid';
 import $ from 'jquery';
 import Button from "@material-ui/core/Button";
-import ReactAudioPlayer from 'react-audio-player';
-import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-
+import {createArrayCsvStringifier, createArrayCsvWriter} from "csv-writer";
 //Surely a better way to do this other than global variable.
 /* This is currently done to ensure that the panels are accessible after
  * the analysis completes. Without it, all the panels disappear after
@@ -187,12 +185,46 @@ function downloadTxtFile(fileNumber){
 
     const element = document.createElement("a");
 
+    var infoDictKeys = finalInfoDictionary[fileNumber][fileData][0]['data'];
+
+
+    const csvWriter = createArrayCsvStringifier({
+        header : ['CATEGORY', 'TIME'],
+        path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
+    });
+    const data = [['Anthro:', ' ', ' ', 'Bio:', ' ', ' ', 'Geo:', ' ', ' '], ['CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME']]
+    for(var  keys = 0; keys < infoDictKeys.length; keys++) {
+        var csvArray = [];
+        for (var dictCount = 0; dictCount < 3; dictCount++) {
+            //Adds information line by line in a CSV.
+            csvArray.push(finalInfoDictionary[fileNumber][fileData][dictCount]["data"][keys]["category"]);
+            csvArray.push(finalInfoDictionary[fileNumber][fileData][dictCount]["data"][keys]["time"]);
+            csvArray.push(' ');
+
+        }
+        data.push(csvArray);
+
+    }
+
+
+
+
+    //csvWriter.writeRecords(data).then(r => console.log("Done"));
    //Fnd proper finalInfoDictionary traversing at top of file
-    const file = new Blob([JSON.stringify(finalInfoDictionary[fileNumber][fileData])], {type: 'text/plain'});
-    element.href = URL.createObjectURL(file);
-    element.download = "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.txt";
+
+    const file = new Blob([csvWriter.stringifyRecords(data)], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file)
+
+    element.download = "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv";
+
+
+
     document.body.appendChild(element); // Required for this to work in FireFox
+
     element.click();
+
+
+
 }
 
 /*
