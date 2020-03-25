@@ -16,9 +16,19 @@ import json
 def classify_file( audio_file ) :
     # load the models
     print("loading the data")
-    all_models = [ load_model('.\\model\\anthro\\ant_cnn_model.h5'),
-                   load_model('.\\model\\bio\\bio_cnn_model.h5'),
-                   load_model('.\\model\\geo\\geo_cnn_model.h5') ]
+    try:
+        print("Trying 1")
+        all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
+                       load_model('model\\bio\\bio_cnn_model.h5'),
+                       load_model('model\\geo\\geo_cnn_model.h5') ]
+        print("1 worked")
+
+    except(OSError):
+        print("Trying 2")
+        all_models = [ load_model("snaw-backend/model/anthro/ant_cnn_model.h5"),
+                       load_model("snaw-backend/model/bio/bio_cnn_model.h5"),
+                       load_model("snaw-backend/model/geo/geo_cnn_model.h5") ]
+        print("2 worked")
 
     print("loaded data")
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
