@@ -6,6 +6,7 @@ import SimpleITK as sitk
 from scipy.stats import itemfreq
 import os
 
+DEBUG_FLAG = False;
 
 class AcousticIndices(object):
 
@@ -674,7 +675,8 @@ def getAcousticIndices():
     # Create file counter
     fileCount = 0
 
-    print("[WORKING] Attempting to run acoustic indices calculator - acousticIndices.py")
+    if( DEBUG_FLAG ):
+        print("[WORKING] Attempting to run acoustic indices calculator - acousticIndices.py")
     # loop through the files in the directory
     for file in os.listdir("instance/upload/"):
 
@@ -703,9 +705,11 @@ def getAcousticIndices():
             # append dictionary items.
             singleResultArray.append({"index": acoustic_headers[i], "value" : acoustic_indices[i]})
         # append result dictionary to the final results array
-        print("[WORKING] Calculated " + acoustic_headers[i] + " - acousticIndices.py")
+        if( DEBUG_FLAG ):
+            print("[WORKING] Calculated " + acoustic_headers[i] + " - acousticIndices.py")
         fileDictionary[fileCount] = singleResultArray
         fileCount += 1
 
-    print("[SUCCESS] Calculated acoustic indices - acousticIndices.py")
+    if( DEBUG_FLAG ):
+        print("[SUCCESS] Calculated acoustic indices - acousticIndices.py")
     return fileDictionary

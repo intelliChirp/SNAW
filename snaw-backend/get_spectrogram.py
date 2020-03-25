@@ -6,6 +6,8 @@ import sys
 import os
 import base64
 
+DEBUG_FLAG = False;
+
 """ short time fourier transform of audio signal """
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
     win = window(frameSize)
@@ -89,7 +91,8 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     return ims
 
 def runScript():
-    print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
+    if( DEBUG_FLAG ):
+        print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
 
     # If spectrogram folder has not been created.
     if (os.path.isdir('Spectrogram/') == False):
@@ -108,7 +111,8 @@ def runScript():
             path= "spectrogram/SpectroedImage"+ str(fileCount)
 
             # Run spectrogram plotting
-            print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
+            if( DEBUG_FLAG ):
+                print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
             ims = plotstft(audiofile, plotpath=path)
 
             # Convert spectrograms into a base64 string to be sent to front end
@@ -132,7 +136,10 @@ def runScript():
             os.remove("spectrogram/"+file)
 
     except:
+        if( DEBUG_FLAG ):
             print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
+            
+    if( DEBUG_FLAG ):
+        print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
 
-    print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
     return listOfImages
