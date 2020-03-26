@@ -5,6 +5,8 @@ import contextlib
 import os
 from flask import jsonify
 
+DEBUG_FLAG = False;
+
 # function that runs the classification functions on the selected audio file
 # builds the dictionary of category with associated timestamps
 def classify_file( audiofile, model, model_type, model_color ):
@@ -70,8 +72,8 @@ def geo_model():
 
 # driver function
 def runScript():
-
-    print("[WORKING] Attempting to run SVM classification calculator - classification_svm.py")
+    if( DEBUG_FLAG ):
+        print("[WORKING] Attempting to run SVM classification calculator - classification_svm.py")
     # Create dictionary for storing return information
     # Create a counter for files
     finalResult = {}
@@ -84,11 +86,14 @@ def runScript():
 
             # Create list to store information
             result = []
-            print("[WORKING] Attempting to run anthrophony classification - classification.py")
+            if( DEBUG_FLAG ):
+                print("[WORKING] Attempting to run anthrophony classification - classification.py")
             result.append( classify_file( audiofile, anthro_model(), 'Anthrophony', '#0088FE' ) )
-            print("[WORKING] Attempting to run geophony classification - classification.py")
+            if( DEBUG_FLAG ):
+                print("[WORKING] Attempting to run geophony classification - classification.py")
             result.append( classify_file(audiofile, bio_model(), 'Biophony', '#00C49F' ) )
-            print("[WORKING] Attempting to run biophony classification - classification.py")
+            if( DEBUG_FLAG ):    
+                print("[WORKING] Attempting to run biophony classification - classification.py")
             result.append( classify_file(audiofile, geo_model(), 'Geophony', '#FFBB28' ) )
 
             # Add result list to finalResult dictionary with filecounter as the key
@@ -97,7 +102,9 @@ def runScript():
 
 
     except:
-        print('[FAILURE  -- Classification 1] File upload unsuccessful, or not file uploaded.')
+        if( DEBUG_FLAG ):
+            print('[FAILURE  -- Classification 1] File upload unsuccessful, or not file uploaded.')
 
-    print("[SUCCESS] Classification was successful - classification.py")
+    if( DEBUG_FLAG ):
+        print("[SUCCESS] Classification was successful - classification.py")
     return finalResult

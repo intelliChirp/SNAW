@@ -13,24 +13,21 @@ import traceback
 import os
 import json
 
+DEBUG_FLAG = False;
+PREDICTION_VERBOSE = False;
+
 def classify_file( audio_file ) :
     # load the models
-    print("loading the data")
-    try:
-        print("Trying 1")
-        all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
-                       load_model('model\\bio\\bio_cnn_model.h5'),
-                       load_model('model\\geo\\geo_cnn_model.h5') ]
-        print("1 worked")
+    if( DEBUG_FLAG ):
+        print("Loading CNN Models..")
 
-    except(OSError):
-        print("Trying 2")
-        all_models = [ load_model("snaw-backend/model/anthro/ant_cnn_model.h5"),
-                       load_model("snaw-backend/model/bio/bio_cnn_model.h5"),
-                       load_model("snaw-backend/model/geo/geo_cnn_model.h5") ]
-        print("2 worked")
+    all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
+                    load_model('model\\bio\\bio_cnn_model.h5'),
+                    load_model('model\\geo\\geo_cnn_model.h5') ]
+    
+    if( DEBUG_FLAG ):
+        print("Loaded CNN Models..")
 
-    print("loaded data")
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
                    ["GOC", "GRA", "GST","GWG", "GWC"] ]
@@ -55,7 +52,6 @@ def classify_file( audio_file ) :
     # Mel-frequency cepstral coefficients
     file_path = audio_file
     big_wave, sr = librosa.load(file_path, mono=True, sr=None)
-    #print(wave.shape, sr)
 
     for sec_index in range( int(big_wave.shape[0] / sr) ) :
         start_sec = sec_index
@@ -91,33 +87,37 @@ def classify_file( audio_file ) :
 
         for labels, predicted, classification in zip( all_labels, all_predicted, classify_dict ) :
             # Output the prediction values for each class
-            print ('PREDICTED VALUES')
+            if( PREDICTION_VERBOSE ):
+                print ('PREDICTED VALUES')
             labels_indices = range(len(labels))
             max_value = 0
             max_value_index = 0
             for index in labels_indices:
-                print("\n", labels[index], ": ", '%.08f' % predicted[0,index])
+                if( PREDICTION_VERBOSE ):
+                    print("\n", labels[index], ": ", '%.08f' % predicted[0,index])
                 if predicted[0,index] > max_value:
                     max_value_index = index
                     max_value = predicted[0,index]
 
             # Output the prediction
             if max_value < 0.5:
-                print("GUESS: Nothing")
+                if( PREDICTION_VERBOSE ):
+                    print("GUESS: Nothing")
                 classification['data'].append( { "category" : "NO", "time" : start_sec } )
             else:
-                print('\n\nGUESS: ', labels[max_value_index])
+                if( PREDICTION_VERBOSE ):
+                    print('\n\nGUESS: ', labels[max_value_index])
                 classification['data'].append( { "category" : labels[max_value_index], "time" : start_sec } )
+    if( PREDICTION_VERBOSE ):
+        print(classify_dict)
 
-    print(classify_dict)
     return classify_dict
-
-#classify_file( "instance/upload/hand_saw_27.wav" )
 
 # driver function
 def runScript():
 
-    print("[WORKING] Attempting to run CNN classification calculator - classification_svm.py")
+    if( DEBUG_FLAG ):
+        print("[WORKING] Attempting to run CNN classification calculator - classification_svm.py")
     # Create dictionary for storing return information
     # Create a counter for files
     finalResult = {}
@@ -127,7 +127,6 @@ def runScript():
     # Retrieve File
         for filename in os.listdir('instance/upload/'):
             audiofile = "instance/upload/" + filename
-            print(audiofile)
             result = classify_file( audiofile )
 
             # Create list to store information
@@ -146,10 +145,10 @@ def runScript():
     except Exception as e:
         track = traceback.format_exc()
         print(track)
-    #except:
-    #    print('[FAILURE  -- Classification 1] File upload unsuccessful, or not file uploaded.')
 
-    print(json.dumps(finalResult))
+    if( PREDICTION_VERBOSE ):
+        print(json.dumps(finalResult))
 
-    print("[SUCCESS] Classification was successful - classification.py")
+    if( DEBUG_FLAG ):
+        print("[SUCCESS] CNN Classification - classification.py")
     return finalResult

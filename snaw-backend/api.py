@@ -13,6 +13,7 @@ import traceback
 
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
+DEBUG_FLAG = False;
 
 app = Flask("__main__")
 app.config["DEBUG"] = True
@@ -107,20 +108,22 @@ be deleted.
 '''
 @app.route("/results/classification")
 def classify():
-    print("[WORKING] Flask is making call to classification.py - api.py")
+    if( DEBUG_FLAG ):
+        print("[WORKING] Flask is making call to classification.py - api.py")
     try:
-        print("trying to get classification")
         try:
             result = get_cnn_classification()
         except Exception as e:
             track = traceback.format_exc()
             print(track)
-        print(result)
-        print("[WORKING] Removing uploaded files - api.py")
+        if( DEBUG_FLAG ):
+            print(result)
+            print("[WORKING] Removing uploaded files - api.py")
         for file in os.listdir('instance/upload/'):
             os.remove('instance/upload/'+file)
 
-        print("[Success] Classification has been completed - api.py")
+        if( DEBUG_FLAG ):
+            print("[Success] Classification has been completed - api.py")
         return result
     except Exception as e:
         return str(e)
@@ -139,10 +142,12 @@ be deleted.
 '''
 @app.route("/results/spectro")
 def get_spectro():
-    print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
+    if( DEBUG_FLAG ):
+        print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
     try:
         result = get_spectrogram()
-        print("[SUCCESS] Spectrogram images have been created - api.py")
+        if( DEBUG_FLAG ):
+            print("[SUCCESS] Spectrogram images have been created - api.py")
         return result
     except Exception as e:
         return str(e)
@@ -161,10 +166,12 @@ be deleted.
 '''
 @app.route("/results/indices")
 def get_indices():
-    print("[WORKING] Flask is making call to acousticIndices.py - api.py")
+    if( DEBUG_FLAG ):
+        print("[WORKING] Flask is making call to acousticIndices.py - api.py")
     try:
         result = get_acoustic_indices()
-        print("[SUCCESS] Calculated acoustic indices - api.py")
+        if( DEBUG_FLAG ):
+            print("[SUCCESS] Calculated acoustic indices - api.py")
         return result
     except Exception as e:
         return str(e)
