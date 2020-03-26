@@ -113,12 +113,11 @@ function fileInserted(){
    spectro_load set to true, allows function to only be loaded on results.js creation, not update
    ajax response is returned to the function
 */
-function get_spectro( classification ){
+function get_spectro( ){
     var result = '';
     $.ajax({
         url: '/results/spectro',
-        type: "POST",
-        data: {data: classification},
+        type: "GET",
         async: false,
         success: function(response){
         //console.log(response);
@@ -206,14 +205,14 @@ function runAnalysis() {
         // Create a final dictionary to store all information about each file
         var resultDictionary;
         // Run spectrogram conversion
+        var spectroImg = get_spectro( );
         var indices = get_indices();
-        var classification = get_class();
-        var spectroImg = get_spectro( classification );
 
         //TODO: This process needs to be completed in the backend, and then the finished dictionary sent through to front-end
         resultDictionary = spectroImg;
-        // Run classification function. returns dictionary. Will delete all upload files upon completion
 
+        // Run classification function. returns dictionary. Will delete all upload files upon completion
+        var classification = get_class();
 
         //Put everything together into one dictionary for dynamic adding.
         for (var i = 0; i < Object.keys(spectroImg).length; i++) {
@@ -242,6 +241,7 @@ function Results() {
     const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+
     return (
         <div className="App">
 
@@ -252,6 +252,7 @@ function Results() {
                 <br/>
                 <Container fixed>
                     {Object.entries(finalInfoDictionary).map(([key, value]) => {
+
                         return (
                             <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
                                 <ExpansionPanelSummary

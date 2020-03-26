@@ -127,7 +127,7 @@ def encoding( data, audiofile, path ) :
         wav_audio.close()
     return encode, wavEncode
 
-def runScript( data ):
+def runScript( ):
     print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
 
     # If spectrogram folder has not been created.
@@ -146,7 +146,8 @@ def runScript( data ):
             # Correct Path
             path= "spectrogram/SpectroedImage"+ str(fileCount)
 
-            #data = get_result()
+            print("HII")
+            data = get_result()
 
             # Run spectrogram plotting
             '''print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")

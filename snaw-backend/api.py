@@ -137,7 +137,6 @@ be deleted.
 @app.route("/results/spectro", methods=['GET', 'POST'])
 def get_spectro():
     print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
-    print("hi", request )
     try:
         result = get_spectrogram()
         print("[SUCCESS] Spectrogram images have been created - api.py")
