@@ -49,7 +49,7 @@ var finalInfoDictionary;
 
 let fileName = 0;
 let fileSpectro = 1;
-let fileAudio = 2
+let fileAudio = 2;
 let fileData = 3;
 let fileAcoustics = 4;
 
@@ -113,11 +113,12 @@ function fileInserted(){
    spectro_load set to true, allows function to only be loaded on results.js creation, not update
    ajax response is returned to the function
 */
-function get_spectro(){
+function get_spectro( classification ){
     var result = '';
     $.ajax({
         url: '/results/spectro',
-        type: "GET",
+        type: "POST",
+        data: {data: classification},
         async: false,
         success: function(response){
         //console.log(response);
@@ -205,9 +206,9 @@ function runAnalysis() {
         // Create a final dictionary to store all information about each file
         var resultDictionary;
         // Run spectrogram conversion
-        var spectroImg = get_spectro();
         var indices = get_indices();
         var classification = get_class();
+        var spectroImg = get_spectro( classification );
 
         //TODO: This process needs to be completed in the backend, and then the finished dictionary sent through to front-end
         resultDictionary = spectroImg;
@@ -264,7 +265,17 @@ function Results() {
                                     <Container>
                                         <Paper>
                                             <Typography variant='subtitle1'>Spectrogram</Typography>
-                                            <CardMedia id="spectrogram" component='img' image={value[fileSpectro]}
+                                            <CardMedia id="spectrogram" component='img' image={value[fileSpectro][0]}
+                                                       className="classes.media"/>
+                                        </Paper>
+                                        <Paper>
+                                            <Typography variant='subtitle1'>Spectrogram</Typography>
+                                            <CardMedia id="spectrogram" component='img' image={value[fileSpectro][1]}
+                                                       className="classes.media"/>
+                                        </Paper>
+                                        <Paper>
+                                            <Typography variant='subtitle1'>Spectrogram</Typography>
+                                            <CardMedia id="spectrogram" component='img' image={value[fileSpectro][2]}
                                                        className="classes.media"/>
                                         </Paper>
                                         <br/>

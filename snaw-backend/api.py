@@ -109,17 +109,16 @@ def classify():
     try:
         print("trying to get classification")
         try:
-            result = get_cnn_classification()
+            class_result = get_cnn_classification()
         except Exception as e:
             track = traceback.format_exc()
             print(track)
-        print(result)
         print("[WORKING] Removing uploaded files - api.py")
         for file in os.listdir('instance/upload/'):
             os.remove('instance/upload/'+file)
 
         print("[Success] Classification has been completed - api.py")
-        return result
+        return class_result
     except Exception as e:
         return str(e)
 
@@ -135,9 +134,10 @@ After the function finishes operations, the uploaded files will
 be deleted.
 ###------------------------------------------------------###
 '''
-@app.route("/results/spectro")
+@app.route("/results/spectro", methods=['GET', 'POST'])
 def get_spectro():
     print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
+    print("hi", request )
     try:
         result = get_spectrogram()
         print("[SUCCESS] Spectrogram images have been created - api.py")
