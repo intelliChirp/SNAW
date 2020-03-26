@@ -10,10 +10,8 @@ from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
 import traceback
 
-
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
-DEBUG_FLAG = False;
 
 app = Flask("__main__")
 app.config["DEBUG"] = True
@@ -111,6 +109,7 @@ def classify():
     if( DEBUG_FLAG ):
         print("[WORKING] Flask is making call to classification.py - api.py")
     try:
+        print("trying to get classification")
         try:
             result = get_cnn_classification()
         except Exception as e:
@@ -140,7 +139,7 @@ After the function finishes operations, the uploaded files will
 be deleted.
 ###------------------------------------------------------###
 '''
-@app.route("/results/spectro")
+@app.route("/results/spectro", methods=['GET', 'POST'])
 def get_spectro():
     if( DEBUG_FLAG ):
         print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
