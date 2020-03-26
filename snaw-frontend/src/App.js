@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from './img/logo_small.png';
+import loading from './img/loading.gif';
 import './App.css';
 import AnalyzeButton from './components/AnalyzeButton';
 import ApplicationBar from "./components/ApplicationBar";
@@ -48,6 +49,10 @@ class App extends React.Component {
      }
  }
 
+ showLoadingImage = event => {
+     document.getElementById("ldimg").style.display='visible';
+ };
+
   render() {
     return (
       <div className="App">
@@ -94,8 +99,9 @@ class App extends React.Component {
                   </Button>
               </label>
           </form>
-            <br/>
-          {<AnalyzeButton bool={this.state.filesInserted}/>}
+          <br/>
+          <img id="ldimg" src={loading} alt='Loading...' style={{visibility: 'hidden'}}></img>
+          <div onClick={this.showLoadingImage}>{<AnalyzeButton bool={this.state.filesInserted}/>}</div>
           {this.state.filesInserted = false}
         </header>
       </div>
