@@ -135,7 +135,7 @@ function get_spectro( ){
    spectro_load set to true, allows function to only be loaded on results.js creation, not update
    ajax response is returned to the function
 */
-function get_class(){
+/*function get_class(){
     var result = '';
     $.ajax({
         url: '/results/classification',
@@ -150,7 +150,7 @@ function get_class(){
         },
     });
     return result
-}
+}*/
 
 /* Func: get_class()
    When the function is called, an ajax call is made to /results/classification
@@ -187,7 +187,6 @@ function downloadTxtFile(fileNumber){
 
     var infoDictKeys = finalInfoDictionary[fileNumber][fileData][0]['data'];
 
-
     const csvWriter = createArrayCsvStringifier({
         header : ['CATEGORY', 'TIME'],
         path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
@@ -206,9 +205,6 @@ function downloadTxtFile(fileNumber){
 
     }
 
-
-
-
     //csvWriter.writeRecords(data).then(r => console.log("Done"));
    //Fnd proper finalInfoDictionary traversing at top of file
 
@@ -217,14 +213,9 @@ function downloadTxtFile(fileNumber){
 
     element.download = "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv";
 
-
-
     document.body.appendChild(element); // Required for this to work in FireFox
 
     element.click();
-
-
-
 }
 
 /*
@@ -237,18 +228,20 @@ function runAnalysis() {
         // Create a final dictionary to store all information about each file
         var resultDictionary;
         // Run spectrogram conversion
-        var spectroImg = get_spectro( );
         var indices = get_indices();
+        var spectroImg = get_spectro( );
 
         //TODO: This process needs to be completed in the backend, and then the finished dictionary sent through to front-end
         resultDictionary = spectroImg;
 
         // Run classification function. returns dictionary. Will delete all upload files upon completion
-        var classification = get_class();
+        //var classification = get_class();
+        //var classification = spectroImg[:][3];
 
         //Put everything together into one dictionary for dynamic adding.
         for (var i = 0; i < Object.keys(spectroImg).length; i++) {
-            resultDictionary[i].push(classification[i]);
+            //var classification = spectroImg[i][3];
+            //resultDictionary[i].push(classification);
             resultDictionary[i].push(indices[i])
         }
         console.log(resultDictionary);

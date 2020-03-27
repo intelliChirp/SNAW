@@ -105,7 +105,7 @@ The function runScript() is pulled into api.py as "get_classification()."
 After the function finishes operations, the uploaded files will
 be deleted.
 ###------------------------------------------------------###
-'''
+
 @app.route("/results/classification")
 def classify():
     if( DEBUG_FLAG ):
@@ -128,6 +128,7 @@ def classify():
         return result
     except Exception as e:
         return str(e)
+'''
 
 '''
 ###------------------------------------------------------###
@@ -149,6 +150,10 @@ def get_spectro():
         result = get_spectrogram()
         if( DEBUG_FLAG ):
             print("[SUCCESS] Spectrogram images have been created - api.py")
+
+        for file in os.listdir('instance/upload/'):
+                    os.remove('instance/upload/'+file)
+
         return result
     except Exception as e:
         return str(e)

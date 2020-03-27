@@ -158,7 +158,8 @@ def runScript( ):
                                        ['data:image/png;base64,' + encode_ant.decode("utf-8"),
                                         'data:image/png;base64,' + encode_bio.decode("utf-8"),
                                         'data:image/png;base64,' + encode_geo.decode("utf-8")],
-                                      'data:audio/wav;base64,' + wavEncode.decode("utf-8")]
+                                      'data:audio/wav;base64,' + wavEncode.decode("utf-8"),
+                                      data[0] ]
             fileCount += 1
 
         # remove all spectrogram pictures from storage
