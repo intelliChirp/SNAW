@@ -13,8 +13,8 @@ import traceback
 import os
 import json
 
-DEBUG_FLAG = False;
-PREDICTION_VERBOSE = False;
+DEBUG_FLAG = False
+PREDICTION_VERBOSE = False
 
 def classify_file( audio_file ) :
     # load the models

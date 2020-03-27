@@ -7,7 +7,7 @@ import os
 import base64
 from classification_cnn import runScript as get_result
 
-DEBUG_FLAG = False;
+DEBUG_FLAG = False
 
 """ short time fourier transform of audio signal """
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):

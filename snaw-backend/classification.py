@@ -5,7 +5,7 @@ import contextlib
 import os
 from flask import jsonify
 
-DEBUG_FLAG = False;
+DEBUG_FLAG = False
 
 # function that runs the classification functions on the selected audio file
 # builds the dictionary of category with associated timestamps
