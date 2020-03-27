@@ -132,8 +132,8 @@ def classify():
 
 '''
 ###------------------------------------------------------###
-App Routing: '/results/spectro'
-Function: get_spectro()
+App Routing: '/results/analysis'
+Function: run_analysis()
 Caller: Results.js
 ###------------------------------------------------------###
 calls the function runScript() within get_spectrogram.py.
@@ -142,8 +142,8 @@ After the function finishes operations, the uploaded files will
 be deleted.
 ###------------------------------------------------------###
 '''
-@app.route("/results/spectro", methods=['GET', 'POST'])
-def get_spectro():
+@app.route("/results/analysis", methods=['GET', 'POST'])
+def run_analysis():
     if( DEBUG_FLAG ):
         print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
     try:

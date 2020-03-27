@@ -105,16 +105,16 @@ function fileInserted(){
     });
     return result;
 }
-/* Func: get_spectro()
+/* Func: run_analysis()
    When the function is called, an ajax call is made to /results/spectro
    flask function returns a file location of a created spectrogram file based on audio file uploaded
    spectro_load set to true, allows function to only be loaded on results.js creation, not update
    ajax response is returned to the function
 */
-function get_spectro( ){
+function run_analysis( ){
     var result = '';
     $.ajax({
-        url: '/results/spectro',
+        url: '/results/analysis',
         type: "GET",
         async: false,
         success: function(response){
@@ -191,7 +191,7 @@ function downloadTxtFile(fileNumber){
         header : ['CATEGORY', 'TIME'],
         path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
     });
-    const data = [['Anthro:', ' ', ' ', 'Bio:', ' ', ' ', 'Geo:', ' ', ' '], ['CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME']]
+    const data = [['Anthro:', ' ', ' ', 'Bio:', ' ', ' ', 'Geo:', ' ', ' '], ['CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME']];
     for(var  keys = 0; keys < infoDictKeys.length; keys++) {
         var csvArray = [];
         for (var dictCount = 0; dictCount < 3; dictCount++) {
@@ -209,7 +209,7 @@ function downloadTxtFile(fileNumber){
    //Fnd proper finalInfoDictionary traversing at top of file
 
     const file = new Blob([csvWriter.stringifyRecords(data)], {type: 'text/plain'});
-    element.href = URL.createObjectURL(file)
+    element.href = URL.createObjectURL(file);
 
     element.download = "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv";
 
@@ -229,14 +229,10 @@ function runAnalysis() {
         var resultDictionary;
         // Run spectrogram conversion
         var indices = get_indices();
-        var spectroImg = get_spectro( );
+        var spectroImg = run_analysis();
 
         //TODO: This process needs to be completed in the backend, and then the finished dictionary sent through to front-end
         resultDictionary = spectroImg;
-
-        // Run classification function. returns dictionary. Will delete all upload files upon completion
-        //var classification = get_class();
-        //var classification = spectroImg[:][3];
 
         //Put everything together into one dictionary for dynamic adding.
         for (var i = 0; i < Object.keys(spectroImg).length; i++) {
@@ -256,12 +252,12 @@ function setGlblDictionary(dicitonary){
 function Results() {
     console.log(finalInfoDictionary);
     //Check if files are currently inserted into the filesystem
-    if(fileInserted() == "True") {
+    if(fileInserted() === "True") {
         //Set global var: finalInfoDictionary to the results of the analysis
         setGlblDictionary(runAnalysis());
     }
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);;
+    const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
