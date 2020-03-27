@@ -18,15 +18,13 @@ PREDICTION_VERBOSE = False
 
 def classify_file( audio_file ) :
     # load the models
-    if( DEBUG_FLAG ):
-        print("Loading CNN Models..")
+    if DEBUG_FLAG : print("[WORKING] Loading CNN Models..")
 
     all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
                     load_model('model\\bio\\bio_cnn_model.h5'),
                     load_model('model\\geo\\geo_cnn_model.h5') ]
     
-    if( DEBUG_FLAG ):
-        print("Loaded CNN Models..")
+    if DEBUG_FLAG : print("[SUCCESS] Loaded CNN Models..")
 
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
@@ -115,9 +113,8 @@ def classify_file( audio_file ) :
 
 # driver function
 def runScript():
+    if DEBUG_FLAG : print("[WORKING] Attempting to run CNN classification calculator - classification_svm.py")
 
-    if( DEBUG_FLAG ):
-        print("[WORKING] Attempting to run CNN classification calculator - classification_svm.py")
     # Create dictionary for storing return information
     # Create a counter for files
     finalResult = {}
@@ -146,9 +143,8 @@ def runScript():
         track = traceback.format_exc()
         print(track)
 
-    if( PREDICTION_VERBOSE ):
-        print(json.dumps(finalResult))
+    if PREDICTION_VERBOSE : print(json.dumps(finalResult))
 
-    if( DEBUG_FLAG ):
-        print("[SUCCESS] CNN Classification - classification.py")
+    if DEBUG_FLAG : print("[SUCCESS] CNN Classification - classification.py")
+
     return finalResult

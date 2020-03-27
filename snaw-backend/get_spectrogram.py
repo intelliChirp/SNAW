@@ -64,7 +64,6 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
      tempCat = row['category']
      if(len(x_cats) > 0 and x_cats[-1] == tempCat) : x_labels.append(""), x_cats.append(tempCat)
      else : x_labels.append(tempCat), x_cats.append(tempCat)
-    print(x_labels)
 
     samplerate, samples = wav.read(audiopath)
 
@@ -111,12 +110,10 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
 
     return ims
 
-def runScript():
-    if( DEBUG_FLAG ):
-        print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
 def encoding( data, audiofile, path ) :
     # Run spectrogram plotting
-    print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
+    if DEBUG_FLAG : print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
+
     ims = plotstft(data, audiofile, plotpath=path)
 
     # Convert spectrograms into a base64 string to be sent to front end
@@ -133,7 +130,7 @@ def encoding( data, audiofile, path ) :
     return encode, wavEncode
 
 def runScript( ):
-    print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
+    if DEBUG_FLAG : print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
 
     # If spectrogram folder has not been created.
     if (os.path.isdir('Spectrogram/') == False):
@@ -153,25 +150,6 @@ def runScript( ):
 
             data = get_result()
 
-            # Run spectrogram plotting
-            if( DEBUG_FLAG ):
-                print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
-
-            '''print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
-            ims = plotstft(data[0][2]['data'], audiofile, plotpath=path)
-
-            # Convert spectrograms into a base64 string to be sent to front end
-            with open(path + ".png", "rb") as spect_image:
-                encode = base64.b64encode(spect_image.read())
-                # Add file number as key and file name and data as values
-                spect_image.close()
-
-            #This is the same as the spectrograms, except it gets the audio
-            #    Base64
-            with open(audiofile, "rb") as wav_audio:
-                wavEncode = base64.b64encode(wav_audio.read())
-                wav_audio.close()'''
-
             encode_ant, wavEncode = encoding( data[0][0]['data'], audiofile, path )
             encode_bio, _ = encoding( data[0][1]['data'], audiofile, path )
             encode_geo, _ = encoding( data[0][2]['data'], audiofile, path )
@@ -188,10 +166,8 @@ def runScript( ):
             os.remove("spectrogram/"+file)
 
     except:
-        if( DEBUG_FLAG ):
-            print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
+        if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
 
-    if( DEBUG_FLAG ):
-        print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
+    if DEBUG_FLAG : print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
 
     return listOfImages
