@@ -10,6 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Paper from '@material-ui/core/Paper';
 import LineChart from './Charts/LineChart';
 import PieChart from './Charts/PieChart';
+import Spectrogram from "./components/Spectrogram";
 import SimpleTable from "./components/table";
 import ApplicationBar from "./components/ApplicationBar";
 import Grid from '@material-ui/core/Grid';
@@ -285,6 +286,7 @@ function Results() {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Container>
+                                        <Spectrogram/>
                                         <Paper>
                                             <Typography variant='subtitle1'>Spectrogram</Typography>
                                             <CardMedia id="spectrogram" component='img' image={value[fileSpectro][0]}
