@@ -13,7 +13,7 @@ import traceback
 import os
 import json
 
-DEBUG_FLAG = False
+DEBUG_FLAG = True
 PREDICTION_VERBOSE = False
 
 def classify_file( audio_file ) :
@@ -112,7 +112,7 @@ def classify_file( audio_file ) :
     return classify_dict
 
 # driver function
-def runScript():
+def runScript(audiofile):
     if DEBUG_FLAG : print("[WORKING] Attempting to run CNN classification calculator - classification_svm.py")
 
     # Create dictionary for storing return information
@@ -121,23 +121,11 @@ def runScript():
     fileCount = 0
 
     try:
-    # Retrieve File
-        for filename in os.listdir('instance/upload/'):
-            audiofile = "instance/upload/" + filename
-            result = classify_file( audiofile )
+        result = classify_file( audiofile )
 
-            # Create list to store information
-            #result = []
-            #print("[WORKING] Attempting to run anthrophony classification - classification.py")
-            #result.append( classify_file( audiofile, anthro_model(), 'Anthrophony', '#0088FE' ) )
-            #print("[WORKING] Attempting to run geophony classification - classification.py")
-            #result.append( classify_file(audiofile, bio_model(), 'Biophony', '#00C49F' ) )
-            #print("[WORKING] Attempting to run biophony classification - classification.py")
-            #result.append( classify_file(audiofile, geo_model(), 'Geophony', '#FFBB28' ) )
-
-            # Add result list to finalResult dictionary with filecounter as the key
-            finalResult[fileCount] = result
-            fileCount += 1
+        # Add result list to finalResult dictionary with filecounter as the key
+        finalResult[fileCount] = result
+        fileCount += 1
 
     except Exception as e:
         track = traceback.format_exc()

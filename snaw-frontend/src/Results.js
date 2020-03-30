@@ -286,21 +286,10 @@ function Results() {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Container>
-                                        <Spectrogram/>
                                         <Paper>
-                                            <Typography variant='subtitle1'>Spectrogram</Typography>
-                                            <CardMedia id="spectrogram" component='img' image={value[fileSpectro][0]}
-                                                       className="classes.media"/>
-                                        </Paper>
-                                        <Paper>
-                                            <Typography variant='subtitle1'>Spectrogram</Typography>
-                                            <CardMedia id="spectrogram" component='img' image={value[fileSpectro][1]}
-                                                       className="classes.media"/>
-                                        </Paper>
-                                        <Paper>
-                                            <Typography variant='subtitle1'>Spectrogram</Typography>
-                                            <CardMedia id="spectrogram" component='img' image={value[fileSpectro][2]}
-                                                       className="classes.media"/>
+                                        <Spectrogram ant_img={value[fileSpectro][0]}
+                                                     bio_img={value[fileSpectro][1]}
+                                                     geo_img={value[fileSpectro][2]}/>
                                         </Paper>
                                         <br/>
                                         <Paper>

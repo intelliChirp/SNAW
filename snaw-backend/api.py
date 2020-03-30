@@ -19,7 +19,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 
-DEBUG_FLAG = False
+DEBUG_FLAG = True
 
 '''
 ###------------------------------------------------------###

@@ -148,7 +148,7 @@ def runScript( ):
             # Correct Path
             path= "spectrogram/SpectroedImage"+ str(fileCount)
 
-            data = get_result()
+            data = get_result(audiofile)
 
             encode_ant, wavEncode = encoding( data[0][0]['data'], audiofile, path )
             encode_bio, _ = encoding( data[0][1]['data'], audiofile, path )

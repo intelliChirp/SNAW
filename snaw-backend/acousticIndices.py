@@ -6,7 +6,7 @@ import SimpleITK as sitk
 from scipy.stats import itemfreq
 import os
 
-DEBUG_FLAG = False
+DEBUG_FLAG = True
 
 class AcousticIndices(object):
 
