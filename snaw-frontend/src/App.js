@@ -49,10 +49,6 @@ class App extends React.Component {
      }
  }
 
- showLoadingImage = event => {
-     document.getElementById("ldimg").style.display='visible';
- };
-
   render() {
     return (
       <div className="App">
@@ -100,8 +96,8 @@ class App extends React.Component {
               </label>
           </form>
           <br/>
-          <img id="ldimg" src={loading} alt='Loading...' style={{visibility: 'hidden'}}></img>
-          <div onClick={this.showLoadingImage}>{<AnalyzeButton bool={this.state.filesInserted}/>}</div>
+          <img id="ldimg" src={loading} alt='Loading...' style={{display: 'none', width: '50px'}}></img>
+          {<AnalyzeButton bool={this.state.filesInserted}/>}
           {this.state.filesInserted = false}
         </header>
       </div>
