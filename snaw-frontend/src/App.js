@@ -5,6 +5,9 @@ import AnalyzeButton from './components/AnalyzeButton';
 import ApplicationBar from "./components/ApplicationBar";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
+import {Typography} from "@material-ui/core";
+import CardMedia from "@material-ui/core/CardMedia";
+import Container from "@material-ui/core/Container";
 
 class App extends React.Component {
 
@@ -53,12 +56,11 @@ class App extends React.Component {
       <div className="App">
         <ApplicationBar/>
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          <p>
-            <b>Soundscape Noise Analysis Workbench</b>
-          </p>
-          <br/>
-          <form action="/uploader" 
+            <Container fixed>
+                <CardMedia id="logo" component="img" image={logo} width="100px"/>
+                <Typography variant="h1">Soundscape Noise Analysis Workbench</Typography>
+            </Container>
+          <form action="/uploader"
                 method="POST"
                 encType="multipart/form-data">
             <label htmlFor='my-input'>

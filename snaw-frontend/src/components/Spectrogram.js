@@ -1,10 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
 import { withStyles} from "@material-ui/core/styles";
-import ant_i from '../img/ant.png';
-import bio_i from '../img/bio-27-690985.png';
-import geo_i from '../img/large_GEO_Corp_Logo__R_.jpg'
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 
