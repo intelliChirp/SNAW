@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { withStyles} from "@material-ui/core/styles";
+import { withRouter } from 'react-router-dom';
 
 const useStyles = theme => ({
     button: {
@@ -27,15 +28,22 @@ const useStyles = theme => ({
  * disabled.
  *-----------------------------------------------------*/
 class AnalyzeButton extends React.Component {
+
+    showLoadingImage = event => {
+        event.preventDefault();
+        document.getElementById("ldimg").style.display='block';
+        setTimeout( event => { this.props.history.push('/results'); }, 100);
+    };
+
     render() {
         const { classes } = this.props;
             return (
                 <div>
                     <label htmlFor="outlined-button-file">
                         {this.props.bool ? (
-                            <Link to={'/results'} style={{ textDecoration: 'none' }}>
+                            <Link to={'/results'} onClick={this.showLoadingImage} style={{ textDecoration: 'none' }}>
                                 <Button disabled={false} 
-                                        variant="contained" 
+                                        variant="contained"
                                         className={classes.button}>
                                     Analyze Audio
                                 </Button>
@@ -52,4 +60,4 @@ class AnalyzeButton extends React.Component {
             )
     }
 }
-export default withStyles(useStyles)(AnalyzeButton);
+export default withRouter(withStyles(useStyles)(AnalyzeButton));
