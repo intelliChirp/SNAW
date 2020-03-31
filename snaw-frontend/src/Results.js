@@ -69,12 +69,12 @@ const useStyles = makeStyles(theme => ({
     button: {
         color: 'white',
         fontSize: '1em',
-        backgroundColor: '#3f5a14',
+        backgroundColor: '#AA4C39',
         margin: theme.spacing(1),
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(4),
         '&:hover': {
-            background: '#2e420e',
+            background: '#550F00',
         },
     },
 }));
@@ -292,12 +292,9 @@ function Results() {
                                                      geo_img={value[fileSpectro][2]}/>
                                         </Paper>
                                         <br/>
-                                        <Paper>
                                         <Typography variant='subtitle1'>Playback Audio File</Typography>
                                         <audio controls src={value[fileAudio]}/>
-                                        </Paper>
                                         <br/>
-
                                         <br/>
                                         <Typography variant='subtitle1'>Results of SVM Anthrophony, Geophony, and Biophony Class
                                             Models</Typography>
