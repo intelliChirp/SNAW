@@ -143,6 +143,7 @@ class App extends React.Component {
                             </Grid>
                             <Grid item>
                                 <br/>
+                                <img id="lding" src={loading} alt='Loading...' style={{display: 'none', width:'50px'}}></img>
                                 <AnalyzeButton bool={this.state.filesInserted}/>
                             </Grid>
                             <Grid item>
