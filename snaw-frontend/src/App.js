@@ -13,6 +13,7 @@ import Paper from "@material-ui/core/Paper"
 import { withStyles} from "@material-ui/core/styles";
 import Divider from '@material-ui/core/Divider'
 import Box from '@material-ui/core/Box'
+import loading from './img/loading.gif'
 
 const customtheme = createMuiTheme({
     palette : {
@@ -94,7 +95,7 @@ class App extends React.Component {
           <body>
           <Container>
               <MuiThemeProvider theme={customtheme}>
-                        <Grid container spacing={3} direction='column'>
+                        <Grid container spacing={5} direction='column'>
                             <Paper elevation={3} >
                                 <Box p={5}>
                             <Grid item>
@@ -143,9 +144,12 @@ class App extends React.Component {
                             </Grid>
                             <Grid item>
                                 <br/>
-                                <img id="lding" src={loading} alt='Loading...' style={{display: 'none', width:'50px'}}></img>
-                                <AnalyzeButton bool={this.state.filesInserted}/>
+                                {<AnalyzeButton bool={this.state.filesInserted}/>}
+                                {this.state.filesInserted = false}
                             </Grid>
+                                    <Grid item>
+                                        <img id="ldimg" src={loading} alt='Loading...' style={{display: 'none', width: '50px', alignItems:'center'}}></img>
+                                    </Grid>
                             <Grid item>
                                 <Divider middle/><br/>
                                 <Typography variant='body1'>
