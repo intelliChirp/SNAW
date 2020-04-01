@@ -668,7 +668,7 @@ as a library to be used by our product.
 ###------------------------------------------------------###
 
 '''
-def getAcousticIndices():
+def getAcousticIndices(peronsalID):
     # fileDictionary will be used to store the filecount keys with their respective file information
     fileDictionary = {}
 
@@ -678,10 +678,9 @@ def getAcousticIndices():
     if( DEBUG_FLAG ):
         print("[WORKING] Attempting to run acoustic indices calculator - acousticIndices.py")
     # loop through the files in the directory
-    for file in os.listdir("instance/upload/"):
-
+    for file in os.listdir('instance/upload/user'+peronsalID):
         # correct the file path with the prefixed upload folder
-        filePath = "instance/upload/" + file
+        filePath = 'instance/upload/user'+peronsalID+"/" + file
         data,fs  =  librosa.load(filePath,sr=None,offset=0,duration=60)
 
         # mono channel
