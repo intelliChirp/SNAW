@@ -2,12 +2,14 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import React from "react";
+import { Link } from 'react-router-dom';
 import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import logo from "../img/logo_small.png";
 import back_img from "../img/garden-pond-lakes-winery-581729.jpg";
+import HomeIcon from '@material-ui/icons/Home';
 
 const useStyles = makeStyles({});
 
@@ -30,6 +32,12 @@ const styles = {
     scrim: {
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         backgroundSize: 'cover'
+    },
+
+    icon: {
+        verticalAlign: 'text-bottom',
+        paddingRight: '5px',
+        fill: 'white'
     }
 }
 
@@ -46,7 +54,10 @@ export default function Applicationbar(props) {
                         <Typography variant='h6'
                                     className={classes.title}
                                     color='inherit'>
-                            Soundscape Noise Analysis Workbench
+                            <Link to={'/'} style={styles.icon}>
+                                <HomeIcon style={styles.icon}></HomeIcon>
+                            </Link>
+                            Soundscape Noise Analysis Workbench Home
                         </Typography>
                     </Toolbar>
                 </AppBar>
