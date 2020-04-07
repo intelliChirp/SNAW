@@ -18,6 +18,9 @@ import $ from 'jquery';
 import Button from "@material-ui/core/Button";
 import 'react-h5-audio-player/lib/styles.css';
 import {createArrayCsvStringifier, createArrayCsvWriter} from "csv-writer";
+import {createMuiTheme} from "@material-ui/core";
+import Divider from "@material-ui/core/Divider";
+
 //Surely a better way to do this other than global variable.
 /* This is currently done to ensure that the panels are accessible after
  * the analysis completes. Without it, all the panels disappear after
@@ -69,17 +72,25 @@ const useStyles = makeStyles(theme => ({
     button: {
         color: 'white',
         fontSize: '1em',
-        backgroundColor: '#3f5a14',
+        backgroundColor: '#AA4C39',
         margin: theme.spacing(1),
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(4),
         '&:hover': {
-            background: '#2e420e',
+            background: '#550F00',
         },
     },
 }));
 
-
+const customtheme = createMuiTheme({
+    palette : {
+        primary : { main: '#297B48',
+            light: '#7BB992',
+            dark: '#003E17',
+            contrastText: '#ffffff'},	/* Main Primary color */
+        secondary : { main: '#AA4C39' },	/* Main Complement color */
+    }
+})
 
 /*-----------------------------------------------------/
  * Function: fileInserted()
@@ -266,64 +277,61 @@ function Results() {
 
     return (
         <div className="App">
-
-            <ApplicationBar/>
+            <body>
+            <ApplicationBar title={'Results of Analysis'}/>
             <Container>
-                <br/>
-                <Typography variant="h3" component="h1">Results of Analysis</Typography>
-                <br/>
-                <Container fixed>
-                    {Object.entries(finalInfoDictionary).map(([key, value]) => {
-
-                        return (
-                            <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon/>}
-                                    aria-controls="panel1bh-content"
-                                    id="panel1bh-header">
-                                    <Typography className={classes.heading}>Results of</Typography>
-                                    <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                    <Container>
-                                        <Paper>
-                                        <Spectrogram ant_img={value[fileSpectro][0]}
-                                                     bio_img={value[fileSpectro][1]}
-                                                     geo_img={value[fileSpectro][2]}/>
-                                        </Paper>
-                                        <br/>
-                                        <Paper>
-                                        <Typography variant='subtitle1'>Playback Audio File</Typography>
-                                        <audio controls src={value[fileAudio]}/>
-                                        </Paper>
-                                        <br/>
-
-                                        <br/>
-                                        <Typography variant='subtitle1'>Results of SVM Anthrophony, Geophony, and Biophony Class
-                                            Models</Typography>
-                                        <br/>
-                                        <Grid container spacing={2}>
-                                            <Grid item linechart>
-                                                <Paper><LineChart series={value[fileData]}/></Paper>
-                                            </Grid>
-                                            <Grid item piechart>
-                                                <Paper><PieChart series={value[fileData]}/></Paper>
-                                            </Grid>
+                <br/><br/>
+                <Typography variant='h5' style={{color:customtheme.palette.primary.dark}}>
+                    View your Classified Audio Soundscape Files Below
+                </Typography>
+                <Divider middle/>
+                {Object.entries(finalInfoDictionary).map(([key, value]) => {
+                    return (
+                        <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon/>}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header">
+                                <Typography className={classes.heading}>Results of</Typography>
+                                <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Container>
+                                    <Paper>
+                                    <Spectrogram ant_img={value[fileSpectro][0]}
+                                                 bio_img={value[fileSpectro][1]}
+                                                 geo_img={value[fileSpectro][2]}/>
+                                    </Paper>
+                                    <br/>
+                                    <Typography variant='subtitle1'>Playback Audio File</Typography>
+                                    <audio controls src={value[fileAudio]}/>
+                                    <br/>
+                                    <br/>
+                                    <Typography variant='subtitle1'>Results of SVM Anthrophony, Geophony, and Biophony Class
+                                        Models</Typography>
+                                    <br/>
+                                    <Grid container spacing={2}>
+                                        <Grid item linechart>
+                                            <Paper><LineChart series={value[fileData]}/></Paper>
                                         </Grid>
-                                        <br/>
-                                        <SimpleTable series={value[fileData]} indices={value[fileAcoustics]}/>
-                                        <br/>
-                                        <Paper>
-                                            <Button onClick={function () {
-                                                downloadTxtFile(key)
-                                            }} variant="contained" className={classes.button}>Export SVM Classification</Button>
-                                        </Paper>
-                                    </Container>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                            )})}
-                </Container>
+                                        <Grid item piechart>
+                                            <Paper><PieChart series={value[fileData]}/></Paper>
+                                        </Grid>
+                                    </Grid>
+                                    <br/>
+                                    <SimpleTable series={value[fileData]} indices={value[fileAcoustics]}/>
+                                    <br/>
+                                    <Paper>
+                                        <Button onClick={function () {
+                                            downloadTxtFile(key)
+                                        }} variant="contained" className={classes.button}>Export SVM Classification</Button>
+                                    </Paper>
+                                </Container>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                        )})}
             </Container>
+            </body>
         </div>
             )
         }
