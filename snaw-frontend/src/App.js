@@ -21,6 +21,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const customtheme = createMuiTheme({
     palette : {
@@ -74,7 +75,6 @@ class App extends React.Component {
      }
  }
 
-
   render() {
 
      const {classes} = this.props;
@@ -82,6 +82,9 @@ class App extends React.Component {
     return (
 
       <div className="App">
+          <div id="overlay" style={{display: 'none', position: 'fixed', width: '100%', height: '100%', top: '0', left: '0', right: '0', bottom: '0', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: '2', cursor: 'pointer'}}>
+              <img id="ldimg" src={loading} alt='Loading...' style={{width: '62px', position: 'absolute', top: '50%', left: '48%'}}/>
+          </div>
           <body>
           <ApplicationBar title={'Soundscape Noise Analysis Workbench'}/>
       <Container>
@@ -141,9 +144,6 @@ class App extends React.Component {
                                 {<AnalyzeButton bool={this.state.filesInserted}/>}
                                 {this.state.filesInserted = false}
                             </Grid>
-                                    <Grid item>
-                                        <img id="ldimg" src={loading} alt='Loading...' style={{display: 'none', width: '50px', alignItems:'center'}}></img>
-                                    </Grid>
                             <Grid item>
                                 <Divider middle/><br/>
                                 <Typography variant='body1'>
