@@ -257,8 +257,8 @@ function runAnalysis() {
 }
 
 //setter function for the global dictionary. Safety i guess?
-function setGlblDictionary(dicitonary){
-    finalInfoDictionary = dicitonary;
+function setGlblDictionary(dictionary){
+    finalInfoDictionary = dictionary;
 }
 
 function Results() {
@@ -307,7 +307,7 @@ function Results() {
                                     <audio controls src={value[fileAudio]}/>
                                     <br/>
                                     <br/>
-                                    <Typography variant='subtitle1'>Results of SVM Anthrophony, Geophony, and Biophony Class
+                                    <Typography variant='subtitle1'>Results of NN Anthrophony, Geophony, and Biophony Class
                                         Models</Typography>
                                     <br/>
                                     <Grid container spacing={2}>
