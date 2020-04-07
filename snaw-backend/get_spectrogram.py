@@ -5,8 +5,9 @@ from numpy.lib import stride_tricks
 import sys
 import os
 import base64
+from classification_cnn import runScript as get_result
 
-DEBUG_FLAG = False;
+DEBUG_FLAG = False
 
 """ short time fourier transform of audio signal """
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
@@ -53,7 +54,17 @@ def logscale_spec(spec, sr=44100, factor=20.):
     return newspec, freqs
 
 """ plot spectrogram"""
-def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
+def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
+
+    size = len(data)
+    x_labels = []
+    x_cats = []
+    tempCat = ""
+    for index, row in enumerate(data) :
+     tempCat = row['category']
+     if(len(x_cats) > 0 and x_cats[-1] == tempCat) : x_labels.append(""), x_cats.append(tempCat)
+     else : x_labels.append(tempCat), x_cats.append(tempCat)
+
     samplerate, samples = wav.read(audiopath)
 
     s = stft(samples, binsize)
@@ -64,8 +75,7 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
 
     timebins, freqbins = np.shape(ims)
 
-    #print("timebins: ", timebins)
-    #print("freqbins: ", freqbins)
+    seconds = int(len(samples) / samplerate)
 
     plt.figure(figsize=(15, 7.5))
     plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
@@ -76,23 +86,51 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     plt.xlim([0, timebins-1])
     plt.ylim([0, freqbins])
 
-    xlocs = np.float32(np.linspace(0, timebins-1, 5))
-    plt.xticks(xlocs, ["%.02f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
+    x_size = int(timebins / seconds)
+
+    xlocs = np.float32(np.linspace(0, timebins-1, seconds))
+    plt.xticks(xlocs, x_labels, rotation=45)
     ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
     plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
 
+    index = 0
+    annotate_size = 1/seconds
+
+    for x, cat in zip(xlocs, x_cats):
+     if(cat != 'NO') :
+         plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'b', alpha=0.2)
+     index += 1
+
     if plotpath:
-        plt.savefig(plotpath, bbox_inches="tight")
+     plt.savefig(plotpath, bbox_inches="tight")
     else:
-        plt.show()
+     plt.show()
 
     plt.clf()
 
     return ims
 
-def runScript():
-    if( DEBUG_FLAG ):
-        print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
+def encoding( data, audiofile, path ) :
+    # Run spectrogram plotting
+    if DEBUG_FLAG : print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
+
+    ims = plotstft(data, audiofile, plotpath=path)
+
+    # Convert spectrograms into a base64 string to be sent to front end
+    with open(path + ".png", "rb") as spect_image:
+        encode = base64.b64encode(spect_image.read())
+        # Add file number as key and file name and data as values
+        spect_image.close()
+
+    '''This is the same as the spectrograms, except it gets the audio
+        Base64'''
+    with open(audiofile, "rb") as wav_audio:
+        wavEncode = base64.b64encode(wav_audio.read())
+        wav_audio.close()
+    return encode, wavEncode
+
+def runScript( ):
+    if DEBUG_FLAG : print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
 
     # If spectrogram folder has not been created.
     if (os.path.isdir('Spectrogram/') == False):
@@ -110,25 +148,18 @@ def runScript():
             # Correct Path
             path= "spectrogram/SpectroedImage"+ str(fileCount)
 
-            # Run spectrogram plotting
-            if( DEBUG_FLAG ):
-                print("[WORKING] Attemping to run spectrogram plotting - get_spectrogram.py")
-            ims = plotstft(audiofile, plotpath=path)
+            data = get_result(audiofile)
 
-            # Convert spectrograms into a base64 string to be sent to front end
-            with open(path + ".png", "rb") as spect_image:
-                encode = base64.b64encode(spect_image.read())
-                # Add file number as key and file name and data as values
-                spect_image.close()
+            encode_ant, wavEncode = encoding( data[0][0]['data'], audiofile, path )
+            encode_bio, _ = encoding( data[0][1]['data'], audiofile, path )
+            encode_geo, _ = encoding( data[0][2]['data'], audiofile, path )
 
-            '''This is the same as the spectrograms, except it gets the audio
-                Base64'''
-            with open(audiofile, "rb") as wav_audio:
-                wavEncode = base64.b64encode(wav_audio.read())
-                wav_audio.close()
-
-
-            listOfImages[fileCount] = [filename, 'data:image/png;base64,' + encode.decode("utf-8"), 'data:audio/wav;base64,' + wavEncode.decode("utf-8")]
+            listOfImages[fileCount] = [filename,
+                                       ['data:image/png;base64,' + encode_ant.decode("utf-8"),
+                                        'data:image/png;base64,' + encode_bio.decode("utf-8"),
+                                        'data:image/png;base64,' + encode_geo.decode("utf-8")],
+                                      'data:audio/wav;base64,' + wavEncode.decode("utf-8"),
+                                      data[0] ]
             fileCount += 1
 
         # remove all spectrogram pictures from storage
@@ -136,10 +167,8 @@ def runScript():
             os.remove("spectrogram/"+file)
 
     except:
-        if( DEBUG_FLAG ):
-            print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
-            
-    if( DEBUG_FLAG ):
-        print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
+        if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
+
+    if DEBUG_FLAG : print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
 
     return listOfImages

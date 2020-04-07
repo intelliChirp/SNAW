@@ -2,17 +2,20 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { withStyles} from "@material-ui/core/styles";
+import { withRouter } from 'react-router-dom';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import Tooltip from "recharts/lib/component/Tooltip";
 
 const useStyles = theme => ({
     button: {
         color: 'white',
         fontSize: '1em',
-        backgroundColor: '#3f5a14',
+        backgroundColor: '#AA4C39',
         margin: theme.spacing(1),
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(4),
         '&:hover': {
-            background: '#2e420e',
+            background: '#550F00',
         },
     },
 });
@@ -27,24 +30,31 @@ const useStyles = theme => ({
  * disabled.
  *-----------------------------------------------------*/
 class AnalyzeButton extends React.Component {
+
+    showLoadingImage = event => {
+        event.preventDefault();
+        document.getElementById("ldimg").style.display='block';
+        setTimeout( event => { this.props.history.push('/results'); }, 100);
+    };
+
     render() {
         const { classes } = this.props;
             return (
                 <div>
                     <label htmlFor="outlined-button-file">
                         {this.props.bool ? (
-                            <Link to={'/results'} style={{ textDecoration: 'none' }}>
-                                <Button disabled={false} 
-                                        variant="contained" 
-                                        className={classes.button}>
-                                    Analyze Audio
-                                </Button>
+                            <Link to={'/results'} onClick={this.showLoadingImage} style={{ textDecoration: 'none' }}>
+                                    <Button disabled={false}
+                                            variant="contained"
+                                            className={classes.button}>
+                                        Analyze Audio File(s)
+                                    </Button>
                             </Link>
                             ) : (
-                                <Button disabled={true} 
-                                        variant="contained" 
-                                        className={classes.button}>
-                                    Analyze Audio
+                                <Button disabled={true}
+                                    variant="contained"
+                                    className={classes.button}>
+                                    Please upload file(s)
                                 </Button>
                         )}
                     </label>
@@ -52,4 +62,4 @@ class AnalyzeButton extends React.Component {
             )
     }
 }
-export default withStyles(useStyles)(AnalyzeButton);
+export default withRouter(withStyles(useStyles)(AnalyzeButton));
