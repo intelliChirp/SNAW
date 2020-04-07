@@ -14,6 +14,13 @@ import { withStyles} from "@material-ui/core/styles";
 import Divider from '@material-ui/core/Divider'
 import Box from '@material-ui/core/Box'
 import loading from './img/loading.gif'
+import PublishIcon from '@material-ui/icons/Publish';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import AddIcon from '@material-ui/icons/Add'
+import Tooltip from "@material-ui/core/Tooltip";
+import InfoIcon from '@material-ui/icons/Info';
+import back_img from './img/garden-pond-lakes-winery-581729.jpg'
+import { shadows } from '@material-ui/system';
 
 const customtheme = createMuiTheme({
     palette : {
@@ -75,33 +82,17 @@ class App extends React.Component {
     return (
 
       <div className="App">
-        <ApplicationBar/>
-        <header className="App-header">
-                <Container>
-                    <MuiThemeProvider theme={customtheme}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={4}><img src={logo} className="App-logo" alt="logo"/></Grid>
-                            <Grid container direction="column" xs={8} spacing={1} justify='center'>
-                                <Grid item >
-                                    <Typography variant="h2" style={{color: customtheme.palette.primary.dark}}>
-                                        Soundscape Noise Analysis Workbench
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </MuiThemeProvider>
-                </Container>
-        </header>
           <body>
-          <Container>
+          <ApplicationBar title={'Soundscape Noise Analysis Workbench'}/>
+      <Container>
               <MuiThemeProvider theme={customtheme}>
                         <Grid container spacing={5} direction='column'>
                             <Paper elevation={3} >
                                 <Box p={5}>
                             <Grid item>
                                 <br/>
-                                <Typography variant='h5' style={{color:customtheme.palette.primary}}>
-                                    Classify your Soundscape Files into Individual Sound Components
+                                <Typography variant='h5' style={{color:customtheme.palette.primary.dark}}>
+                                    Classify your Soundscape Audio Files Below
                                 </Typography>
                                 <Divider middle/>
                             </Grid>
@@ -111,10 +102,12 @@ class App extends React.Component {
                                           method="POST"
                                           encType="multipart/form-data">
                                         <label htmlFor='my-input'>
-                                            <Button variant="outlined"
-                                                    component='span'>
-                                                Upload Audio File(s)
-                                            </Button>
+                                            <Tooltip title={'Upload Audio File(s)'}>
+                                                <Button variant="outlined"
+                                                        component='span'>
+                                                    <AddIcon  fontSize="large"/>
+                                                </Button>
+                                            </Tooltip>
                                         </label>
                                         <input id="my-input"
                                                aria-describedby="my-helper-text"
@@ -124,7 +117,7 @@ class App extends React.Component {
                                                name='file'
                                                style={{display: 'none'}}/>
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
-                                            Selected Files : <br/>
+                                            <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index) {
                                                 return <li key={index}>{file.name} (Size: {file.size} bytes)</li>
                                             })}
@@ -133,12 +126,13 @@ class App extends React.Component {
                                             <input id='my-submit'
                                                    type='submit'
                                                    style={{display: 'none'}}/>
-                                            <Button variant="contained"
-                                                    onClick={this.submitHandler}
-                                                    component='span'
-                                                    style={{backgroundColor:customtheme.palette.primary}}>>
-                                                Submit
-                                            </Button>
+                                                   <Tooltip title={'Submit Audio File(s)'}>
+                                                <Button variant="contained"
+                                                        onClick={this.submitHandler}
+                                                        component='span'>>
+                                                    <PublishIcon/>
+                                                </Button>
+                                                   </Tooltip>
                                         </label>
                                     </form>
                             </Grid>
@@ -158,9 +152,9 @@ class App extends React.Component {
                                     classification of Anthrophony, Biophony, and Geophony sound components. Simply
                                     upload one or many .WAV audio files above, click analyze, and the automatic analysis
                                     will begin to take place. For more information about how the analysis works
-                                    and results of accuracy measures please click the button below.
+                                    and results of accuracy measures please click below.
                                 </Typography>
-                                <Button>Information</Button>
+                                <Tooltip title={'More Information'}><Button><InfoIcon/></Button></Tooltip>
                             </Grid>
                                 </Box>
                             </Paper>

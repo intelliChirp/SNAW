@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { withStyles} from "@material-ui/core/styles";
 import { withRouter } from 'react-router-dom';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import Tooltip from "recharts/lib/component/Tooltip";
 
 const useStyles = theme => ({
     button: {
@@ -42,17 +44,17 @@ class AnalyzeButton extends React.Component {
                     <label htmlFor="outlined-button-file">
                         {this.props.bool ? (
                             <Link to={'/results'} onClick={this.showLoadingImage} style={{ textDecoration: 'none' }}>
-                                <Button disabled={false} 
-                                        variant="contained"
-                                        className={classes.button}>
-                                    Analyze Audio
-                                </Button>
+                                    <Button disabled={false}
+                                            variant="contained"
+                                            className={classes.button}>
+                                        Analyze Audio File(s)
+                                    </Button>
                             </Link>
                             ) : (
-                                <Button disabled={true} 
-                                        variant="contained" 
-                                        className={classes.button}>
-                                    Analyze Audio
+                                <Button disabled={true}
+                                    variant="contained"
+                                    className={classes.button}>
+                                    Please upload file(s)
                                 </Button>
                         )}
                     </label>

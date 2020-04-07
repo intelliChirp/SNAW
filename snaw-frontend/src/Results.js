@@ -266,12 +266,8 @@ function Results() {
 
     return (
         <div className="App">
-
-            <ApplicationBar/>
+            <ApplicationBar title={'Results of Analysis'}/>
             <Container>
-                <br/>
-                <Typography variant="h3" component="h1">Results of Analysis</Typography>
-                <br/>
                 <Container fixed>
                     {Object.entries(finalInfoDictionary).map(([key, value]) => {
 
