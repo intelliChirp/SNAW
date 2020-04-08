@@ -21,6 +21,10 @@ import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
+import $ from 'jquery';
+import LoadingBar from "./components/LoadingBar";
+import {isPercent} from "recharts/lib/util/DataUtils";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const customtheme = createMuiTheme({
     palette : {
@@ -38,7 +42,8 @@ class App extends React.Component {
     super(props);
     this.state = {selectedFile: [],
                   filesInserted: false, 
-                  fileCount: 0};
+                  fileCount: 0,
+                  percentage: 0};
     this.submitHandler.bind(this)
   }
 
@@ -68,18 +73,21 @@ class App extends React.Component {
      event.preventDefault();
      var ajaxSuccess = this.ajaxSuccess;
      var formData = new FormData();
-     formData.append('file', this.state.selectedFile[0]);
+     for(var i = 0; i < this.state.selectedFile.length; i++) {
+         formData.append('file', this.state.selectedFile[i]);
+     }
      console.log(formData)
      var percent = 0;
 
      $.ajax({
          xhr : () =>{
              var xhr = new window.XMLHttpRequest();
-
+             var self = this;
              xhr.upload.addEventListener('progress', function(e){
                  if(e.lengthComputable){
                      percent = Math.round((e.loaded / e.total) * 100);
                      console.log(percent);
+                     self.setState({percentage : percent});
 
                  }
 
@@ -93,16 +101,13 @@ class App extends React.Component {
          contentType: false,
          success: () =>{
              if(this.state.fileCount != 0 ) {
-                 this.state.filesInserted = true;
-                 this.forceUpdate();
+                 this.setState({filesInserted: true});
              }
          }
 
      })
 
  }
-
-
   render() {
 
      const {classes} = this.props;
@@ -145,8 +150,10 @@ class App extends React.Component {
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index) {
-                                                return <li key={index}>{file.name} (Size: {file.size} bytes)</li>
+                                                return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
+                                                </li>
                                             })}
+                                            <LinearProgress id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(60)} variant="buffer"/>
                                         </Typography>
                                         <label htmlFor='my-submit'>
                                             <input id='my-submit'
