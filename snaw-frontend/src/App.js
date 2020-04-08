@@ -21,6 +21,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
+import $ from 'jquery';
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const customtheme = createMuiTheme({
     palette : {
@@ -76,14 +78,14 @@ class App extends React.Component {
      var percent = 0;
 
      $.ajax({
-         xhr : () =>{
+         xhr: () => {
              var xhr = new window.XMLHttpRequest();
              var self = this;
-             xhr.upload.addEventListener('progress', function(e){
-                 if(e.lengthComputable){
+             xhr.upload.addEventListener('progress', function (e) {
+                 if (e.lengthComputable) {
                      percent = Math.round((e.loaded / e.total) * 100);
                      console.log(percent);
-                     self.setState({percentage : percent});
+                     self.setState({percentage: percent});
 
                  }
 
@@ -95,11 +97,13 @@ class App extends React.Component {
          data: formData,
          processData: false,
          contentType: false,
-         success: () =>{
-             if(this.state.fileCount != 0 ) {
+         success: () => {
+             if (this.state.fileCount != 0) {
                  this.setState({filesInserted: true});
              }
          }
+     })
+  }
 
 
   render() {
