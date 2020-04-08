@@ -163,7 +163,7 @@ class App extends React.Component {
                                                    <Tooltip title={'Submit Audio File(s)'}>
                                                 <Button variant="contained"
                                                         onClick={this.submitHandler}
-                                                        component='span'>>
+                                                        component='span'>
                                                     <PublishIcon/>
                                                 </Button>
                                                    </Tooltip>
