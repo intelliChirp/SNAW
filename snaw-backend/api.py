@@ -99,7 +99,7 @@ def getUserFolder():
         if('id' not in session):
             session['id'] = 0
 
-        if('user'+session['id'] in os.listdir('instance/upload/')):
+        if('user' + str(session['id']) in os.listdir('instance/upload/')):
             for file in os.listdir('instance/upload/user' + session['id']):
                 os.remove('instance/upload/user' + session['id']+'/'+file)
             return
