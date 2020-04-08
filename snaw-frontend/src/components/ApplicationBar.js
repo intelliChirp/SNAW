@@ -36,7 +36,7 @@ const styles = {
 
     icon: {
         verticalAlign: 'text-bottom',
-        paddingRight: '5px',
+        paddingRight: '10px',
         fill: 'white'
     }
 }
@@ -54,7 +54,7 @@ export default function Applicationbar(props) {
                         <Typography variant='h6'
                                     className={classes.title}
                                     color='inherit'>
-                            <Link to={'/'} style={styles.icon}>
+                            <Link to={'/'}>
                                 <HomeIcon style={styles.icon}></HomeIcon>
                             </Link>
                             Soundscape Noise Analysis Workbench Home
