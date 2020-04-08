@@ -62,16 +62,44 @@ class App extends React.Component {
    * AnalyzeButton.js The page then force updates, which allows
    * the "Analyze" button to be shown in green and active.
    *-----------------------------------------------------*/
- submitHandler = event => {
-     if(this.state.fileCount == 0) {
-         event.preventDefault();
-         this.render();
-     }
-     else {
-        this.state.filesInserted = true;
-        this.state.fileCount = 0;
-        this.forceUpdate();
-     }
+
+
+  submitHandler = event => {
+     event.preventDefault();
+     var ajaxSuccess = this.ajaxSuccess;
+     var formData = new FormData();
+     formData.append('file', this.state.selectedFile[0]);
+     console.log(formData)
+     var percent = 0;
+
+     $.ajax({
+         xhr : () =>{
+             var xhr = new window.XMLHttpRequest();
+
+             xhr.upload.addEventListener('progress', function(e){
+                 if(e.lengthComputable){
+                     percent = Math.round((e.loaded / e.total) * 100);
+                     console.log(percent);
+
+                 }
+
+             });
+             return xhr
+         },
+         type: 'POST',
+         url: '/uploader',
+         data: formData,
+         processData: false,
+         contentType: false,
+         success: () =>{
+             if(this.state.fileCount != 0 ) {
+                 this.state.filesInserted = true;
+                 this.forceUpdate();
+             }
+         }
+
+     })
+
  }
 
 
@@ -98,9 +126,7 @@ class App extends React.Component {
                             </Grid>
                             <Grid item>
                             <br/>
-                                    <form action="/uploader"
-                                          method="POST"
-                                          encType="multipart/form-data">
+                                    <form encType="multipart/form-data">
                                         <label htmlFor='my-input'>
                                             <Tooltip title={'Upload Audio File(s)'}>
                                                 <Button variant="outlined"
