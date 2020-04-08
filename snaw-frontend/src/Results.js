@@ -11,7 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import LineChart from './Charts/LineChart';
 import PieChart from './Charts/PieChart';
 import Spectrogram from "./components/Spectrogram";
-import SimpleTable from "./components/table";
+import ClassificationTable from "./components/ClassificationTable";
+import AcousticIndiceTable from "./components/AcousticIndiceTable";
 import ApplicationBar from "./components/ApplicationBar";
 import Grid from '@material-ui/core/Grid';
 import $ from 'jquery';
@@ -65,10 +66,10 @@ const useStyles = makeStyles(theme => ({
         flexBasis: '33.33%',
         flexShrink: 0,
     },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
-  },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+    },
     button: {
         color: 'white',
         fontSize: '1em',
@@ -282,9 +283,10 @@ function Results() {
             <Container>
                 <br/><br/>
                 <Typography variant='h5' style={{color:customtheme.palette.primary.dark}}>
-                    View your Classified Audio Soundscape Files Below
+                    View your Classified Audio Soundscape File(s) Below
                 </Typography>
                 <Divider middle/>
+                <br/>
                 {Object.entries(finalInfoDictionary).map(([key, value]) => {
                     return (
                         <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
@@ -298,16 +300,18 @@ function Results() {
                             <ExpansionPanelDetails>
                                 <Container>
                                     <Paper>
+                                    <br/>
                                     <Spectrogram ant_img={value[fileSpectro][0]}
                                                  bio_img={value[fileSpectro][1]}
                                                  geo_img={value[fileSpectro][2]}/>
+                                    <br/>
                                     </Paper>
                                     <br/>
                                     <Typography variant='subtitle1'>Playback Audio File</Typography>
                                     <audio controls src={value[fileAudio]}/>
                                     <br/>
                                     <br/>
-                                    <Typography variant='subtitle1'>Results of NN Anthrophony, Geophony, and Biophony Class
+                                    <Typography variant='subtitle1'>Results from the Anthrophony, Geophony and Biophony Classification
                                         Models</Typography>
                                     <br/>
                                     <Grid container spacing={2}>
@@ -319,12 +323,25 @@ function Results() {
                                         </Grid>
                                     </Grid>
                                     <br/>
-                                    <SimpleTable series={value[fileData]} indices={value[fileAcoustics]}/>
+                                    <ClassificationTable series={value[fileData]}/>
+                                    <br/>
+                                    <ExpansionPanel>
+                                    <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                    >
+                                        <Typography className={classes.heading}>Click to View Acoustic Indices Calculations</Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        <AcousticIndiceTable indices={value[fileAcoustics]}/>
+                                    </ExpansionPanelDetails>
+                                    </ExpansionPanel>
                                     <br/>
                                     <Paper>
                                         <Button onClick={function () {
                                             downloadTxtFile(key)
-                                        }} variant="contained" className={classes.button}>Export SVM Classification</Button>
+                                        }} variant="contained" className={classes.button}>Export Neural Network Classification</Button>
                                     </Paper>
                                 </Container>
                             </ExpansionPanelDetails>
@@ -332,6 +349,13 @@ function Results() {
                         )})}
             </Container>
             </body>
+            <footer>
+                <Container>
+                    <br/><br/>
+                    <Typography variant='subtitle1'>Created by NAU Capstone Team IntelliChirp</Typography>
+                    <br/>
+                </Container>
+            </footer>
         </div>
             )
         }
