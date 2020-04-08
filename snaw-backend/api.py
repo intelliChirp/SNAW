@@ -207,4 +207,4 @@ def get_indices():
         print(track)
 
 #print('Starting Flask!')
-app.run(debug=True)
+#app.run(debug=True)
