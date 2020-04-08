@@ -33,6 +33,7 @@ class AnalyzeButton extends React.Component {
 
     showLoadingImage = event => {
         event.preventDefault();
+        document.getElementById("overlay").style.display='block';
         document.getElementById("ldimg").style.display='block';
         setTimeout( event => { this.props.history.push('/results'); }, 100);
     };
