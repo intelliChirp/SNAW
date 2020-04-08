@@ -130,6 +130,7 @@ def runScript(audiofile):
     except Exception as e:
         track = traceback.format_exc()
         print(track)
+        if DEBUG_FLAG : print("[**FAILURE**] Classification not run properly...")
 
     if PREDICTION_VERBOSE : print(json.dumps(finalResult))
 

@@ -21,7 +21,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
-import CircularProgress from "@material-ui/core/CircularProgress";
+import $ from 'jquery';
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const customtheme = createMuiTheme({
     palette : {
@@ -39,7 +40,8 @@ class App extends React.Component {
     super(props);
     this.state = {selectedFile: [],
                   filesInserted: false, 
-                  fileCount: 0};
+                  fileCount: 0,
+                  percentage: 0};
     this.submitHandler.bind(this)
   }
 
@@ -63,17 +65,46 @@ class App extends React.Component {
    * AnalyzeButton.js The page then force updates, which allows
    * the "Analyze" button to be shown in green and active.
    *-----------------------------------------------------*/
- submitHandler = event => {
-     if(this.state.fileCount == 0) {
-         event.preventDefault();
-         this.render();
+
+
+  submitHandler = event => {
+     event.preventDefault();
+     var ajaxSuccess = this.ajaxSuccess;
+     var formData = new FormData();
+     for(var i = 0; i < this.state.selectedFile.length; i++) {
+         formData.append('file', this.state.selectedFile[i]);
      }
-     else {
-        this.state.filesInserted = true;
-        this.state.fileCount = 0;
-        this.forceUpdate();
-     }
- }
+     console.log(formData)
+     var percent = 0;
+
+     $.ajax({
+         xhr: () => {
+             var xhr = new window.XMLHttpRequest();
+             var self = this;
+             xhr.upload.addEventListener('progress', function (e) {
+                 if (e.lengthComputable) {
+                     percent = Math.round((e.loaded / e.total) * 100);
+                     console.log(percent);
+                     self.setState({percentage: percent});
+
+                 }
+
+             });
+             return xhr
+         },
+         type: 'POST',
+         url: '/uploader',
+         data: formData,
+         processData: false,
+         contentType: false,
+         success: () => {
+             if (this.state.fileCount != 0) {
+                 this.setState({filesInserted: true});
+             }
+         }
+     })
+  }
+
 
   render() {
 
@@ -101,9 +132,7 @@ class App extends React.Component {
                             </Grid>
                             <Grid item>
                             <br/>
-                                    <form action="/uploader"
-                                          method="POST"
-                                          encType="multipart/form-data">
+                                    <form encType="multipart/form-data">
                                         <label htmlFor='my-input'>
                                             <Tooltip title={'Upload Audio File(s)'}>
                                                 <Button variant="outlined"
@@ -122,8 +151,10 @@ class App extends React.Component {
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index) {
-                                                return <li key={index}>{file.name} (Size: {file.size} bytes)</li>
+                                                return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
+                                                </li>
                                             })}
+                                            <LinearProgress id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(60)} variant="buffer"/>
                                         </Typography>
                                         <label htmlFor='my-submit'>
                                             <input id='my-submit'
@@ -132,7 +163,7 @@ class App extends React.Component {
                                                    <Tooltip title={'Submit Audio File(s)'}>
                                                 <Button variant="contained"
                                                         onClick={this.submitHandler}
-                                                        component='span'>>
+                                                        component='span'>
                                                     <PublishIcon/>
                                                 </Button>
                                                    </Tooltip>

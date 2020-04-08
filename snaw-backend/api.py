@@ -9,16 +9,17 @@ from classification import runScript as get_svm_classification
 from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
 import traceback
+import random
+import shutil
 
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
-
+DEBUG_FLAG = False
 app = Flask("__main__")
 app.config["DEBUG"] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-
 DEBUG_FLAG = True
 
 '''
@@ -35,10 +36,7 @@ hit refresh upon uploading a file.
 '''
 @app.route('/')
 def home():
-    if not os.path.isdir('instance/upload'):
-        os.makedirs('instance/upload')
-    for file in os.listdir('instance/upload/'):
-            os.remove('instance/upload/'+file)
+    getUserFolder()
     return render_template("index.html")
 
 
@@ -58,6 +56,7 @@ and saves the files one at a time to the folder 'instance/upload'
 '''
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
+   getUserFolder()
    if request.method == 'POST':
         # Request.Files comes in a immutable multi-dictionary.
         # MutableList uses a method to convert the imm. multi-dict to a mutable list.
@@ -67,7 +66,7 @@ def upload_file():
         for f in mutableList.getlist('file'):
             # Follow the same procedure as uploading singular files.
             filename = secure_filename(f.filename)
-            f.save(os.path.join(UPLOAD_FOLDER, filename))
+            f.save(os.path.join('instance/upload/user'+session['id'], filename))
         return redirect('', 204)
 
 
@@ -85,15 +84,39 @@ condition.
 @app.route('/didUpload')
 def didFileUpload():
      # Create 'instance/upload/' folder if not present
-    if(os.path.isdir('instance/upload/') == False):
-        os.makedirs('instance/upload/')
+    if(os.path.isdir('instance/upload/user'+session['id']) == False):
+        os.makedirs('instance/upload/user'+session['id'])
 
     # Check if upload folder contains any files
-    if(len(os.listdir('instance/upload/')) != 0):
+    if(len(os.listdir('instance/upload/user'+session['id'])) != 0):
         return "True"
     else:
         return "False"
 
+
+
+def getUserFolder():
+        if('id' not in session):
+            session['id'] = 0
+
+        if('user'+session['id'] in os.listdir('instance/upload/')):
+            for file in os.listdir('instance/upload/user' + session['id']):
+                os.remove('instance/upload/user' + session['id']+'/'+file)
+            return
+
+        else:
+            personID = str(random.randint(0, 999999999999))
+            while('user'+ personID in os.listdir('instance/upload/')):
+                 personID = str(random.randint(0, 999999999999))
+
+
+
+            if('user'+ str(session['id']) not in os.listdir('instance/upload/')):
+                session['id'] =  personID
+
+
+            if not os.path.isdir('instance/upload/user'+session['id']):
+                os.makedirs('instance/upload/user'+session['id'])
 '''
 ###------------------------------------------------------###
 App Routing: '/results/classification'
@@ -120,8 +143,8 @@ def classify():
         if( DEBUG_FLAG ):
             print(result)
             print("[WORKING] Removing uploaded files - api.py")
-        for file in os.listdir('instance/upload/'):
-            os.remove('instance/upload/'+file)
+        for file in os.listdir('instance/upload/user'+personID):
+            os.remove('instance/upload/user'+personID+"/"+file)
 
         if( DEBUG_FLAG ):
             print("[Success] Classification has been completed - api.py")
@@ -147,12 +170,12 @@ def run_analysis():
     if( DEBUG_FLAG ):
         print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
     try:
-        result = get_spectrogram()
+        result = get_spectrogram(session['id'])
         if( DEBUG_FLAG ):
             print("[SUCCESS] Spectrogram images have been created - api.py")
 
-        for file in os.listdir('instance/upload/'):
-                    os.remove('instance/upload/'+file)
+
+        shutil.rmtree('instance/upload/user'+session['id'])
 
         return result
     except Exception as e:
@@ -175,12 +198,13 @@ def get_indices():
     if( DEBUG_FLAG ):
         print("[WORKING] Flask is making call to acousticIndices.py - api.py")
     try:
-        result = get_acoustic_indices()
+        result = get_acoustic_indices(session['id'])
         if( DEBUG_FLAG ):
             print("[SUCCESS] Calculated acoustic indices - api.py")
         return result
     except Exception as e:
-        return str(e)
+        track = traceback.format_exc()
+        print(track)
 
-print('Starting Flask!')
-app.run(debug=True)
+#print('Starting Flask!')
+#app.run(debug=True)
