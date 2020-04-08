@@ -20,7 +20,6 @@ app.config["DEBUG"] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-
 DEBUG_FLAG = True
 
 '''
@@ -37,17 +36,7 @@ hit refresh upon uploading a file.
 '''
 @app.route('/')
 def home():
-    personID = str(random.randint(0, 999999999999))
-    while('user'+ personID in os.listdir('instance/upload/')):
-         personID = str(random.randint(0, 999999999999))
-
-    if('user'+ session['id'] not in os.listdir('instance/upload/')):
-        session['id'] =  personID
-
-
-    if not os.path.isdir('instance/upload/user'+session['id']):
-        os.makedirs('instance/upload/user'+session['id'])
-
+    getUserFolder()
     return render_template("index.html")
 
 
@@ -67,6 +56,7 @@ and saves the files one at a time to the folder 'instance/upload'
 '''
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
+   getUserFolder()
    if request.method == 'POST':
         # Request.Files comes in a immutable multi-dictionary.
         # MutableList uses a method to convert the imm. multi-dict to a mutable list.
@@ -103,6 +93,30 @@ def didFileUpload():
     else:
         return "False"
 
+
+
+def getUserFolder():
+        if('id' not in session):
+            session['id'] = 0
+
+        if('user'+session['id'] in os.listdir('instance/upload/')):
+            for file in os.listdir('instance/upload/user' + session['id']):
+                os.remove('instance/upload/user' + session['id']+'/'+file)
+            return
+
+        else:
+            personID = str(random.randint(0, 999999999999))
+            while('user'+ personID in os.listdir('instance/upload/')):
+                 personID = str(random.randint(0, 999999999999))
+
+
+
+            if('user'+ str(session['id']) not in os.listdir('instance/upload/')):
+                session['id'] =  personID
+
+
+            if not os.path.isdir('instance/upload/user'+session['id']):
+                os.makedirs('instance/upload/user'+session['id'])
 '''
 ###------------------------------------------------------###
 App Routing: '/results/classification'
@@ -163,9 +177,6 @@ def run_analysis():
 
         shutil.rmtree('instance/upload/user'+session['id'])
 
-        #for file in os.listdir('instance/upload/user'+session['id']):
-         #   os.remove('instance/upload/user'+session['id']+'/'+file)
-
         return result
     except Exception as e:
         return str(e)
@@ -192,7 +203,8 @@ def get_indices():
             print("[SUCCESS] Calculated acoustic indices - api.py")
         return result
     except Exception as e:
-        return str(e)
+        track = traceback.format_exc()
+        print(track)
 
 #print('Starting Flask!')
-#app.run(debug=True)
+app.run(debug=True)
