@@ -189,12 +189,10 @@ function get_indices(){
     return result
 }
 
-/* func: downloadTxtFile
-   creates a txt file with a classification result when export button is pressed
-   TODO:: Pretty print classification results in the returned export file Issue #13
-   TODO:: Save classification results to a csv. file Issue #14
+/* func: downloadCSVFile
+   creates a CSV file with a classification result when export button is pressed
  */
-function downloadTxtFile(fileNumber){
+function downloadCSVFile(fileNumber){
 
     const element = document.createElement("a");
 
@@ -340,7 +338,7 @@ function Results() {
                                     <br/>
                                     <Paper>
                                         <Button onClick={function () {
-                                            downloadTxtFile(key)
+                                            downloadCSVFile(key)
                                         }} variant="contained" className={classes.button}>Export Neural Network Classification</Button>
                                     </Paper>
                                 </Container>
