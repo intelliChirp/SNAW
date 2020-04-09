@@ -204,7 +204,7 @@ function downloadTxtFile(fileNumber){
         header : ['CATEGORY', 'TIME'],
         path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
     });
-    const data = [['Anthro:', ' ', ' ', 'Bio:', ' ', ' ', 'Geo:', ' ', ' '], ['CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME']];
+    const data = [['Anthrophony Model:', ' ', ' ', 'Biophony Model:', ' ', ' ', 'Geophony Model:', ' ', ' '], ['CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)']];
     for(var  keys = 0; keys < infoDictKeys.length; keys++) {
         var csvArray = [];
         for (var dictCount = 0; dictCount < 3; dictCount++) {
