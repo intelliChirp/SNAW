@@ -58,6 +58,9 @@ export default function Applicationbar(props) {
                                 <HomeIcon style={styles.icon}></HomeIcon>
                             </Link>
                             Soundscape Noise Analysis Workbench Home
+                            <Link to={'/Information'}>
+                                Information
+                            </Link>
                         </Typography>
                     </Toolbar>
                 </AppBar>
