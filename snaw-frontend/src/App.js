@@ -23,6 +23,7 @@ import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { Link } from 'react-router-dom';
 
 const customtheme = createMuiTheme({
     palette : {
@@ -189,7 +190,7 @@ class App extends React.Component {
                                     will begin to take place. For more information about how the analysis works
                                     and results of accuracy measures please click below.
                                 </Typography>
-                                <Tooltip title={'More Information'}><Button><InfoIcon/></Button></Tooltip>
+                                <Tooltip title={'More Information'}><Link to={'/Information'}><Button><InfoIcon/></Button></Link></Tooltip>
                             </Grid>
                                 </Box>
                             </Paper>

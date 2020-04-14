@@ -19,7 +19,7 @@ const customtheme = createMuiTheme({
 function Information() {
     return (
         <div className="Information">
-            <ApplicationBar title={'More Information'}/>
+            <ApplicationBar title={'Information about SNAW'}/>
             <Container>
                 <MuiThemeProvider theme={customtheme}>
                     <Grid container spacing={5} direction='column'>
