@@ -100,8 +100,6 @@ def getUserFolder():
             session['id'] = 0
 
         if('user' + str(session['id']) in os.listdir('instance/upload/')):
-            for file in os.listdir('instance/upload/user' + session['id']):
-                os.remove('instance/upload/user' + session['id']+'/'+file)
             return
 
         else:
@@ -175,7 +173,8 @@ def run_analysis():
             print("[SUCCESS] Spectrogram images have been created - api.py")
 
 
-        shutil.rmtree('instance/upload/user'+session['id'])
+        for file in os.listdir('instance/upload/user' + session['id']):
+            os.remove('instance/upload/user' + session['id']+'/'+file)
 
         return result
     except Exception as e:
@@ -206,5 +205,6 @@ def get_indices():
         track = traceback.format_exc()
         print(track)
 
+
 #print('Starting Flask!')
-#app.run(debug=True)
+app.run(debug=True)
