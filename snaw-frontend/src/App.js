@@ -42,17 +42,24 @@ class App extends React.Component {
                   filesInserted: false, 
                   fileCount: 0,
                   percentage: 0,
-                  loadingBarVisible: true};
+                  loadingBarVisible: true,
+                  inputFilesButtonVisible: false};
     this.submitHandler.bind(this)
   }
 
   fileSelectedHandler = event => {
-    event.preventDefault();
+      console.log(this.state.inputFilesButtonVisible);
+      if(this.state.inputFilesButtonVisible){
+          return
+      }
+      else {
+          event.preventDefault();
+          this.setState({percentage: 0});
+          this.state.selectedFile = Array.from(event.target.files);
+          this.state.fileCount = this.state.selectedFile.length;
+          this.setState(this.state.selectedFile)
+      }
 
-    this.state.selectedFile = Array.from(event.target.files);
-    this.state.fileCount = this.state.selectedFile.length;
-
-    this.setState(this.state.selectedFile)
   };
 
   /*-----------------------------------------------------/
@@ -87,7 +94,8 @@ class App extends React.Component {
                  if (e.lengthComputable) {
                      percent = Math.round((e.loaded / e.total) * 100);
                      console.log(percent);
-                     self.setState({percentage: percent});
+                     self.setState({percentage: percent, inputFilesButtonVisible: true});
+
 
                  }
 
@@ -101,12 +109,33 @@ class App extends React.Component {
          contentType: false,
          success: () => {
              if (this.state.fileCount != 0) {
-                 this.setState({filesInserted: true});
+                 this.setState({filesInserted: true, inputFilesButtonVisible: false, loadingBarVisible: true});
              }
          }
      })
   }
 
+
+  getFileByteSize(size){
+      let result = 0;
+      if(size >= 1000 && size < 1000000){
+          result = Number.parseFloat(String(size/1000)).toFixed(2);
+          return String(result + " KB")
+      }
+      else if(size >= 1000000 && size < 1000000000){
+          result = Number.parseFloat(String(size/1000000)).toFixed(2);
+          return String(result + " MB")
+
+      }
+      else if(size >= 1000000000){
+          result = Number.parseFloat(String(size/1000000000)).toFixed(2);
+          return String(result + " GB")
+
+      }
+      else{
+          return 0;
+      }
+  }
 
   render() {
 
@@ -138,7 +167,8 @@ class App extends React.Component {
                                         <label htmlFor='my-input'>
                                             <Tooltip title={'Upload Audio File(s)'}>
                                                 <Button variant="outlined"
-                                                        component='span'>
+                                                        component='span'
+                                                        disabled={this.state.inputFilesButtonVisible}>
                                                     <AddIcon  fontSize="large"/>
                                                 </Button>
                                             </Tooltip>
@@ -148,14 +178,16 @@ class App extends React.Component {
                                                type='file'
                                                multiple={true}
                                                onChange={this.fileSelectedHandler}
+                                               disabled={this.state.inputFilesButtonVisible}
                                                name='file'
-                                               style={{display: 'none'}}/>
+                                               style={{display: 'none'}}
+                                               />
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <br/> Selected Files : <br/>
-                                            {this.state.selectedFile.map(function(file, index) {
-                                                return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
+                                            {this.state.selectedFile.map(function(file, index){
+                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})<br/>
                                                 </li>
-                                            })}
+                                            }.bind(this))}
                                             <br/>
                                             <LinearProgress hidden={this.state.loadingBarVisible} id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(200)+2} variant="buffer"/>
                                             <br/>
@@ -163,11 +195,13 @@ class App extends React.Component {
                                         <label htmlFor='my-submit'>
                                             <input id='my-submit'
                                                    type='submit'
-                                                   style={{display: 'none'}}/>
+                                                   style={{display: 'none'}}
+                                                   disabled={this.state.inputFilesButtonVisible}/>
                                                    <Tooltip title={'Submit Audio File(s)'}>
                                                 <Button variant="contained"
                                                         onClick={this.submitHandler}
-                                                        component='span'>
+                                                        component='span'
+                                                        disabled={this.state.inputFilesButtonVisible}>
                                                     <PublishIcon/>
                                                 </Button>
                                                    </Tooltip>
