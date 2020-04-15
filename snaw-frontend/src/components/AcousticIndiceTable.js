@@ -42,7 +42,7 @@ export default function AcousticIndiceTable(props) {
           {props.indices.map(row => (
               <TableRow key={row.index}>
                 <TableCell align="left">
-                  <Alert index={row.index} description="desc desc desc"/>
+                  <Alert index={row.index} description={row.desc}/>
                 </TableCell>
                 <TableCell align="right">{row.value}</TableCell>
               </TableRow>
