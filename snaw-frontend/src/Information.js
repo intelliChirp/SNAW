@@ -6,7 +6,9 @@ import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Box from "@material-ui/core/Box";
-import nn_arch from './img/nn.png'
+import nn_arch from './img/nn.png';
+import confusionmatrix from './img/confusionmatrix.png';
+import roccurve from './img/roccurve.png';
 import CardMedia from "@material-ui/core/CardMedia";
 
 const customtheme = createMuiTheme({
@@ -70,17 +72,27 @@ function Information() {
                                     <Divider/>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Architecture</Typography>
+                                    <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
+                                        Architecture
+                                    </Typography>
                                     <CardMedia id="nn_arch" component='img' image={nn_arch}
                                                className="classes.media"/>
                                     <Divider/>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Where</Typography>
+                                    <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
+                                        Confusion Matrix
+                                    </Typography>
+                                    <CardMedia id="nn_arch" component='img' image={confusionmatrix}
+                                               className="classes.media"/>
                                     <Divider/>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Why</Typography>
+                                    <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
+                                        ROC Curves
+                                    </Typography>
+                                    <CardMedia id="nn_arch" component='img' image={roccurve}
+                                               className="classes.media"/>
                                     <Divider/>
                                 </Grid>
                             </Box>
