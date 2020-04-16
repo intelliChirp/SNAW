@@ -25,17 +25,18 @@ def run_driver(personalID) :
     # And a counter for the files
     listOfImages = {}
     fileCount = 0
+
+    if DEBUG_FLAG : print("[WORKING] Loading CNN Models..")
+    all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
+                    load_model('model\\bio\\bio_cnn_model.h5'),
+                    load_model('model\\geo\\geo_cnn_model.h5') ]
+    if DEBUG_FLAG : print("[SUCCESS] Loaded CNN Models..")
+
     try:
         # Retrieve file
         for filename in os.listdir('instance/upload/user'+personalID):
 
             audiofile = 'instance/upload/user'+personalID+"/"+ filename
-
-            if DEBUG_FLAG : print("[WORKING] Loading CNN Models..")
-            all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
-                            load_model('model\\bio\\bio_cnn_model.h5'),
-                            load_model('model\\geo\\geo_cnn_model.h5') ]
-            if DEBUG_FLAG : print("[SUCCESS] Loaded CNN Models..")
 
             data = run_classification( audiofile, all_models )
 
