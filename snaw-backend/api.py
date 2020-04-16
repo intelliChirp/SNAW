@@ -8,6 +8,7 @@ from get_spectrogram import runScript as get_spectrogram
 from classification import runScript as get_svm_classification
 from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
+from analysis_driver import run_driver
 import traceback
 import random
 import shutil
@@ -93,8 +94,6 @@ def didFileUpload():
     else:
         return "False"
 
-
-
 def getUserFolder():
         if('id' not in session):
             session['id'] = 0
@@ -117,41 +116,6 @@ def getUserFolder():
 
             if not os.path.isdir('instance/upload/user'+session['id']):
                 os.makedirs('instance/upload/user'+session['id'])
-'''
-###------------------------------------------------------###
-App Routing: '/results/classification'
-Function: classify()
-Caller: Results.js
-###------------------------------------------------------###
-calls the function runScript() within classification.py.
-The function runScript() is pulled into api.py as "get_classification()."
-After the function finishes operations, the uploaded files will
-be deleted.
-###------------------------------------------------------###
-
-@app.route("/results/classification")
-def classify():
-    if( DEBUG_FLAG ):
-        print("[WORKING] Flask is making call to classification.py - api.py")
-    try:
-        print("trying to get classification")
-        try:
-            result = get_cnn_classification()
-        except Exception as e:
-            track = traceback.format_exc()
-            print(track)
-        if( DEBUG_FLAG ):
-            print(result)
-            print("[WORKING] Removing uploaded files - api.py")
-        for file in os.listdir('instance/upload/user'+personID):
-            os.remove('instance/upload/user'+personID+"/"+file)
-
-        if( DEBUG_FLAG ):
-            print("[Success] Classification has been completed - api.py")
-        return result
-    except Exception as e:
-        return str(e)
-'''
 
 '''
 ###------------------------------------------------------###
@@ -170,7 +134,7 @@ def run_analysis():
     if( DEBUG_FLAG ):
         print("[WORKING] Flask is making call to get_spectrogram.py - api.py")
     try:
-        result = get_spectrogram(session['id'])
+        result = run_driver(session['id'])
         if( DEBUG_FLAG ):
             print("[SUCCESS] Spectrogram images have been created - api.py")
 
@@ -180,31 +144,6 @@ def run_analysis():
         return result
     except Exception as e:
         return str(e)
-
-'''
-###------------------------------------------------------###
-App Routing: '/results/indices'
-Function: get_indices()
-Caller: Results.js
-###------------------------------------------------------###
-calls the function getAcousticIndices() within acousticIndices.py.
-The function getAcousticIndices() is pulled into api.py as "get_acoustic_indices()."
-After the function finishes operations, the uploaded files will
-be deleted.
-###------------------------------------------------------###
-'''
-@app.route("/results/indices")
-def get_indices():
-    if( DEBUG_FLAG ):
-        print("[WORKING] Flask is making call to acousticIndices.py - api.py")
-    try:
-        result = get_acoustic_indices(session['id'])
-        if( DEBUG_FLAG ):
-            print("[SUCCESS] Calculated acoustic indices - api.py")
-        return result
-    except Exception as e:
-        track = traceback.format_exc()
-        print(track)
 
 #print('Starting Flask!')
 #app.run(debug=True)

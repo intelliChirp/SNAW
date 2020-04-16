@@ -6,6 +6,7 @@ import sys
 import os
 import base64
 from classification_cnn import runScript as get_result
+import traceback
 
 DEBUG_FLAG = False
 
@@ -129,46 +130,29 @@ def encoding( data, audiofile, path ) :
         wav_audio.close()
     return encode, wavEncode
 
-def runScript(personalID):
+def runScript(filename, fileCount, audiofile, data):
     if DEBUG_FLAG : print("[WORKING] Attempting to run spectrogram calculator - get_spectrogram.py")
 
     # If spectrogram folder has not been created.
     if (os.path.isdir('Spectrogram/') == False):
         os.mkdir('Spectrogram/')
 
-    # Create a dictionary for storing
-    # And a counter for the files
-    listOfImages = {}
-    fileCount = 0
     try:
-        # Retrieve file
-        for filename in os.listdir('instance/upload/user'+personalID):
-            audiofile = 'instance/upload/user'+personalID+"/"+ filename
+        # Correct Path
+        path= "spectrogram/SpectroedImage"+ str(fileCount)
 
-            # Correct Path
-            path= "spectrogram/SpectroedImage"+ str(fileCount)
+        encode_ant, wavEncode = encoding( data[0]['data'], audiofile, path )
+        encode_bio, _ = encoding( data[1]['data'], audiofile, path )
+        encode_geo, _ = encoding( data[2]['data'], audiofile, path )
 
-            data = get_result(audiofile)
-
-            encode_ant, wavEncode = encoding( data[0][0]['data'], audiofile, path )
-            encode_bio, _ = encoding( data[0][1]['data'], audiofile, path )
-            encode_geo, _ = encoding( data[0][2]['data'], audiofile, path )
-
-            listOfImages[fileCount] = [filename,
-                                       ['data:image/png;base64,' + encode_ant.decode("utf-8"),
-                                        'data:image/png;base64,' + encode_bio.decode("utf-8"),
-                                        'data:image/png;base64,' + encode_geo.decode("utf-8")],
-                                      'data:audio/wav;base64,' + wavEncode.decode("utf-8"),
-                                      data[0] ]
-            fileCount += 1
-
-        # remove all spectrogram pictures from storage
-        for file in os.listdir("spectrogram/"):
-            os.remove("spectrogram/"+file)
+        image_list = ['data:image/png;base64,' + encode_ant.decode("utf-8"),
+                      'data:image/png;base64,' + encode_bio.decode("utf-8"),
+                      'data:image/png;base64,' + encode_geo.decode("utf-8")]
+        audio_wav =  'data:audio/wav;base64,' + wavEncode.decode("utf-8")
 
     except:
-        if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
+        #if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
+        track = traceback.format_exc()
+        print(track)
 
-    if DEBUG_FLAG : print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
-
-    return listOfImages
+    return image_list, audio_wav
