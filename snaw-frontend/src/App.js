@@ -151,7 +151,7 @@ class App extends React.Component {
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index) {
-                                                return <li key={index}>{file.name} (Size: {(file.size / 1048576).toFixed(2)} MB)<br/>
+                                                return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
                                                 </li>
                                             })}
                                             <LinearProgress id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(60)} variant="buffer"/>
