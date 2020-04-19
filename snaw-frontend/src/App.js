@@ -114,7 +114,7 @@ class App extends React.Component {
 
       <div className="App">
           <div id="overlay" style={{display: 'none', position: 'fixed', width: '100%', height: '100%', top: '0', left: '0', right: '0', bottom: '0', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: '2', cursor: 'pointer'}}>
-              <img id="ldimg" src={loading} alt='Loading...' style={{width: '62px', top: '50%', margin: 'auto'}}/>
+              <img id="ldimg" src={loading} alt='Loading...' style={{width: '62px', position: 'absolute', top: '50%', left: '50%', margin: '-31px 0 0 -31px'}}/>
           </div>
           <body>
           <ApplicationBar title={'Soundscape Noise Analysis Workbench'}/>
@@ -151,7 +151,7 @@ class App extends React.Component {
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index) {
-                                                return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
+                                                return <li key={index}>{file.name} (Size: {(file.size / 1048576).toFixed(2)} MB)<br/>
                                                 </li>
                                             })}
                                             <LinearProgress id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(60)} variant="buffer"/>
