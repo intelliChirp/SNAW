@@ -330,6 +330,7 @@ function Results() {
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         )})}
+                        <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
             </Container>
             </body>
         </div>
