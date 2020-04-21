@@ -23,6 +23,7 @@ import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { Link } from 'react-router-dom';
 
 const customtheme = createMuiTheme({
     palette : {
@@ -41,7 +42,8 @@ class App extends React.Component {
     this.state = {selectedFile: [],
                   filesInserted: false, 
                   fileCount: 0,
-                  percentage: 0};
+                  percentage: 0,
+                  loadingBarVisible: true};
     this.submitHandler.bind(this)
   }
 
@@ -74,6 +76,7 @@ class App extends React.Component {
      for(var i = 0; i < this.state.selectedFile.length; i++) {
          formData.append('file', this.state.selectedFile[i]);
      }
+     this.setState({loadingBarVisible: false})
      console.log(formData)
      var percent = 0;
 
@@ -154,7 +157,9 @@ class App extends React.Component {
                                                 return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
                                                 </li>
                                             })}
-                                            <LinearProgress id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(60)} variant="buffer"/>
+                                            <br/>
+                                            <LinearProgress hidden={this.state.loadingBarVisible} id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(200)+2} variant="buffer"/>
+                                            <br/>
                                         </Typography>
                                         <label htmlFor='my-submit'>
                                             <input id='my-submit'
@@ -185,7 +190,7 @@ class App extends React.Component {
                                     will begin to take place. For more information about how the analysis works
                                     and results of accuracy measures please click below.
                                 </Typography>
-                                <Tooltip title={'More Information'}><Button><InfoIcon/></Button></Tooltip>
+                                <Tooltip title={'More Information'}><Link to={'/Information'}><Button><InfoIcon/></Button></Link></Tooltip>
                             </Grid>
                                 </Box>
                             </Paper>

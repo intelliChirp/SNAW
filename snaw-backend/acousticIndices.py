@@ -636,7 +636,7 @@ class AcousticIndices(object):
         feature_headers.append("Temporal Entropy")
         feature_headers.append("Spectral Entropy")
         feature_headers.append("Acoustic Entropy")
-        feature_headers.extend(["Antrhophony","Biophony","Normalized Difference Soundscape Index"])
+        feature_headers.extend(["Anthrophony","Biophony","Normalized Difference Soundscape Index"])
         feature_headers.append("Acoustic Complexity Index")
         feature_headers.append("Shannon Index")
         feature_headers.append("Median Of Amplitude Envelope")
@@ -649,6 +649,30 @@ class AcousticIndices(object):
 
         return feature_headers
 
+    @staticmethod
+    def get_acoustic_indices_descs():
+        feature_descs = []
+        feature_descs.append("Average Signal Amplitude Desc")
+        feature_descs.append("Background Noise Desc")
+        feature_descs.append("SNR Desc")
+        feature_descs.append("Acoustic Activity Desc")
+        feature_descs.append("Acoustic Activity Count Desc")
+        feature_descs.append("Acoustic Events Average Duration Desc")
+        feature_descs.append("Temporal Entropy Desc")
+        feature_descs.append("Spectral Entropy Desc")
+        feature_descs.append("Acoustic Entropy Desc")
+        feature_descs.extend(["Anthrophony Desc","Biophony Desc","Normalized Difference Soundscape Index Desc"])
+        feature_descs.append("Acoustic Complexity Index Desc")
+        feature_descs.append("Shannon Index Desc")
+        feature_descs.append("Median Of Amplitude Envelope Desc")
+        feature_descs.append("Mid Band Activity Desc")
+        feature_descs.append("Entropy Of Spectral Maxima Desc")
+        feature_descs.append("Entropy Of Spectral Average Desc")
+        feature_descs.append("Entropy Of Spectral Variance Desc")
+        #feature_descs.append("Spectral Diversity")
+        #feature_descs.append("Spectral Persistence")
+
+        return feature_descs
 
 '''
 ###------------------------------------------------------###
@@ -694,9 +718,12 @@ def getAcousticIndices(peronsalID):
             # extracting indices
             acousticIndices = AcousticIndices(data_chunk,new_fs)
             acoustic_indices = acousticIndices.get_acoustic_indices()
-            print("Hi: ", len(acoustic_indices))
+
+            acoustic_indices = list(map(lambda x: round(x, 4), acoustic_indices))
+            print(acoustic_indices)
+
             acoustic_headers = acousticIndices.get_acoustic_indices_headers()
-            print("Headers", len(acoustic_headers))
+            acoustic_descs = acousticIndices.get_acoustic_indices_descs()
             # singleResultArray is used to store the results of one file (List of dictionaries)
             singleResultArray = []
 
@@ -704,7 +731,7 @@ def getAcousticIndices(peronsalID):
             for i in range(len(acoustic_headers)):
                 # per indices in the length of the acoustic tags,
                 # append dictionary items.
-                singleResultArray.append({"index": acoustic_headers[i], "value" : acoustic_indices[i]})
+                singleResultArray.append({"index": acoustic_headers[i], "value" : acoustic_indices[i], "desc" : acoustic_descs[i]})
 
             # append result dictionary to the final results array
                 if( DEBUG_FLAG ):

@@ -26,7 +26,7 @@ function createData(class_name, seconds, percentage) {
   return { class_name, seconds, percentage };
 }
 
-// MOCK DATA
+// START OF MOCK DATA
 const rows = [
   createData('Geophony', 14, 45),
   createData('Biophony', 12, 45),
@@ -36,6 +36,7 @@ const rows = [
 const rows2 = [
   {"class_name" : "Geophony", "seconds" : 14, "percentage" : 45}
 ];
+// END OF MOCK DATA
 
 function getTotals(classification_dict) {
   var anthro_total = 0;
@@ -69,7 +70,7 @@ function getTotalSecs(classification_dict) {
   return total;
 }
 
-export default function SimpleTable(props) {
+export default function ClassificationTable(props) {
   const classes = useStyles();
 
   //var anthro_total = getTotals( props.series[0].data ); // Total number of ant classes with non NO categ
@@ -102,8 +103,8 @@ export default function SimpleTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell><Typography variant="h6">Classification Type</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h6">Seconds</Typography></TableCell>
+            <TableCell><Typography variant="h6">Classification Category</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h6">Total Seconds</Typography></TableCell>
             <TableCell align="right"><Typography variant="h6">Percentage (%)</Typography></TableCell>
       </TableRow>
         </TableHead>
@@ -117,24 +118,6 @@ export default function SimpleTable(props) {
               </TableCell>
               <TableCell align="right">{row.value}</TableCell>
               <TableCell align="right">{row.percent}</TableCell>
-              </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell><Typography variant="h6">Index Name</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h6">Value</Typography></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.indices.map(row => (
-              <TableRow key={row.index}>
-                <TableCell component="th" scope="row">
-                  {row.index}
-                </TableCell>
-                <TableCell align="right">{row.value}</TableCell>
               </TableRow>
           ))}
         </TableBody>

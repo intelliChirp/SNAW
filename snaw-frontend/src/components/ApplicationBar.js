@@ -3,15 +3,28 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import React from "react";
 import { Link } from 'react-router-dom';
-import {makeStyles} from "@material-ui/core/styles";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import logo from "../img/logo_small.png";
 import back_img from "../img/garden-pond-lakes-winery-581729.jpg";
 import HomeIcon from '@material-ui/icons/Home';
+import InfoIcon from "@material-ui/icons/Info";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            flexGrow: 1,
+        },
+        webTitle: {
+            marginRight: theme.spacing(2),
+        },
+        pageTitle: {
+            flexGrow: 1,
+        },
+    }),
+);
 
 const customtheme = createMuiTheme({
     palette : {
@@ -26,7 +39,8 @@ const customtheme = createMuiTheme({
 const styles = {
     headerContainer: {
         backgroundImage : `url(${back_img})`,
-        backgroundSize: 'cover'
+        backgroundSize: 'cover',
+        flexGrow: 1
     },
 
     scrim: {
@@ -38,6 +52,10 @@ const styles = {
         verticalAlign: 'text-bottom',
         paddingRight: '10px',
         fill: 'white'
+    },
+
+    title: {
+        flexGrow: 1,
     }
 }
 
@@ -48,17 +66,19 @@ export default function Applicationbar(props) {
     return (
         <header style={styles.headerContainer}>
             <header style={styles.scrim}>
-                <AppBar position='static'
-                        style={{background: customtheme.palette.primary.main}}>
+                <AppBar position="static" style={{background: customtheme.palette.primary.main}}>
                     <Toolbar>
-                        <Typography variant='h6'
-                                    className={classes.title}
-                                    color='inherit'>
-                            <Link to={'/'}>
-                                <HomeIcon style={styles.icon}></HomeIcon>
-                            </Link>
-                            Soundscape Noise Analysis Workbench Home
+                        <Typography variant='h6' className={classes.webTitle}>
+                            SNAW
                         </Typography>
+                        <Typography variant="h6" className={classes.pageTitle}>
+                            {props.title}
+                        </Typography>
+                        <Link to={'/'} style={styles.icon} color={customtheme.palette.primary.contrastText}><HomeIcon style={styles.icon}/>
+                        </Link>
+                        <Link to={'/Information'} style={styles.icon} color={customtheme.palette.primary.contrastText}>
+                            <InfoIcon style={styles.icon}/>
+                        </Link>
                     </Toolbar>
                 </AppBar>
                 <br/>
