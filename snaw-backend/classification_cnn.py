@@ -16,15 +16,9 @@ import json
 DEBUG_FLAG = True
 PREDICTION_VERBOSE = False
 
-def classify_file( audio_file ) :
+def classify_file( audio_file, all_models ) :
     # load the models
-    if DEBUG_FLAG : print("[WORKING] Loading CNN Models..")
 
-    all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
-                    load_model('model\\bio\\bio_cnn_model.h5'),
-                    load_model('model\\geo\\geo_cnn_model.h5') ]
-    
-    if DEBUG_FLAG : print("[SUCCESS] Loaded CNN Models..")
 
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
@@ -112,20 +106,14 @@ def classify_file( audio_file ) :
     return classify_dict
 
 # driver function
-def runScript(audiofile):
+def runScript(audiofile, all_models):
     if DEBUG_FLAG : print("[WORKING] Attempting to run CNN classification calculator - classification_svm.py")
 
-    # Create dictionary for storing return information
-    # Create a counter for files
-    finalResult = {}
-    fileCount = 0
-
     try:
-        result = classify_file( audiofile )
+        result = classify_file( audiofile, all_models )
 
         # Add result list to finalResult dictionary with filecounter as the key
-        finalResult[fileCount] = result
-        fileCount += 1
+        finalResult = result
 
     except Exception as e:
         track = traceback.format_exc()

@@ -11,7 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import LineChart from './Charts/LineChart';
 import PieChart from './Charts/PieChart';
 import Spectrogram from "./components/Spectrogram";
-import SimpleTable from "./components/table";
+import ClassificationTable from "./components/ClassificationTable";
+import AcousticIndiceTable from "./components/AcousticIndiceTable";
 import ApplicationBar from "./components/ApplicationBar";
 import Grid from '@material-ui/core/Grid';
 import $ from 'jquery';
@@ -65,10 +66,10 @@ const useStyles = makeStyles(theme => ({
         flexBasis: '33.33%',
         flexShrink: 0,
     },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
-  },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+    },
     button: {
         color: 'white',
         fontSize: '1em',
@@ -140,60 +141,10 @@ function run_analysis( ){
     return result;
 }
 
-/* Func: get_class()
-   When the function is called, an ajax call is made to /results/classification
-   flask function returns a JSON string featuring a dictionary of time stamps and classification
-   based on the audio file uploaded
-   spectro_load set to true, allows function to only be loaded on results.js creation, not update
-   ajax response is returned to the function
-*/
-/*function get_class(){
-    var result = '';
-    $.ajax({
-        url: '/results/classification',
-        type: 'GET',
-        async: false,
-        success: function(response){
-            //console.log(response);
-            result = response;
-        },
-        error: function(error){
-            console.log(error);
-        },
-    });
-    return result
-}*/
-
-/* Func: get_class()
-   When the function is called, an ajax call is made to /results/classification
-   flask function returns a JSON string featuring a dictionary of time stamps and classification
-   based on the audio file uploaded
-   spectro_load set to true, allows function to only be loaded on results.js creation, not update
-   ajax response is returned to the function
-*/
-function get_indices(){
-    var result = '';
-    $.ajax({
-        url: '/results/indices',
-        type: 'GET',
-        async: false,
-        success: function(response){
-            //console.log(response);
-            result = response;
-        },
-        error: function(error){
-            console.log(error);
-        },
-    });
-    return result
-}
-
-/* func: downloadTxtFile
-   creates a txt file with a classification result when export button is pressed
-   TODO:: Pretty print classification results in the returned export file Issue #13
-   TODO:: Save classification results to a csv. file Issue #14
+/* func: downloadCSVFile
+   creates a CSV file with a classification result when export button is pressed
  */
-function downloadTxtFile(fileNumber){
+function downloadCSVFile(fileNumber){
 
     const element = document.createElement("a");
 
@@ -203,7 +154,7 @@ function downloadTxtFile(fileNumber){
         header : ['CATEGORY', 'TIME'],
         path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
     });
-    const data = [['Anthro:', ' ', ' ', 'Bio:', ' ', ' ', 'Geo:', ' ', ' '], ['CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME', ' ', 'CATEGORY', 'TIME']];
+    const data = [['Anthrophony Model:', ' ', ' ', 'Biophony Model:', ' ', ' ', 'Geophony Model:', ' ', ' '], ['CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)']];
     for(var  keys = 0; keys < infoDictKeys.length; keys++) {
         var csvArray = [];
         for (var dictCount = 0; dictCount < 3; dictCount++) {
@@ -238,22 +189,22 @@ function downloadTxtFile(fileNumber){
 function runAnalysis() {
 
         // Create a final dictionary to store all information about each file
-        var resultDictionary;
+        //var resultDictionary;
         // Run spectrogram conversion
-        var indices = get_indices();
-        var spectroImg = run_analysis();
+        //var indices = get_indices();
+        var analysis_results = run_analysis();
 
         //TODO: This process needs to be completed in the backend, and then the finished dictionary sent through to front-end
-        resultDictionary = spectroImg;
+        //resultDictionary = spectroImg;
 
         //Put everything together into one dictionary for dynamic adding.
-        for (var i = 0; i < Object.keys(spectroImg).length; i++) {
+        //for (var i = 0; i < Object.keys(spectroImg).length; i++) {
             //var classification = spectroImg[i][3];
             //resultDictionary[i].push(classification);
-            resultDictionary[i].push(indices[i])
-        }
-        console.log(resultDictionary);
-        return resultDictionary;
+        //    resultDictionary[i].push(indices[i])
+        //}
+        console.log(analysis_results);
+        return analysis_results;
 }
 
 //setter function for the global dictionary. Safety i guess?
@@ -282,9 +233,10 @@ function Results() {
             <Container>
                 <br/><br/>
                 <Typography variant='h5' style={{color:customtheme.palette.primary.dark}}>
-                    View your Classified Audio Soundscape Files Below
+                    View your Classified Audio Soundscape File(s) Below
                 </Typography>
                 <Divider middle/>
+                <br/>
                 {Object.entries(finalInfoDictionary).map(([key, value]) => {
                     return (
                         <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
@@ -298,16 +250,18 @@ function Results() {
                             <ExpansionPanelDetails>
                                 <Container>
                                     <Paper>
+                                    <br/>
                                     <Spectrogram ant_img={value[fileSpectro][0]}
                                                  bio_img={value[fileSpectro][1]}
                                                  geo_img={value[fileSpectro][2]}/>
+                                    <br/>
                                     </Paper>
                                     <br/>
                                     <Typography variant='subtitle1'>Playback Audio File</Typography>
                                     <audio controls src={value[fileAudio]}/>
                                     <br/>
                                     <br/>
-                                    <Typography variant='subtitle1'>Results of NN Anthrophony, Geophony, and Biophony Class
+                                    <Typography variant='subtitle1'>Results from the Anthrophony, Geophony and Biophony Classification
                                         Models</Typography>
                                     <br/>
                                     <Grid container spacing={2}>
@@ -319,12 +273,25 @@ function Results() {
                                         </Grid>
                                     </Grid>
                                     <br/>
-                                    <SimpleTable series={value[fileData]} indices={value[fileAcoustics]}/>
+                                    <ClassificationTable series={value[fileData]}/>
+                                    <br/>
+                                    <ExpansionPanel>
+                                    <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                    >
+                                        <Typography className={classes.heading}>Click to View Acoustic Indices Calculations</Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        <AcousticIndiceTable indices={value[fileAcoustics]}/>
+                                    </ExpansionPanelDetails>
+                                    </ExpansionPanel>
                                     <br/>
                                     <Paper>
                                         <Button onClick={function () {
-                                            downloadTxtFile(key)
-                                        }} variant="contained" className={classes.button}>Export SVM Classification</Button>
+                                            downloadCSVFile(key)
+                                        }} variant="contained" className={classes.button}>Export Neural Network Classification</Button>
                                     </Paper>
                                 </Container>
                             </ExpansionPanelDetails>
@@ -333,6 +300,13 @@ function Results() {
                         <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
             </Container>
             </body>
+            <footer>
+                <Container>
+                    <br/><br/>
+                    <Typography variant='subtitle1'>Created by NAU Capstone Team IntelliChirp</Typography>
+                    <br/>
+                </Container>
+            </footer>
         </div>
             )
         }
