@@ -252,7 +252,7 @@ function Results() {
                                         listOfProblems.push("**Audio playback couldn't be collected**");
                                         continue
                                     case 3:
-                                        listOfProblems.push("**Analysis couldn't be run on file**");
+                                        listOfProblems.push("**Analysis couldn't be run on the file**");
                                         continue
                                     case 4:
                                         listOfProblems.push("**Acoustic Indices couldn't be calculated on the file**")
