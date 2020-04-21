@@ -1,7 +1,7 @@
 # intellichirp-snaw
 ## Soundscape Noise Analysis Workbench
 
-[Demo *Coming Soon*]()
+[Demo](https://github.com/intelliChirp/SNAW)
 
 [Team Website](https://www.cefns.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/)
 
@@ -27,12 +27,16 @@ Our envisioned solution is a user friendly web application for use by any resear
 Here are a couple screenshots from our demo.
 
 ### Uploading audio for analysis
-![Demo 1](https://github.com/stevenenriquez/intellichirp-snaw/blob/master/readme_images/techDemo1.png)
+![Demo 1](readme_images/upload.gif)
+
+### Analyze the audio and give results
+![Demo 2](readme_images/analyze.gif)
 
 ### Visualizing results from analysis
-![Demo 2](https://github.com/stevenenriquez/intellichirp-snaw/blob/master/readme_images/techDemo2.png)
-![Demo 3](https://github.com/stevenenriquez/intellichirp-snaw/blob/master/readme_images/techDemo3.png)
-![Demo 4](https://github.com/stevenenriquez/intellichirp-snaw/blob/master/readme_images/techDemo4.png)
+![Demo 3](readme_images/visualization.gif)
+
+### Export acoustic indices as csv file
+![Demo 3](readme_images/export.gif)
 
 ## Authors
 
