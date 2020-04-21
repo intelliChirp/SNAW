@@ -82,6 +82,14 @@ function Information() {
                                         </ListItem>
                                     </List>
                                 </Grid>
+                                SNAW uses a Convolutional Neural Network for each of the 3 categories above. The accuracies for each category are listed below:
+                                <br/><br/>
+                                Anthrophony: X%
+                                <br/>
+                                Biophony: X%
+                                <br/>
+                                Geophony: X%
+                                <br/><br/>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         Architecture
