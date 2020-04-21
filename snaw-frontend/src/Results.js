@@ -275,8 +275,10 @@ function Results() {
                                             <Typography>
                                                 <h3>It seems something went wrong with this file! Here's what we ran into:</h3>
                                                 <ListItemText>
-                                                {listOfProblems.map(item => <p><h2>{item}</h2></p>)}
+                                                {listOfProblems.map(item => <p><h4>{item}</h4></p>)}
                                                 </ListItemText>
+                                                <br/>
+                                                <h3>If this problem persists, please contact [support@example.com]</h3>
                                             </Typography>
                                         </Paper>
                                     </Container>
