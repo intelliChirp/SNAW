@@ -22,7 +22,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 DEBUG_FLAG = True
-
 '''
 ###------------------------------------------------------###
 App Routing: '/'
@@ -94,6 +93,15 @@ def didFileUpload():
     else:
         return "False"
 
+
+'''
+###------------------------------------------------------###
+Function: getUserFolder()
+Caller: upload_file(), home()
+###------------------------------------------------------###
+Assigns a user a unique id and creates a folder for usage.
+###------------------------------------------------------###
+'''
 def getUserFolder():
         if('id' not in session):
             session['id'] = 0
@@ -117,6 +125,7 @@ def getUserFolder():
             if not os.path.isdir('instance/upload/user'+session['id']):
                 os.makedirs('instance/upload/user'+session['id'])
 
+
 '''
 ###------------------------------------------------------###
 App Routing: '/results/analysis'
@@ -139,11 +148,12 @@ def run_analysis():
             print("[SUCCESS] Spectrogram images have been created - api.py")
 
 
-        shutil.rmtree('instance/upload/user'+session['id'])
+        for file in os.listdir('instance/upload/user' + session['id']):
+            os.remove('instance/upload/user' + session['id']+'/'+file)
 
         return result
     except Exception as e:
         return str(e)
 
 #print('Starting Flask!')
-#app.run(debug=True)
+app.run(debug=True)

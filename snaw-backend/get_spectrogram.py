@@ -79,8 +79,7 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     seconds = int(len(samples) / samplerate)
 
     plt.figure(figsize=(15, 7.5))
-    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
-    plt.colorbar()
+    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", interpolation="none")
 
     plt.xlabel("time (s)")
     plt.ylabel("frequency (hz)")
@@ -144,12 +143,17 @@ def runScript(filename, fileCount, audiofile, data):
         encode_ant, wavEncode = encoding( data[0]['data'], audiofile, path )
         encode_bio, _ = encoding( data[1]['data'], audiofile, path )
         encode_geo, _ = encoding( data[2]['data'], audiofile, path )
+        try:
+            image_list = ['data:image/png;base64,' + encode_ant.decode("utf-8"),
+                          'data:image/png;base64,' + encode_bio.decode("utf-8"),
+                          'data:image/png;base64,' + encode_geo.decode("utf-8")]
+        except:
+            image_list = "ERROR_PRESENT"
 
-        image_list = ['data:image/png;base64,' + encode_ant.decode("utf-8"),
-                      'data:image/png;base64,' + encode_bio.decode("utf-8"),
-                      'data:image/png;base64,' + encode_geo.decode("utf-8")]
-        audio_wav =  'data:audio/wav;base64,' + wavEncode.decode("utf-8")
-
+        try:
+            audio_wav =  'data:audio/wav;base64,' + wavEncode.decode("utf-8")
+        except:
+            audio_wav = "ERROR_PRESENT"
     except:
         #if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
         track = traceback.format_exc()

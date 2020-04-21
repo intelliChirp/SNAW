@@ -724,13 +724,14 @@ def getAcousticIndices(audiofile):
             # append dictionary items.
             singleResultArray.append({"index": acoustic_headers[i], "value" : acoustic_indices[i], "desc" : acoustic_descs[i]})
 
-        # append result dictionary to the final results array
+            # append result dictionary to the final results array
             if( DEBUG_FLAG ):
                 print("[WORKING] Calculated " + acoustic_headers[i] + " - acousticIndices.py")
-
-    except Exception as e:
+   except Exception as e:
         track = traceback.format_exc()
         print(track)
+        singleResultArray = "ERROR_PRESENT"
+
 
     if( DEBUG_FLAG ):
         print("[SUCCESS] Calculated acoustic indices - acousticIndices.py")
