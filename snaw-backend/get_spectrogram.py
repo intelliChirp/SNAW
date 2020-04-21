@@ -36,7 +36,7 @@ def logscale_spec(spec, sr=44100, factor=20.):
 
     # create spectrogram with new freq bins
     newspec = np.complex128(np.zeros([timebins, len(scale)]))
-    for i in range(0, len(scale)):        
+    for i in range(0, len(scale)):
         if i == len(scale)-1:
             newspec[:,i] = np.sum(spec[:,int(scale[i]):], axis=1)
         else:        
@@ -79,7 +79,6 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
 
     plt.figure(figsize=(15, 7.5))
     plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
-    plt.colorbar()
 
     plt.xlabel("time (s)")
     plt.ylabel("frequency (hz)")
@@ -140,14 +139,23 @@ def runScript(personalID):
     # And a counter for the files
     listOfImages = {}
     fileCount = 0
-    try:
-        # Retrieve file
-        for filename in os.listdir('instance/upload/user'+personalID):
-            audiofile = 'instance/upload/user'+personalID+"/"+ filename
 
-            # Correct Path
-            path= "spectrogram/SpectroedImage"+ str(fileCount)
+    # Retrieve file
+    for filename in os.listdir('instance/upload/user'+personalID):
+        audiofile = 'instance/upload/user'+personalID+"/"+ filename
 
+        '''
+        #TESTING
+        if(filename == "s2lam001_180526_2018-05-28_12-00.wav"):
+            listOfImages[fileCount] = [filename, "ERROR_PRESENT"]
+            fileCount += 1
+            continue
+        #TESTING
+        '''
+
+        # Correct Path
+        path= "spectrogram/SpectroedImage"+ str(fileCount)
+        try:
             data = get_result(audiofile)
 
             encode_ant, wavEncode = encoding( data[0][0]['data'], audiofile, path )
@@ -159,15 +167,19 @@ def runScript(personalID):
                                         'data:image/png;base64,' + encode_bio.decode("utf-8"),
                                         'data:image/png;base64,' + encode_geo.decode("utf-8")],
                                       'data:audio/wav;base64,' + wavEncode.decode("utf-8"),
-                                      data[0] ]
+                                      data[0]]
+        except:
+            if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
+            listOfImages[fileCount] = [filename, "ERROR_PRESENT"]
             fileCount += 1
+            continue
 
-        # remove all spectrogram pictures from storage
-        for file in os.listdir("spectrogram/"):
-            os.remove("spectrogram/"+file)
+        fileCount += 1
 
-    except:
-        if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
+    # remove all spectrogram pictures from storage
+    for file in os.listdir("spectrogram/"):
+        os.remove("spectrogram/"+file)
+
 
     if DEBUG_FLAG : print("[SUCCESS] Spectrogram Images created - get_spectrogram.py")
 
