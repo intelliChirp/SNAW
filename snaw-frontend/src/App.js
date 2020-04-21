@@ -222,15 +222,19 @@ class App extends React.Component {
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index){
-                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})<br/>
-                                                <Button
-                                                    size="sm"
-                                                    variant="contained"
+                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;&nbsp;
+                                                    <Button
+                                                    size={"small"}
+                                                    variant="text"
                                                     component='span'
+                                                    color="secondary"
                                                     onClick={() => {this.removeFile(file, file.name)}}>
-                                                    Clear File
+                                                    clear file
                                                 </Button>
+                                                    <br/>
+                                                    <br/>
                                                 </li>
+
                                             }.bind(this))}
                                             <br/>
                                             <LinearProgress hidden={this.state.loadingBarVisible} id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(200)+2} variant="buffer"/>
