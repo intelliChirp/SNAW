@@ -135,7 +135,8 @@ def runScript(filename, fileCount, audiofile, data):
     # If spectrogram folder has not been created.
     if (os.path.isdir('Spectrogram/') == False):
         os.mkdir('Spectrogram/')
-
+    image_list = ""
+    audio_wav = ""
     try:
         # Correct Path
         path= "spectrogram/SpectroedImage"+ str(fileCount)
@@ -158,5 +159,7 @@ def runScript(filename, fileCount, audiofile, data):
         #if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
         track = traceback.format_exc()
         print(track)
+        image_list = "ERROR_PRESENT"
+        audio_wav = "ERROR_PRESENT"
 
     return image_list, audio_wav
