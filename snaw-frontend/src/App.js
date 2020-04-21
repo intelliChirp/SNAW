@@ -23,6 +23,8 @@ import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const customtheme = createMuiTheme({
     palette : {
@@ -38,7 +40,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {selectedFile: [],
+    this.state = {selectedFiles: [],
                   filesInserted: false, 
                   fileCount: 0,
                   percentage: 0};
@@ -48,11 +50,38 @@ class App extends React.Component {
   fileSelectedHandler = event => {
     event.preventDefault();
 
-    this.state.selectedFile = Array.from(event.target.files);
-    this.state.fileCount = this.state.selectedFile.length;
-
-    this.setState(this.state.selectedFile)
+    if(this.checkNumFiles(event) && this.checkFileFormat(event)){
+        this.state.selectedFiles = Array.from(event.target.files);
+        this.state.fileCount = this.state.selectedFiles.length;
+        this.setState(this.state.selectedFiles)
+    }
   };
+
+  checkNumFiles=(event)=>{
+    let files = event.target.files
+        if (files.length > 10) { 
+           event.target.value = null
+           toast.error("Reached File Limit: Exceeded 10 Files")
+           return false
+      }
+    return true
+ }
+
+ checkFileFormat=(event)=>{
+    let files = event.target.files 
+    let errs = ''
+    const types = ['audio/wav', 'audio/WAV']
+
+    for(var index = 0; index < files.length; index++) {
+        // check if files are in wav format
+        if (types.every(type => files[index].type !== type)) {
+        // create error message and assign to container   
+        toast.error("Invalid File Format: Only WAV files accepted.")
+        return false
+       }
+     };
+    return true
+}
 
   /*-----------------------------------------------------/
    * Function [Event Handler]: submitHandler
@@ -71,8 +100,8 @@ class App extends React.Component {
      event.preventDefault();
      var ajaxSuccess = this.ajaxSuccess;
      var formData = new FormData();
-     for(var i = 0; i < this.state.selectedFile.length; i++) {
-         formData.append('file', this.state.selectedFile[i]);
+     for(var i = 0; i < this.state.selectedFiles.length; i++) {
+         formData.append('file', this.state.selectedFiles[i]);
      }
      console.log(formData)
      var percent = 0;
@@ -100,11 +129,11 @@ class App extends React.Component {
          success: () => {
              if (this.state.fileCount != 0) {
                  this.setState({filesInserted: true});
+                 toast.success('Upload Successful: Uploaded ' + this.state.fileCount + ' file(s).')
              }
          }
      })
   }
-
 
   render() {
 
@@ -149,11 +178,15 @@ class App extends React.Component {
                                                name='file'
                                                style={{display: 'none'}}/>
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
-                                            <br/> Selected Files : <br/>
-                                            {this.state.selectedFile.map(function(file, index) {
+                                            <div class="form-group">
+                                                <ToastContainer />
+                                            </div>
+                                            <br/> Selected File's: <br/> (Accepted File Format: WAV, File Limit: 10) <br/><br/>
+                                            {this.state.selectedFiles.map(function(file, index) {
                                                 return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
                                                 </li>
                                             })}
+                                            <br/>
                                             <LinearProgress id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(60)} variant="buffer"/>
                                         </Typography>
                                         <label htmlFor='my-submit'>
