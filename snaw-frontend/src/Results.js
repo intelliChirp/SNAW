@@ -141,54 +141,6 @@ function run_analysis( ){
     return result;
 }
 
-/* Func: get_class()
-   When the function is called, an ajax call is made to /results/classification
-   flask function returns a JSON string featuring a dictionary of time stamps and classification
-   based on the audio file uploaded
-   spectro_load set to true, allows function to only be loaded on results.js creation, not update
-   ajax response is returned to the function
-*/
-/*function get_class(){
-    var result = '';
-    $.ajax({
-        url: '/results/classification',
-        type: 'GET',
-        async: false,
-        success: function(response){
-            //console.log(response);
-            result = response;
-        },
-        error: function(error){
-            console.log(error);
-        },
-    });
-    return result
-}*/
-
-/* Func: get_class()
-   When the function is called, an ajax call is made to /results/classification
-   flask function returns a JSON string featuring a dictionary of time stamps and classification
-   based on the audio file uploaded
-   spectro_load set to true, allows function to only be loaded on results.js creation, not update
-   ajax response is returned to the function
-*/
-function get_indices(){
-    var result = '';
-    $.ajax({
-        url: '/results/indices',
-        type: 'GET',
-        async: false,
-        success: function(response){
-            //console.log(response);
-            result = response;
-        },
-        error: function(error){
-            console.log(error);
-        },
-    });
-    return result
-}
-
 /* func: downloadCSVFile
    creates a CSV file with a classification result when export button is pressed
  */
@@ -237,22 +189,22 @@ function downloadCSVFile(fileNumber){
 function runAnalysis() {
 
         // Create a final dictionary to store all information about each file
-        var resultDictionary;
+        //var resultDictionary;
         // Run spectrogram conversion
-        var indices = get_indices();
-        var spectroImg = run_analysis();
+        //var indices = get_indices();
+        var analysis_results = run_analysis();
 
         //TODO: This process needs to be completed in the backend, and then the finished dictionary sent through to front-end
-        resultDictionary = spectroImg;
+        //resultDictionary = spectroImg;
 
         //Put everything together into one dictionary for dynamic adding.
-        for (var i = 0; i < Object.keys(spectroImg).length; i++) {
+        //for (var i = 0; i < Object.keys(spectroImg).length; i++) {
             //var classification = spectroImg[i][3];
             //resultDictionary[i].push(classification);
-            resultDictionary[i].push(indices[i])
-        }
-        console.log(resultDictionary);
-        return resultDictionary;
+        //    resultDictionary[i].push(indices[i])
+        //}
+        console.log(analysis_results);
+        return analysis_results;
 }
 
 //setter function for the global dictionary. Safety i guess?

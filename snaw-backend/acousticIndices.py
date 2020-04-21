@@ -692,56 +692,46 @@ as a library to be used by our product.
 ###------------------------------------------------------###
 
 '''
-def getAcousticIndices(peronsalID):
-    # fileDictionary will be used to store the filecount keys with their respective file information
-    fileDictionary = {}
-
-    # Create file counter
-    fileCount = 0
+def getAcousticIndices(audiofile):
     if( DEBUG_FLAG ):
         print("[WORKING] Attempting to run acoustic indices calculator - acousticIndices.py")
+
     # loop through the files in the directory
     try:
-        for file in os.listdir('instance/upload/user'+peronsalID):
-            # correct the file path with the prefixed upload folder
-            filePath = 'instance/upload/user'+peronsalID+"/" + file
-            data,fs  =  librosa.load(filePath,sr=None,offset=0,duration=60)
+        data,fs  =  librosa.load(audiofile, sr=None, offset=0, duration=60)
+        # mono channel
+        data = AudioProcessing.convert_to_mono(data)
 
-            # mono channel
-            data = AudioProcessing.convert_to_mono(data)
+        # changing sampling rate
+        new_fs = 17640
+        data_chunk = AudioProcessing.resample(data,fs,new_fs)
 
-            # changing sampling rate
-            new_fs = 17640
-            data_chunk = AudioProcessing.resample(data,fs,new_fs)
+        # extracting indices
+        acousticIndices = AcousticIndices(data_chunk,new_fs)
+        acoustic_indices = acousticIndices.get_acoustic_indices()
 
+        acoustic_indices = list(map(lambda x: round(x, 4), acoustic_indices))
+        print(acoustic_indices)
 
-            # extracting indices
-            acousticIndices = AcousticIndices(data_chunk,new_fs)
-            acoustic_indices = acousticIndices.get_acoustic_indices()
+        acoustic_headers = acousticIndices.get_acoustic_indices_headers()
+        acoustic_descs = acousticIndices.get_acoustic_indices_descs()
+        # singleResultArray is used to store the results of one file (List of dictionaries)
+        singleResultArray = []
 
-            acoustic_indices = list(map(lambda x: round(x, 4), acoustic_indices))
-            print(acoustic_indices)
+        # Traverse the acoustic tags
+        for i in range(len(acoustic_headers)):
+            # per indices in the length of the acoustic tags,
+            # append dictionary items.
+            singleResultArray.append({"index": acoustic_headers[i], "value" : acoustic_indices[i], "desc" : acoustic_descs[i]})
 
-            acoustic_headers = acousticIndices.get_acoustic_indices_headers()
-            acoustic_descs = acousticIndices.get_acoustic_indices_descs()
-            # singleResultArray is used to store the results of one file (List of dictionaries)
-            singleResultArray = []
+        # append result dictionary to the final results array
+            if( DEBUG_FLAG ):
+                print("[WORKING] Calculated " + acoustic_headers[i] + " - acousticIndices.py")
 
-            # Traverse the acoustic tags
-            for i in range(len(acoustic_headers)):
-                # per indices in the length of the acoustic tags,
-                # append dictionary items.
-                singleResultArray.append({"index": acoustic_headers[i], "value" : acoustic_indices[i], "desc" : acoustic_descs[i]})
-
-            # append result dictionary to the final results array
-                if( DEBUG_FLAG ):
-                    print("[WORKING] Calculated " + acoustic_headers[i] + " - acousticIndices.py")
-            fileDictionary[fileCount] = singleResultArray
-            fileCount += 1
     except Exception as e:
         track = traceback.format_exc()
         print(track)
 
     if( DEBUG_FLAG ):
         print("[SUCCESS] Calculated acoustic indices - acousticIndices.py")
-    return fileDictionary
+    return singleResultArray
