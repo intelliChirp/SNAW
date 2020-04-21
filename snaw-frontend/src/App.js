@@ -24,7 +24,7 @@ import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { Link } from 'react-router-dom';
-
+import DeleteIcon from '@material-ui/icons/Delete';
 const customtheme = createMuiTheme({
     palette : {
         primary : { main: '#297B48',
@@ -166,7 +166,6 @@ class App extends React.Component {
       })
 
       if(newFileList.length == 0){
-          console.log("HELLO");
           this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false});
       }
       else {
@@ -229,7 +228,7 @@ class App extends React.Component {
                                                     component='span'
                                                     color="secondary"
                                                     onClick={() => {this.removeFile(file, file.name)}}>
-                                                    clear file
+                                                    <DeleteIcon/>
                                                 </Button>
                                                     <br/>
                                                     <br/>
