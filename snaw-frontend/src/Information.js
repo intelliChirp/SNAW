@@ -1,4 +1,5 @@
 import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import {Container, createMuiTheme, ListItemText, MuiThemeProvider, Paper, Typography} from "@material-ui/core";
 import ApplicationBar from "./components/ApplicationBar";
 import Divider from "@material-ui/core/Divider";
@@ -21,7 +22,17 @@ const customtheme = createMuiTheme({
     }
 })
 
+const useStyles = makeStyles(theme => ({
+    padding: {
+        padding: '15px',
+    },
+    images: {
+        width: '55%',
+    },
+}));
+
 function Information() {
+    const classes = useStyles();
     return (
         <div className="Information">
             <ApplicationBar title={'Information about SNAW'}/>
@@ -35,64 +46,65 @@ function Information() {
                                         Motivations
                                     </Typography>
                                     <Divider middle></Divider>
-                                    <Typography>Various environmental changes affect a range of species around the world
+                                    <Typography className={classes.padding}>Various environmental changes affect a range of species around the world
                                         and as more species are being affected, proper management and observation are
                                         required to understand their response. Traditional field methods require trained
                                         observers to determine species presence/absence and are thus expensive and
                                         challenging to employ at large scales. Using sound to monitor biodiversity across
-                                        landscapes is a fairly recent development.</Typography>
-                                    <Divider/>
+                                        landscapes is a fairly recent development.
+                                        </Typography>
                                 </Grid>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         What is SNAW
                                     </Typography>
                                     <Divider middle></Divider>
-                                    <Typography>Using a Convolutional Neural Network, the Soundscape Noise Analysis Workbench
+                                    <Typography className={classes.padding}>Using a Convolutional Neural Network, the Soundscape Noise Analysis Workbench
                                     allows biodiversity researchers and volunteers to easily, quickly, and automatically
-                                    identify individual sound components from their uploaded soundscape files.</Typography>
-                                    <Typography>SNAW identifies sounds in three categories</Typography>
+                                    identify individual sound components from their uploaded soundscape files.
+                                    </Typography>
+                                    <Typography><br/>SNAW identifies sounds in three categories:</Typography>
                                     <List>
                                         <ListItem>
                                             <ListItemText
                                                 primary='Anthrophony'
-                                                secondary='Sounds made by humans'/>
+                                                secondary='Sounds made by humans. Subcategories include: Air Traffic (AAT), Vehicle Horn (AVH), Vehicle Traffic (AVT), Rail Traffic (ART), Siren (ASI), Machinery (AMA), Human Voice (AHV), Music (AMU).'/>
                                         </ListItem>
                                         <ListItem>
                                             <ListItemText
                                                 primary='Biophony'
-                                                secondary='Sounds made by biological life'/>
+                                                secondary='Sounds made by biological life. Subcategories include: Birds (BBI), Insects (BIN), Amphibians (BAM), Mammals (BMA).'/>
                                         </ListItem>
                                         <ListItem>
                                             <ListItemText
                                                 primary='Geophony'
-                                                secondary='Sounds made by nature'/>
+                                                secondary='Sounds made by nature. Subcategories include: Rain (GRA), Constant Wind (GWC), Gust of Wind (GWG), Stream (GST), Ocean (GOC).'/>
                                         </ListItem>
                                     </List>
-                                    <Divider/>
                                 </Grid>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         Architecture
                                     </Typography>
-                                    <CardMedia id="nn_arch" component='img' image={nn_arch}
-                                               className="classes.media"/>
                                     <Divider/>
+                                    <CardMedia id="nn_arch" component='img' image={nn_arch}
+                                               className={classes.images}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         Confusion Matrix
                                     </Typography>
-                                    <CardMedia id="nn_arch" component='img' image={confusionmatrix}
-                                               className="classes.media"/>
                                     <Divider/>
+                                    <CardMedia id="nn_arch" component='img' image={confusionmatrix}
+                                               className={classes.images}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         ROC Curves
                                     </Typography>
+                                    <Divider/>
                                     <CardMedia id="nn_arch" component='img' image={roccurve}
-                                               className="classes.media"/>
+                                               className={classes.images}/>
                                     <Divider/>
                                 </Grid>
                             </Box>
