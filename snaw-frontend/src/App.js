@@ -125,17 +125,17 @@ class App extends React.Component {
 
   getFileByteSize(size){
       let result = 0;
-      if(size >= 1000 && size < 1000000){
-          result = Number.parseFloat(String(size/1000)).toFixed(2);
+      if(size >= 1024 && size < 1048576){
+          result = Number.parseFloat(String(size/1024)).toFixed(2);
           return String(result + " KB")
       }
-      else if(size >= 1000000 && size < 1000000000){
-          result = Number.parseFloat(String(size/1000000)).toFixed(2);
+      else if(size >= 1048576 && size < 1073741824){
+          result = Number.parseFloat(String(size/1048576)).toFixed(2);
           return String(result + " MB")
 
       }
-      else if(size >= 1000000000){
-          result = Number.parseFloat(String(size/1000000000)).toFixed(2);
+      else if(size >= 1073741824){
+          result = Number.parseFloat(String(size/1073741824)).toFixed(2);
           return String(result + " GB")
 
       }
