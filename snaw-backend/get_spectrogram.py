@@ -78,7 +78,7 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     seconds = int(len(samples) / samplerate)
 
     plt.figure(figsize=(15, 7.5))
-    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", cmap=colormap, interpolation="none")
+    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", interpolation="none")
 
     plt.xlabel("time (s)")
     plt.ylabel("frequency (hz)")
@@ -144,14 +144,14 @@ def runScript(personalID):
     for filename in os.listdir('instance/upload/user'+personalID):
         audiofile = 'instance/upload/user'+personalID+"/"+ filename
 
-        '''
-        #TESTING
+
+        #######################--TESTING--############################
         if(filename == "s2lam001_180526_2018-05-28_12-00.wav"):
             listOfImages[fileCount] = [filename, "ERROR_PRESENT"]
             fileCount += 1
             continue
-        #TESTING
-        '''
+        #######################--TESTING--############################
+
 
         # Correct Path
         path= "spectrogram/SpectroedImage"+ str(fileCount)
