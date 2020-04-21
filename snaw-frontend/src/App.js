@@ -24,7 +24,7 @@ import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { Link } from 'react-router-dom';
-
+import DeleteIcon from '@material-ui/icons/Delete';
 const customtheme = createMuiTheme({
     palette : {
         primary : { main: '#297B48',
@@ -63,7 +63,7 @@ class App extends React.Component {
           }
           this.state.fileCount = this.state.selectedFile.length;
           this.setState(this.state.selectedFile);
-          this.setState({submitAudioFilesButton: false});
+          this.setState({submitAudioFilesButton: false, filesInserted: false});
           console.log(this.state.selectedFile);
       }
 
@@ -144,6 +144,35 @@ class App extends React.Component {
       }
   }
 
+  removeFile(file, filename){
+      console.log(file);
+      let currentFiles = this.state.selectedFile;
+      let newFileList = [];
+      console.log("REMOVING FILE....");
+      for(let i = 0; i < currentFiles.length; i++){
+          if(file == currentFiles[i]){
+              continue
+          }
+          else{
+              newFileList.push(currentFiles[i]);
+          }
+
+      }
+      $.ajax({
+          contentType: 'application/json;charset=UTF-8',
+          type: 'POST',
+          url: '/removeFile',
+          data: JSON.stringify({'file': filename}),
+      })
+
+      if(newFileList.length == 0){
+          this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false});
+      }
+      else {
+          this.setState({selectedFile: newFileList});
+      }
+  }
+
   render() {
 
      const {classes} = this.props;
@@ -192,8 +221,19 @@ class App extends React.Component {
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index){
-                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})<br/>
+                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;&nbsp;
+                                                    <Button
+                                                    size={"small"}
+                                                    variant="text"
+                                                    component='span'
+                                                    color="secondary"
+                                                    onClick={() => {this.removeFile(file, file.name)}}>
+                                                    <DeleteIcon/>
+                                                </Button>
+                                                    <br/>
+                                                    <br/>
                                                 </li>
+
                                             }.bind(this))}
                                             <br/>
                                             <LinearProgress hidden={this.state.loadingBarVisible} id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(200)+2} variant="buffer"/>
@@ -218,7 +258,6 @@ class App extends React.Component {
                             <Grid item>
                                 <br/>
                                 {<AnalyzeButton bool={this.state.filesInserted}/>}
-                                {this.state.filesInserted = false}
                             </Grid>
                             <Grid item>
                                 <Divider middle/><br/>
