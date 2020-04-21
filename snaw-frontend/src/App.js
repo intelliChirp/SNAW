@@ -19,12 +19,14 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import AddIcon from '@material-ui/icons/Add'
 import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { Link } from 'react-router-dom';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const customtheme = createMuiTheme({
     palette : {
         primary : { main: '#297B48',
@@ -51,14 +53,13 @@ class App extends React.Component {
 
   fileSelectedHandler = event => {
       console.log(this.state.uploadAudioFilesButton);
-      if(this.state.uploadAudioFilesButton){
+      if (this.state.uploadAudioFilesButton) {
           return
-      }
-      else {
+      } else {
           event.preventDefault();
           this.setState({percentage: 0});
           let tempArray = Array.from(event.target.files);
-          for(let i = 0; i < tempArray.length; i++){
+          for (let i = 0; i < tempArray.length; i++) {
               this.state.selectedFile.push(tempArray[i])
           }
           this.state.fileCount = this.state.selectedFile.length;
@@ -66,8 +67,34 @@ class App extends React.Component {
           this.setState({submitAudioFilesButton: false, filesInserted: false});
           console.log(this.state.selectedFile);
       }
+  }
 
-  };
+
+  checkNumFiles=(event)=>{
+    let files = event.target.files
+        if (files.length > 10) {
+           event.target.value = null
+           toast.error("Reached File Limit: Exceeded 10 Files")
+           return false
+      }
+    return true
+ }
+
+ checkFileFormat=(event)=>{
+    let files = event.target.files
+    let errs = ''
+    const types = ['audio/wav', 'audio/WAV']
+
+    for(var index = 0; index < files.length; index++) {
+        // check if files are in wav format
+        if (types.every(type => files[index].type !== type)) {
+        // create error message and assign to container
+        toast.error("Invalid File Format: Only WAV files accepted.")
+        return false
+       }
+     };
+    return true
+}
 
   /*-----------------------------------------------------/
    * Function [Event Handler]: submitHandler
@@ -117,6 +144,7 @@ class App extends React.Component {
          success: () => {
              if (this.state.fileCount != 0) {
                  this.setState({filesInserted: true, uploadAudioFilesButton: false, loadingBarVisible: true});
+                 toast.success('Upload Successful: Uploaded ' + this.state.fileCount + ' file(s).')
              }
          }
      })
@@ -219,23 +247,25 @@ class App extends React.Component {
                                                style={{display: 'none'}}
                                                />
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
-                                            <br/> Selected Files : <br/>
+                                            <div class="form-group">
+                                                <ToastContainer />
+                                            </div>
+                                            <br/> Selected File's: <br/> (Accepted File Format: WAV, File Limit: 10) <br/><br/>
                                             {this.state.selectedFile.map(function(file, index){
                                                 return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;&nbsp;
                                                     <Button
-                                                    size={"small"}
-                                                    variant="text"
-                                                    component='span'
-                                                    color="secondary"
-                                                    onClick={() => {this.removeFile(file, file.name)}}>
-                                                    <DeleteIcon/>
-                                                </Button>
+                                                        size={"small"}
+                                                        variant="text"
+                                                        component='span'
+                                                        color="secondary"
+                                                        onClick={() => {this.removeFile(file, file.name)}}>
+                                                        <DeleteIcon/>
+                                                    </Button>
                                                     <br/>
                                                     <br/>
                                                 </li>
 
                                             }.bind(this))}
-                                            <br/>
                                             <LinearProgress hidden={this.state.loadingBarVisible} id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(200)+2} variant="buffer"/>
                                             <br/>
                                         </Typography>
