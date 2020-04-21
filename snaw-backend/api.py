@@ -145,5 +145,5 @@ def run_analysis():
     except Exception as e:
         return str(e)
 
-#print('Starting Flask!')
-#app.run(debug=True)
+print('Starting Flask!')
+app.run(debug=True)
