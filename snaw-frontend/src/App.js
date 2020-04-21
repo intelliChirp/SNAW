@@ -43,21 +43,27 @@ class App extends React.Component {
                   fileCount: 0,
                   percentage: 0,
                   loadingBarVisible: true,
-                  inputFilesButtonVisible: false};
+                  uploadAudioFilesButton: false,
+                  submitAudioFilesButton: true};
     this.submitHandler.bind(this)
   }
 
   fileSelectedHandler = event => {
-      console.log(this.state.inputFilesButtonVisible);
-      if(this.state.inputFilesButtonVisible){
+      console.log(this.state.uploadAudioFilesButton);
+      if(this.state.uploadAudioFilesButton){
           return
       }
       else {
           event.preventDefault();
           this.setState({percentage: 0});
-          this.state.selectedFile = Array.from(event.target.files);
+          let tempArray = Array.from(event.target.files);
+          for(let i = 0; i < tempArray.length; i++){
+              this.state.selectedFile.push(tempArray[i])
+          }
           this.state.fileCount = this.state.selectedFile.length;
-          this.setState(this.state.selectedFile)
+          this.setState(this.state.selectedFile);
+          this.setState({submitAudioFilesButton: false});
+          console.log(this.state.selectedFile);
       }
 
   };
@@ -82,7 +88,7 @@ class App extends React.Component {
      for(var i = 0; i < this.state.selectedFile.length; i++) {
          formData.append('file', this.state.selectedFile[i]);
      }
-     this.setState({loadingBarVisible: false})
+     this.setState({loadingBarVisible: false, submitAudioFilesButton: true})
      console.log(formData)
      var percent = 0;
 
@@ -94,7 +100,7 @@ class App extends React.Component {
                  if (e.lengthComputable) {
                      percent = Math.round((e.loaded / e.total) * 100);
                      console.log(percent);
-                     self.setState({percentage: percent, inputFilesButtonVisible: true});
+                     self.setState({percentage: percent, uploadAudioFilesButton: true});
 
 
                  }
@@ -109,7 +115,7 @@ class App extends React.Component {
          contentType: false,
          success: () => {
              if (this.state.fileCount != 0) {
-                 this.setState({filesInserted: true, inputFilesButtonVisible: false, loadingBarVisible: true});
+                 this.setState({filesInserted: true, uploadAudioFilesButton: false, loadingBarVisible: true});
              }
          }
      })
@@ -168,7 +174,7 @@ class App extends React.Component {
                                             <Tooltip title={'Upload Audio File(s)'}>
                                                 <Button variant="outlined"
                                                         component='span'
-                                                        disabled={this.state.inputFilesButtonVisible}>
+                                                        disabled={this.state.uploadAudioFilesButton}>
                                                     <AddIcon  fontSize="large"/>
                                                 </Button>
                                             </Tooltip>
@@ -178,7 +184,7 @@ class App extends React.Component {
                                                type='file'
                                                multiple={true}
                                                onChange={this.fileSelectedHandler}
-                                               disabled={this.state.inputFilesButtonVisible}
+                                               disabled={this.state.uploadAudioFilesButton}
                                                name='file'
                                                style={{display: 'none'}}
                                                />
@@ -196,12 +202,12 @@ class App extends React.Component {
                                             <input id='my-submit'
                                                    type='submit'
                                                    style={{display: 'none'}}
-                                                   disabled={this.state.inputFilesButtonVisible}/>
+                                                   disabled={this.state.submitAudioFilesButton}/>
                                                    <Tooltip title={'Submit Audio File(s)'}>
                                                 <Button variant="contained"
                                                         onClick={this.submitHandler}
                                                         component='span'
-                                                        disabled={this.state.inputFilesButtonVisible}>
+                                                        disabled={this.state.submitAudioFilesButton}>
                                                     <PublishIcon/>
                                                 </Button>
                                                    </Tooltip>
