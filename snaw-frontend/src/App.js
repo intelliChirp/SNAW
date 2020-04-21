@@ -48,7 +48,8 @@ class App extends React.Component {
                   percentage: 0,
                   loadingBarVisible: true,
                   uploadAudioFilesButton: false,
-                  submitAudioFilesButton: true};
+                  submitAudioFilesButton: true,
+                  deleteButton: false};
     this.submitHandler.bind(this)
   }
 
@@ -117,7 +118,7 @@ class App extends React.Component {
      for(var i = 0; i < this.state.selectedFile.length; i++) {
          formData.append('file', this.state.selectedFile[i]);
      }
-     this.setState({loadingBarVisible: false, submitAudioFilesButton: true})
+     this.setState({loadingBarVisible: false, submitAudioFilesButton: true, deleteButton: true})
      console.log(formData)
      var percent = 0;
 
@@ -144,7 +145,7 @@ class App extends React.Component {
          contentType: false,
          success: () => {
              if (this.state.fileCount != 0) {
-                 this.setState({filesInserted: true, uploadAudioFilesButton: false, loadingBarVisible: true});
+                 this.setState({filesInserted: true, uploadAudioFilesButton: false, loadingBarVisible: true, deleteButton: false});
                  toast.success('Upload Successful: Uploaded ' + this.state.fileCount + ' file(s).')
              }
          }
@@ -253,12 +254,13 @@ class App extends React.Component {
                                             </div>
                                             <br/> Selected File's: <br/> (Accepted File Format: WAV, File Limit: 10) <br/><br/>
                                             {this.state.selectedFile.map(function(file, index){
-                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;&nbsp;
+                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;
                                                     <Button
                                                         size={"small"}
                                                         variant="text"
                                                         component='span'
                                                         color="secondary"
+                                                        disabled={this.state.deleteButton}
                                                         onClick={() => {this.removeFile(file, file.name)}}>
                                                         <DeleteIcon/>
                                                     </Button>
