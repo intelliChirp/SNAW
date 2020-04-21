@@ -727,7 +727,7 @@ def getAcousticIndices(audiofile):
             # append result dictionary to the final results array
             if( DEBUG_FLAG ):
                 print("[WORKING] Calculated " + acoustic_headers[i] + " - acousticIndices.py")
-   except Exception as e:
+    except Exception as e:
         track = traceback.format_exc()
         print(track)
         singleResultArray = "ERROR_PRESENT"
