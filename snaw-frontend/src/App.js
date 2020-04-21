@@ -54,26 +54,26 @@ class App extends React.Component {
 
   fileSelectedHandler = event => {
       console.log(this.state.uploadAudioFilesButton);
-      if (this.state.uploadAudioFilesButton) {
-          return
-      } else {
-          event.preventDefault();
-          this.setState({percentage: 0});
-          let tempArray = Array.from(event.target.files);
-          for (let i = 0; i < tempArray.length; i++) {
-              this.state.selectedFile.push(tempArray[i])
+      event.preventDefault();
+      this.setState({percentage: 0});
+
+
+      let tempArray = Array.from(event.target.files);
+      if(this.checkNumFiles(event, tempArray) && this.checkFileFormat(event)) {
+           for (let i = 0; i < tempArray.length; i++) {
+                  this.state.selectedFile.push(tempArray[i]);
+                  this.setState({fileCount: this.state.selectedFile.length});
+              }
+           this.setState({selectedFile: this.state.selectedFile, submitAudioFilesButton: false, filesInserted: false });
           }
-          this.state.fileCount = this.state.selectedFile.length;
-          this.setState(this.state.selectedFile);
-          this.setState({submitAudioFilesButton: false, filesInserted: false});
+
           console.log(this.state.selectedFile);
-      }
-  }
+    }
 
 
-  checkNumFiles=(event)=>{
+  checkNumFiles=(event, newFileArray)=>{
     let files = event.target.files
-        if (files.length > 10) {
+        if (files.length > 10 || this.state.fileCount > 10 || this.state.fileCount + newFileArray.length > 10) {
            event.target.value = null
            toast.error("Reached File Limit: Exceeded 10 Files")
            return false
@@ -195,10 +195,10 @@ class App extends React.Component {
       })
 
       if(newFileList.length == 0){
-          this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false});
+          this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false, fileCount: this.state.fileCount-1});
       }
       else {
-          this.setState({selectedFile: newFileList});
+          this.setState({selectedFile: newFileList, fileCount: this.state.fileCount-1});
       }
   }
 
