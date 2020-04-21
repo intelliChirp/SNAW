@@ -63,8 +63,9 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     tempCat = ""
     for index, row in enumerate(data) :
      tempCat = row['category']
-     if(len(x_cats) > 0 and x_cats[-1] == tempCat) : x_labels.append(""), x_cats.append(tempCat)
-     else : x_labels.append(tempCat), x_cats.append(tempCat)
+     pred = row['pred']
+     if(len(x_cats) > 0 and x_cats[-1][:-3] == tempCat) : x_labels.append(" " + str(pred)), x_cats.append(tempCat + " " + str(pred))
+     else : x_labels.append(tempCat + " " + str(pred)), x_cats.append(tempCat + " " + str(pred))
 
     samplerate, samples = wav.read(audiopath)
 
@@ -97,8 +98,12 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     annotate_size = 1/seconds
 
     for x, cat in zip(xlocs, x_cats):
-     if(cat != 'NO') :
-         plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'b', alpha=0.2)
+     if(cat[:-3] != 'NO') :
+         alpha_val = int(cat[-2:]) / 100 / 3
+         plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'b', alpha=alpha_val)
+     else :
+        alpha_val = int(cat[-2]) / 100 * -1 + .33
+        plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'r', alpha=alpha_val)
      index += 1
 
     if plotpath:
