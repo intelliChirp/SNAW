@@ -63,7 +63,7 @@ class App extends React.Component {
           }
           this.state.fileCount = this.state.selectedFile.length;
           this.setState(this.state.selectedFile);
-          this.setState({submitAudioFilesButton: false});
+          this.setState({submitAudioFilesButton: false, filesInserted: false});
           console.log(this.state.selectedFile);
       }
 
@@ -144,6 +144,36 @@ class App extends React.Component {
       }
   }
 
+  removeFile(file, filename){
+      console.log(file);
+      let currentFiles = this.state.selectedFile;
+      let newFileList = [];
+      console.log("REMOVING FILE....");
+      for(let i = 0; i < currentFiles.length; i++){
+          if(file == currentFiles[i]){
+              continue
+          }
+          else{
+              newFileList.push(currentFiles[i]);
+          }
+
+      }
+      $.ajax({
+          contentType: 'application/json;charset=UTF-8',
+          type: 'POST',
+          url: '/removeFile',
+          data: JSON.stringify({'file': filename}),
+      })
+
+      if(newFileList.length == 0){
+          console.log("HELLO");
+          this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false});
+      }
+      else {
+          this.setState({selectedFile: newFileList});
+      }
+  }
+
   render() {
 
      const {classes} = this.props;
@@ -193,6 +223,13 @@ class App extends React.Component {
                                             <br/> Selected Files : <br/>
                                             {this.state.selectedFile.map(function(file, index){
                                                 return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})<br/>
+                                                <Button
+                                                    size="sm"
+                                                    variant="contained"
+                                                    component='span'
+                                                    onClick={() => {this.removeFile(file, file.name)}}>
+                                                    Clear File
+                                                </Button>
                                                 </li>
                                             }.bind(this))}
                                             <br/>
@@ -218,7 +255,6 @@ class App extends React.Component {
                             <Grid item>
                                 <br/>
                                 {<AnalyzeButton bool={this.state.filesInserted}/>}
-                                {this.state.filesInserted = false}
                             </Grid>
                             <Grid item>
                                 <Divider middle/><br/>
