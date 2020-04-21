@@ -19,7 +19,7 @@ import $ from 'jquery';
 import Button from "@material-ui/core/Button";
 import 'react-h5-audio-player/lib/styles.css';
 import {createArrayCsvStringifier, createArrayCsvWriter} from "csv-writer";
-import {createMuiTheme} from "@material-ui/core";
+import {createMuiTheme, ListItemText} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 
 //Surely a better way to do this other than global variable.
@@ -240,7 +240,26 @@ function Results() {
                 <Divider middle/>
                 <br/>
                 {Object.entries(finalInfoDictionary).map(([key, value]) => {
-                    if(value[ANALYSIS_ERROR_PRESENT] == "ERROR_PRESENT" || value[ACOUSTIC_INDICES_ERROR_PRESENT] == "ERROR_PRESENT"){
+                    if(value.includes("ERROR_PRESENT")) {
+                        let listOfProblems = [];
+                        for (let i = 1; i < value.length; i++) {
+                            if (value[i] == "ERROR_PRESENT") {
+                                switch (i) {
+                                    case 1:
+                                        listOfProblems.push("**Spectrogram couldn't be created**");
+                                        continue
+                                    case 2:
+                                        listOfProblems.push("**Audio playback couldn't be collected**");
+                                        continue
+                                    case 3:
+                                        listOfProblems.push("**Analysis couldn't be run on file**");
+                                        continue
+                                    case 4:
+                                        listOfProblems.push("**Acoustic Indices couldn't be calculated on the file**")
+                                        continue
+                                }
+                            }
+                        }
                         return (
                             <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
                                 <ExpansionPanelSummary
@@ -251,11 +270,16 @@ function Results() {
                                     <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    {value[ANALYSIS_ERROR_PRESENT] === "ERROR_PRESENT" ?
-                                        (<Typography>It seems something went wrong with the analysis of this file. Be sure to upload .WAV files only. If the error persists and shouldn't be then please contact [CONTACT EMAIL].</Typography>
-                                        ):
-                                        (<Typography>It seems something went wrong with the acoustic Indices calculation of this file. Be sure to upload .WAV files only. If the error persists and shouldn't be then please contact [CONTACT EMAIL].</Typography>
-                                        )}
+                                    <Container>
+                                        <Paper>
+                                            <Typography>
+                                                <h3>It seems something went wrong with this file! Here's what we ran into:</h3>
+                                                <ListItemText>
+                                                {listOfProblems.map(item => <p><h2>{item}</h2></p>)}
+                                                </ListItemText>
+                                            </Typography>
+                                        </Paper>
+                                    </Container>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
                         )}
