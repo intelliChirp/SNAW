@@ -94,6 +94,17 @@ def didFileUpload():
         return "False"
 
 
+
+@app.route('/removeFile', methods = ['POST'])
+def removeFile():
+   file = request.get_json()
+   if(file['file'] not in os.listdir('instance/upload/user'+session['id'])):
+        print("HELLO")
+        return redirect('', 204)
+   else:
+       os.remove('instance/upload/user' + session['id']+'/'+file['file'])
+       return redirect('', 204)
+
 '''
 ###------------------------------------------------------###
 Function: getUserFolder()
