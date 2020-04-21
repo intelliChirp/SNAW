@@ -9,6 +9,7 @@ from classification_cnn import runScript as get_result
 import traceback
 
 DEBUG_FLAG = False
+ERROR = 'ERROR_PRESENT'
 
 """ short time fourier transform of audio signal """
 def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
@@ -56,27 +57,35 @@ def logscale_spec(spec, sr=44100, factor=20.):
 
 """ plot spectrogram"""
 def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
-
+    # initialize variables
     size = len(data)
     x_labels = []
     x_cats = []
-    tempCat = ""
+    currCat = ""
+
+    # enumerate on the classified data
     for index, row in enumerate(data) :
-     tempCat = row['category']
-     pred = row['pred']
-     if(len(x_cats) > 0 and x_cats[-1][:-3] == tempCat) : x_labels.append(" " + str(pred)), x_cats.append(tempCat + " " + str(pred))
-     else : x_labels.append(tempCat + " " + str(pred)), x_cats.append(tempCat + " " + str(pred))
+     # set value to the current category at index
+     currCat = row['category']
+     # set prediction value from data, cast to string and add percent symbol
+     pred = str(row['pred']) + "%"
 
+     # if, this isnt the first run and the last seen category is the same as the current category
+     #   only append the prediction value
+     # else, we are on a new category, or first run
+     #   append new category and prediction value
+     if(len(x_cats) > 0 and x_cats[-1][:-4] == currCat) : x_labels.append(" " + pred), x_cats.append(currCat+" "+pred)
+     else : x_labels.append(currCat + " " + pred), x_cats.append(currCat + " " + pred)
+
+    # load audio file and get sample rates
     samplerate, samples = wav.read(audiopath)
-
     s = stft(samples, binsize)
-
+    # get frequency of audio data
     sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
-
     ims = 20.*np.log10(np.abs(sshow)/10e-6) # amplitude to decibel
-
     timebins, freqbins = np.shape(ims)
 
+    # calc number of seconds
     seconds = int(len(samples) / samplerate)
 
     plt.figure(figsize=(15, 7.5))
@@ -97,12 +106,18 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     index = 0
     annotate_size = 1/seconds
 
+    # draw classification boxes
     for x, cat in zip(xlocs, x_cats):
-     if(cat[:-3] != 'NO') :
-         alpha_val = int(cat[-2:]) / 100 / 3
+     if(cat[:-4] != 'NO') :
+         # get prediction value from label, divide by 100 to get percent, divide by 3 to get reasonable opacity level
+         alpha_val = int(cat[-3:-1]) / 100 / 3
          plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'b', alpha=alpha_val)
      else :
-        alpha_val = int(cat[-2]) / 100 * -1 + .33
+        # get prediction value from label, divide by 100 to get percent,
+        #   multiply by negative and add .33 to get reasonable opacity level
+        alpha_val = int(cat[-3:-1]) / 100 * -1 + .5
+        print(alpha_val)
+        print(int(cat[-3:-1]))
         plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'r', alpha=alpha_val)
      index += 1
 
@@ -112,7 +127,6 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
      plt.show()
 
     plt.clf()
-
     return ims
 
 def encoding( data, audiofile, path ) :
@@ -146,25 +160,28 @@ def runScript(filename, fileCount, audiofile, data):
         # Correct Path
         path= "spectrogram/SpectroedImage"+ str(fileCount)
 
-        encode_ant, wavEncode = encoding( data[0]['data'], audiofile, path )
+        # encode the data to save as a picture for front-end of site
+        encode_ant, wavEncode = encoding( data[0]['data'], audiofile, path ) # wavEncode only needed from one, all same
         encode_bio, _ = encoding( data[1]['data'], audiofile, path )
         encode_geo, _ = encoding( data[2]['data'], audiofile, path )
         try:
+            # save lise of pictures
             image_list = ['data:image/png;base64,' + encode_ant.decode("utf-8"),
                           'data:image/png;base64,' + encode_bio.decode("utf-8"),
                           'data:image/png;base64,' + encode_geo.decode("utf-8")]
         except:
-            image_list = "ERROR_PRESENT"
+            image_list = ERROR
 
         try:
+            # save .wav representation
             audio_wav =  'data:audio/wav;base64,' + wavEncode.decode("utf-8")
         except:
-            audio_wav = "ERROR_PRESENT"
+            audio_wav = ERROR
     except:
         #if DEBUG_FLAG : print('[FAILURE -- Spectrogram] File upload unsuccessful, or no file uploaded.')
         track = traceback.format_exc()
         print(track)
-        image_list = "ERROR_PRESENT"
-        audio_wav = "ERROR_PRESENT"
+        image_list = ERROR
+        audio_wav = ERROR
 
     return image_list, audio_wav
