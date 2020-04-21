@@ -21,7 +21,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 DEBUG_FLAG = True
-
 '''
 ###------------------------------------------------------###
 App Routing: '/'
@@ -94,7 +93,14 @@ def didFileUpload():
         return "False"
 
 
-
+'''
+###------------------------------------------------------###
+Function: getUserFolder()
+Caller: upload_file(), home()
+###------------------------------------------------------###
+Assigns a user a unique id and creates a folder for usage.
+###------------------------------------------------------###
+'''
 def getUserFolder():
         if('id' not in session):
             session['id'] = 0
@@ -115,41 +121,7 @@ def getUserFolder():
 
             if not os.path.isdir('instance/upload/user'+session['id']):
                 os.makedirs('instance/upload/user'+session['id'])
-'''
-###------------------------------------------------------###
-App Routing: '/results/classification'
-Function: classify()
-Caller: Results.js
-###------------------------------------------------------###
-calls the function runScript() within classification.py.
-The function runScript() is pulled into api.py as "get_classification()."
-After the function finishes operations, the uploaded files will
-be deleted.
-###------------------------------------------------------###
 
-@app.route("/results/classification")
-def classify():
-    if( DEBUG_FLAG ):
-        print("[WORKING] Flask is making call to classification.py - api.py")
-    try:
-        print("trying to get classification")
-        try:
-            result = get_cnn_classification()
-        except Exception as e:
-            track = traceback.format_exc()
-            print(track)
-        if( DEBUG_FLAG ):
-            print(result)
-            print("[WORKING] Removing uploaded files - api.py")
-        for file in os.listdir('instance/upload/user'+personID):
-            os.remove('instance/upload/user'+personID+"/"+file)
-
-        if( DEBUG_FLAG ):
-            print("[Success] Classification has been completed - api.py")
-        return result
-    except Exception as e:
-        return str(e)
-'''
 
 '''
 ###------------------------------------------------------###
