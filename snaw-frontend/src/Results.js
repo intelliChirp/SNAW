@@ -51,10 +51,12 @@ var finalInfoDictionary;
  *-------------------------------------------------------------*/
 
 let fileName = 0;
+let ANALYSIS_ERROR_PRESENT = 1;
 let fileSpectro = 1;
 let fileAudio = 2;
 let fileData = 3;
 let fileAcoustics = 4;
+let ACOUSTIC_INDICES_ERROR_PRESENT = 4;
 
 
 const useStyles = makeStyles(theme => ({
@@ -247,8 +249,6 @@ function runAnalysis() {
 
         //Put everything together into one dictionary for dynamic adding.
         for (var i = 0; i < Object.keys(spectroImg).length; i++) {
-            //var classification = spectroImg[i][3];
-            //resultDictionary[i].push(classification);
             resultDictionary[i].push(indices[i])
         }
         console.log(resultDictionary);
@@ -286,6 +286,26 @@ function Results() {
                 <Divider middle/>
                 <br/>
                 {Object.entries(finalInfoDictionary).map(([key, value]) => {
+                    if(value[ANALYSIS_ERROR_PRESENT] == "ERROR_PRESENT" || value[ACOUSTIC_INDICES_ERROR_PRESENT] == "ERROR_PRESENT"){
+                        return (
+                            <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header">
+                                    <Typography className={classes.heading}>An error has occurred with the following file:  </Typography>
+                                    <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    {value[ANALYSIS_ERROR_PRESENT] === "ERROR_PRESENT" ?
+                                        (<Typography>It seems something went wrong with the analysis of this file. Be sure to upload .WAV files only. If the error persists and shouldn't be then please contact [CONTACT EMAIL].</Typography>
+                                        ):
+                                        (<Typography>It seems something went wrong with the acoustic Indices calculation of this file. Be sure to upload .WAV files only. If the error persists and shouldn't be then please contact [CONTACT EMAIL].</Typography>
+                                        )}
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        )}
+                    else{
                     return (
                         <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
                             <ExpansionPanelSummary
@@ -344,7 +364,7 @@ function Results() {
                                 </Container>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
-                        )})}
+                        )}})}
             </Container>
             </body>
             <footer>
