@@ -19,6 +19,7 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import AddIcon from '@material-ui/icons/Add'
 import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
 import $ from 'jquery';
@@ -183,7 +184,7 @@ class App extends React.Component {
                                             </div>
                                             <br/> Selected File's: <br/> (Accepted File Format: WAV, File Limit: 10) <br/><br/>
                                             {this.state.selectedFiles.map(function(file, index) {
-                                                return <li key={index}>{file.name} (Size: {file.size} bytes)<br/>
+                                                return <li key={index}>{file.name} (Size: {file.size} bytes) <Button><DeleteIcon/></Button> <br/>
                                                 </li>
                                             })}
                                             <br/>
@@ -227,10 +228,11 @@ class App extends React.Component {
                 </Container>
             </body>
           <footer>
-              <Container>
-                  <br/><br/>
-              <Typography variant='subtitle1'>Created by NAU Capstone Team IntelliChirp</Typography>
-              </Container>
+                <Container>
+                <br/><br/>
+                <Typography variant='subtitle1'>Created by NAU Capstone Team IntelliChirp</Typography>
+                <br/><br/>
+                </Container>
           </footer>
       </div>
     );
