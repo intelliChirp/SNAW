@@ -312,14 +312,7 @@ function Results() {
                                     <Typography variant='subtitle1'>Results from the Anthrophony, Geophony and Biophony Classification
                                         Models</Typography>
                                     <br/>
-                                    <Grid container spacing={2}>
-                                        <Grid item linechart>
-                                            <Paper><LineChart series={value[fileData]}/></Paper>
-                                        </Grid>
-                                        <Grid item piechart>
-                                            <Paper><PieChart series={value[fileData]}/></Paper>
-                                        </Grid>
-                                    </Grid>
+                                    <Paper><PieChart series={value[fileData]}/></Paper>
                                     <br/>
                                     <ClassificationTable series={value[fileData]}/>
                                     <br/>
