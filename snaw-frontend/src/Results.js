@@ -19,7 +19,7 @@ import $ from 'jquery';
 import Button from "@material-ui/core/Button";
 import 'react-h5-audio-player/lib/styles.css';
 import {createArrayCsvStringifier, createArrayCsvWriter} from "csv-writer";
-import {createMuiTheme} from "@material-ui/core";
+import {createMuiTheme, ListItemText} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 
 //Surely a better way to do this other than global variable.
@@ -51,10 +51,12 @@ var finalInfoDictionary;
  *-------------------------------------------------------------*/
 
 let fileName = 0;
+let ANALYSIS_ERROR_PRESENT = 1;
 let fileSpectro = 1;
 let fileAudio = 2;
 let fileData = 3;
 let fileAcoustics = 4;
+let ACOUSTIC_INDICES_ERROR_PRESENT = 4;
 
 
 const useStyles = makeStyles(theme => ({
@@ -238,6 +240,52 @@ function Results() {
                 <Divider middle/>
                 <br/>
                 {Object.entries(finalInfoDictionary).map(([key, value]) => {
+                    if(value.includes("ERROR_PRESENT")) {
+                        let listOfProblems = [];
+                        for (let i = 1; i < value.length; i++) {
+                            if (value[i] == "ERROR_PRESENT") {
+                                switch (i) {
+                                    case 1:
+                                        listOfProblems.push("**Spectrogram couldn't be created**");
+                                        continue
+                                    case 2:
+                                        listOfProblems.push("**Audio playback couldn't be collected**");
+                                        continue
+                                    case 3:
+                                        listOfProblems.push("**Analysis couldn't be run on the file**");
+                                        continue
+                                    case 4:
+                                        listOfProblems.push("**Acoustic Indices couldn't be calculated on the file**")
+                                        continue
+                                }
+                            }
+                        }
+                        return (
+                            <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header">
+                                    <Typography className={classes.heading}>An error has occurred with the following file:  </Typography>
+                                    <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Container>
+                                        <Paper>
+                                            <Typography>
+                                                <h3>It seems something went wrong with this file! Here's what we ran into:</h3>
+                                                <ListItemText>
+                                                {listOfProblems.map(item => <p><h4>{item}</h4></p>)}
+                                                </ListItemText>
+                                                <br/>
+                                                <h3>If this problem persists, please contact [support@example.com]</h3>
+                                            </Typography>
+                                        </Paper>
+                                    </Container>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        )}
+                    else{
                     return (
                         <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
                             <ExpansionPanelSummary
@@ -296,14 +344,13 @@ function Results() {
                                 </Container>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
-                        )})}
-                        <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
+                        )}})}
             </Container>
             </body>
             <footer>
                 <Container>
-                    <br/><br/>
-                    <Typography variant='subtitle1'>Created by NAU Capstone Team IntelliChirp</Typography>
+                    <br/>
+                     <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
                     <br/>
                 </Container>
             </footer>

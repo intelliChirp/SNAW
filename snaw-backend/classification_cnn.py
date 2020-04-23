@@ -108,7 +108,7 @@ def classify_file( audio_file, all_models ) :
 # driver function
 def runScript(audiofile, all_models):
     if DEBUG_FLAG : print("[WORKING] Attempting to run CNN classification calculator - classification_svm.py")
-
+    finalResult = []
     try:
         result = classify_file( audiofile, all_models )
 
@@ -119,6 +119,7 @@ def runScript(audiofile, all_models):
         track = traceback.format_exc()
         print(track)
         if DEBUG_FLAG : print("[**FAILURE**] Classification not run properly...")
+        finalResult = "ERROR_PRESENT"
 
     if PREDICTION_VERBOSE : print(json.dumps(finalResult))
 

@@ -19,11 +19,14 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import AddIcon from '@material-ui/icons/Add'
 import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Link from "@material-ui/core/Link";
 
 const customtheme = createMuiTheme({
     palette : {
@@ -43,18 +46,57 @@ class App extends React.Component {
                   filesInserted: false, 
                   fileCount: 0,
                   percentage: 0,
-                  loadingBarVisible: true};
+                  loadingBarVisible: true,
+                  uploadAudioFilesButton: false,
+                  submitAudioFilesButton: true,
+                  deleteButton: false};
     this.submitHandler.bind(this)
   }
 
   fileSelectedHandler = event => {
-    event.preventDefault();
+      console.log(this.state.uploadAudioFilesButton);
+      event.preventDefault();
+      this.setState({percentage: 0});
 
-    this.state.selectedFile = Array.from(event.target.files);
-    this.state.fileCount = this.state.selectedFile.length;
 
-    this.setState(this.state.selectedFile)
-  };
+      let tempArray = Array.from(event.target.files);
+      if(this.checkNumFiles(event, tempArray) && this.checkFileFormat(event)) {
+           for (let i = 0; i < tempArray.length; i++) {
+                  this.state.selectedFile.push(tempArray[i]);
+                  this.setState({fileCount: this.state.selectedFile.length});
+              }
+           this.setState({selectedFile: this.state.selectedFile, submitAudioFilesButton: false, filesInserted: false });
+          }
+
+          console.log(this.state.selectedFile);
+    }
+
+
+  checkNumFiles=(event, newFileArray)=>{
+    let files = event.target.files
+        if (files.length > 10 || this.state.fileCount > 10 || this.state.fileCount + newFileArray.length > 10) {
+           event.target.value = null
+           toast.error("Reached File Limit: Exceeded 10 Files")
+           return false
+      }
+    return true
+ }
+
+ checkFileFormat=(event)=>{
+    let files = event.target.files
+    let errs = ''
+    const types = ['audio/wav', 'audio/WAV']
+
+    for(var index = 0; index < files.length; index++) {
+        // check if files are in wav format
+        if (types.every(type => files[index].type !== type)) {
+        // create error message and assign to container
+        toast.error("Invalid File Format: Only WAV files accepted.")
+        return false
+       }
+     };
+    return true
+}
 
   /*-----------------------------------------------------/
    * Function [Event Handler]: submitHandler
@@ -76,7 +118,7 @@ class App extends React.Component {
      for(var i = 0; i < this.state.selectedFile.length; i++) {
          formData.append('file', this.state.selectedFile[i]);
      }
-     this.setState({loadingBarVisible: false})
+     this.setState({loadingBarVisible: false, submitAudioFilesButton: true, deleteButton: true})
      console.log(formData)
      var percent = 0;
 
@@ -88,7 +130,8 @@ class App extends React.Component {
                  if (e.lengthComputable) {
                      percent = Math.round((e.loaded / e.total) * 100);
                      console.log(percent);
-                     self.setState({percentage: percent});
+                     self.setState({percentage: percent, uploadAudioFilesButton: true});
+
 
                  }
 
@@ -102,12 +145,63 @@ class App extends React.Component {
          contentType: false,
          success: () => {
              if (this.state.fileCount != 0) {
-                 this.setState({filesInserted: true});
+                 this.setState({filesInserted: true, uploadAudioFilesButton: false, loadingBarVisible: true, deleteButton: false});
+                 toast.success('Upload Successful: Uploaded ' + this.state.fileCount + ' file(s).')
              }
          }
      })
   }
 
+
+  getFileByteSize(size){
+      let result = 0;
+      if(size >= 1024 && size < 1048576){
+          result = Number.parseFloat(String(size/1024)).toFixed(2);
+          return String(result + " KB")
+      }
+      else if(size >= 1048576 && size < 1073741824){
+          result = Number.parseFloat(String(size/1048576)).toFixed(2);
+          return String(result + " MB")
+
+      }
+      else if(size >= 1073741824){
+          result = Number.parseFloat(String(size/1073741824)).toFixed(2);
+          return String(result + " GB")
+
+      }
+      else{
+          return 0;
+      }
+  }
+
+  removeFile(file, filename){
+      console.log(file);
+      let currentFiles = this.state.selectedFile;
+      let newFileList = [];
+      console.log("REMOVING FILE....");
+      for(let i = 0; i < currentFiles.length; i++){
+          if(file == currentFiles[i]){
+              continue
+          }
+          else{
+              newFileList.push(currentFiles[i]);
+          }
+
+      }
+      $.ajax({
+          contentType: 'application/json;charset=UTF-8',
+          type: 'POST',
+          url: '/removeFile',
+          data: JSON.stringify({'file': filename}),
+      })
+
+      if(newFileList.length == 0){
+          this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false, fileCount: this.state.fileCount-1});
+      }
+      else {
+          this.setState({selectedFile: newFileList, fileCount: this.state.fileCount-1});
+      }
+  }
 
   render() {
 
@@ -139,7 +233,8 @@ class App extends React.Component {
                                         <label htmlFor='my-input'>
                                             <Tooltip title={'Upload Audio File(s)'}>
                                                 <Button variant="outlined"
-                                                        component='span'>
+                                                        component='span'
+                                                        disabled={this.state.uploadAudioFilesButton}>
                                                     <AddIcon  fontSize="large"/>
                                                 </Button>
                                             </Tooltip>
@@ -149,26 +244,43 @@ class App extends React.Component {
                                                type='file'
                                                multiple={true}
                                                onChange={this.fileSelectedHandler}
+                                               disabled={this.state.uploadAudioFilesButton}
                                                name='file'
-                                               style={{display: 'none'}}/>
+                                               style={{display: 'none'}}
+                                               />
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
-                                            <br/> Selected Files : <br/>
-                                            {this.state.selectedFile.map(function(file, index) {
-                                                return <li key={index}>{file.name} (Size: {(file.size / 1048576).toFixed(2)} MB)<br/>
+                                            <div class="form-group">
+                                                <ToastContainer />
+                                            </div>
+                                            <br/> Selected File's: <br/> (Accepted File Format: WAV, File Limit: 10) <br/><br/>
+                                            {this.state.selectedFile.map(function(file, index){
+                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;
+                                                    <Button
+                                                        size={"small"}
+                                                        variant="text"
+                                                        component='span'
+                                                        color="secondary"
+                                                        disabled={this.state.deleteButton}
+                                                        onClick={() => {this.removeFile(file, file.name)}}>
+                                                        <DeleteIcon/>
+                                                    </Button>
+                                                    <br/>
                                                 </li>
-                                            })}
-                                            <br/>
+
+                                            }.bind(this))}
                                             <LinearProgress hidden={this.state.loadingBarVisible} id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(200)+2} variant="buffer"/>
                                             <br/>
                                         </Typography>
                                         <label htmlFor='my-submit'>
                                             <input id='my-submit'
                                                    type='submit'
-                                                   style={{display: 'none'}}/>
+                                                   style={{display: 'none'}}
+                                                   disabled={this.state.submitAudioFilesButton}/>
                                                    <Tooltip title={'Submit Audio File(s)'}>
                                                 <Button variant="contained"
                                                         onClick={this.submitHandler}
-                                                        component='span'>
+                                                        component='span'
+                                                        disabled={this.state.submitAudioFilesButton}>
                                                     <PublishIcon/>
                                                 </Button>
                                                    </Tooltip>
@@ -178,7 +290,6 @@ class App extends React.Component {
                             <Grid item>
                                 <br/>
                                 {<AnalyzeButton bool={this.state.filesInserted}/>}
-                                {this.state.filesInserted = false}
                             </Grid>
                             <Grid item>
                                 <Divider middle/><br/>
@@ -200,8 +311,9 @@ class App extends React.Component {
             </body>
           <footer>
               <Container>
-                  <br/><br/>
-              <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
+                <br/><br/>
+                <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
+                <br/>
               </Container>
           </footer>
       </div>
