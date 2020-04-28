@@ -19,7 +19,6 @@ PREDICTION_VERBOSE = False
 def classify_file( audio_file, all_models ) :
     # load the models
 
-
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
                    ["GOC", "GRA", "GST","GWG", "GWC"] ]
