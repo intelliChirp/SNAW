@@ -13,6 +13,7 @@ import traceback
 import random
 import shutil
 
+
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
 DEBUG_FLAG = False
@@ -101,7 +102,6 @@ def didFileUpload():
 def removeFile():
    file = request.get_json()
    if(file['file'] not in os.listdir('instance/upload/user'+session['id'])):
-        print("HELLO")
         return redirect('', 204)
    else:
        os.remove('instance/upload/user' + session['id']+'/'+file['file'])
@@ -168,5 +168,14 @@ def run_analysis():
     except Exception as e:
         return str(e)
 
+@app.route('/removeUserFolder', methods=['GET', 'POST'])
+def closeUserFolder():
+    shutil.rmtree('instance/upload/user' + session['id'])
+    return redirect('', 204)
+
+
+
 #print('Starting Flask!')
 app.run(debug=True)
+
+
