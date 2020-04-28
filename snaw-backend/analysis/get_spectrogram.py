@@ -5,7 +5,6 @@ from numpy.lib import stride_tricks
 import sys
 import os
 import base64
-from classification_cnn import runScript as get_result
 import traceback
 
 DEBUG_FLAG = False

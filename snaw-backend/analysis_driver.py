@@ -12,9 +12,9 @@ import numpy as np
 import traceback
 import os
 import json
-from classification_cnn import runScript as run_classification
-from get_spectrogram import runScript as run_spectrogram
-from acousticIndices import getAcousticIndices as run_indices
+from analysis.classification_cnn import runScript as run_classification
+from analysis.get_spectrogram import runScript as run_spectrogram
+from analysis.acousticIndices import getAcousticIndices as run_indices
 
 DEBUG_FLAG = True
 
