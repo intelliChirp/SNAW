@@ -151,12 +151,12 @@ function downloadCSVFile(fileNumber){
     const element = document.createElement("a");
 
     var infoDictKeys = finalInfoDictionary[fileNumber][fileData][0]['data'];
-
+    var acousticDictLength = finalInfoDictionary[fileNumber][fileAcoustics].length;
     const csvWriter = createArrayCsvStringifier({
         header : ['CATEGORY', 'TIME'],
         path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
     });
-    const data = [['Anthrophony Model:', ' ', ' ', 'Biophony Model:', ' ', ' ', 'Geophony Model:', ' ', ' '], ['CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)']];
+    const data = [['Anthrophony Model:', ' ', ' ', 'Biophony Model:', ' ', ' ', 'Geophony Model:', ' ', ' ', 'Acoustic Indices:'], ['CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'Index', 'Value', 'Description']];
     for(var  keys = 0; keys < infoDictKeys.length; keys++) {
         var csvArray = [];
         for (var dictCount = 0; dictCount < 3; dictCount++) {
@@ -165,6 +165,13 @@ function downloadCSVFile(fileNumber){
             csvArray.push(finalInfoDictionary[fileNumber][fileData][dictCount]["data"][keys]["time"]);
             csvArray.push(' ');
 
+        }
+
+        if(keys < acousticDictLength) {
+            csvArray.push(finalInfoDictionary[fileNumber][fileAcoustics][keys]['index']);
+            csvArray.push(finalInfoDictionary[fileNumber][fileAcoustics][keys]['value'])
+            csvArray.push(finalInfoDictionary[fileNumber][fileAcoustics][keys]['desc']);
+            ;
         }
         data.push(csvArray);
 
