@@ -19,12 +19,15 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import AddIcon from '@material-ui/icons/Add'
 import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
 import back_img from './img/garden-pond-lakes-winery-581729.jpg'
 import { shadows } from '@material-ui/system';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { Link } from 'react-router-dom';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Link from "@material-ui/core/Link";
+
 const customtheme = createMuiTheme({
     palette : {
         primary : { main: '#297B48',
@@ -45,29 +48,55 @@ class App extends React.Component {
                   percentage: 0,
                   loadingBarVisible: true,
                   uploadAudioFilesButton: false,
-                  submitAudioFilesButton: true};
+                  submitAudioFilesButton: true,
+                  deleteButton: false};
     this.submitHandler.bind(this)
   }
 
   fileSelectedHandler = event => {
       console.log(this.state.uploadAudioFilesButton);
-      if(this.state.uploadAudioFilesButton){
-          return
-      }
-      else {
-          event.preventDefault();
-          this.setState({percentage: 0});
-          let tempArray = Array.from(event.target.files);
-          for(let i = 0; i < tempArray.length; i++){
-              this.state.selectedFile.push(tempArray[i])
-          }
-          this.state.fileCount = this.state.selectedFile.length;
-          this.setState(this.state.selectedFile);
-          this.setState({submitAudioFilesButton: false, filesInserted: false});
-          console.log(this.state.selectedFile);
-      }
+      event.preventDefault();
+      this.setState({percentage: 0});
 
-  };
+
+      let tempArray = Array.from(event.target.files);
+      if(this.checkNumFiles(event, tempArray) && this.checkFileFormat(event)) {
+           for (let i = 0; i < tempArray.length; i++) {
+                  this.state.selectedFile.push(tempArray[i]);
+                  this.setState({fileCount: this.state.selectedFile.length});
+              }
+           this.setState({selectedFile: this.state.selectedFile, submitAudioFilesButton: false, filesInserted: false });
+          }
+
+          console.log(this.state.selectedFile);
+    }
+
+
+  checkNumFiles=(event, newFileArray)=>{
+    let files = event.target.files
+        if (files.length > 10 || this.state.fileCount > 10 || this.state.fileCount + newFileArray.length > 10) {
+           event.target.value = null
+           toast.error("Reached File Limit: Exceeded 10 Files")
+           return false
+      }
+    return true
+ }
+
+ checkFileFormat=(event)=>{
+    let files = event.target.files
+    let errs = ''
+    const types = ['audio/wav', 'audio/WAV']
+
+    for(var index = 0; index < files.length; index++) {
+        // check if files are in wav format
+        if (types.every(type => files[index].type !== type)) {
+        // create error message and assign to container
+        toast.error("Invalid File Format: Only WAV files accepted.")
+        return false
+       }
+     };
+    return true
+}
 
   /*-----------------------------------------------------/
    * Function [Event Handler]: submitHandler
@@ -89,7 +118,7 @@ class App extends React.Component {
      for(var i = 0; i < this.state.selectedFile.length; i++) {
          formData.append('file', this.state.selectedFile[i]);
      }
-     this.setState({loadingBarVisible: false, submitAudioFilesButton: true})
+     this.setState({loadingBarVisible: false, submitAudioFilesButton: true, deleteButton: true})
      console.log(formData)
      var percent = 0;
 
@@ -116,7 +145,8 @@ class App extends React.Component {
          contentType: false,
          success: () => {
              if (this.state.fileCount != 0) {
-                 this.setState({filesInserted: true, uploadAudioFilesButton: false, loadingBarVisible: true});
+                 this.setState({filesInserted: true, uploadAudioFilesButton: false, loadingBarVisible: true, deleteButton: false});
+                 toast.success('Upload Successful: Uploaded ' + this.state.fileCount + ' file(s).')
              }
          }
      })
@@ -166,10 +196,10 @@ class App extends React.Component {
       })
 
       if(newFileList.length == 0){
-          this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false});
+          this.setState({selectedFile: newFileList, submitAudioFilesButton: true, filesInserted : false, fileCount: this.state.fileCount-1});
       }
       else {
-          this.setState({selectedFile: newFileList});
+          this.setState({selectedFile: newFileList, fileCount: this.state.fileCount-1});
       }
   }
 
@@ -219,23 +249,25 @@ class App extends React.Component {
                                                style={{display: 'none'}}
                                                />
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
-                                            <br/> Selected Files : <br/>
+                                            <div class="form-group">
+                                                <ToastContainer />
+                                            </div>
+                                            <br/> Selected File's: <br/> (Accepted File Format: WAV, File Limit: 10) <br/><br/>
                                             {this.state.selectedFile.map(function(file, index){
-                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;&nbsp;
+                                                return <li key={index}>{file.name} (Size: {this.getFileByteSize(file.size)})&nbsp;&nbsp;
                                                     <Button
-                                                    size={"small"}
-                                                    variant="text"
-                                                    component='span'
-                                                    color="secondary"
-                                                    onClick={() => {this.removeFile(file, file.name)}}>
-                                                    <DeleteIcon/>
-                                                </Button>
-                                                    <br/>
+                                                        size={"small"}
+                                                        variant="text"
+                                                        component='span'
+                                                        color="secondary"
+                                                        disabled={this.state.deleteButton}
+                                                        onClick={() => {this.removeFile(file, file.name)}}>
+                                                        <DeleteIcon/>
+                                                    </Button>
                                                     <br/>
                                                 </li>
 
                                             }.bind(this))}
-                                            <br/>
                                             <LinearProgress hidden={this.state.loadingBarVisible} id="loadingBar" value = {this.state.percentage} valueBuffer = {this.state.percentage + Math.random(200)+2} variant="buffer"/>
                                             <br/>
                                         </Typography>
@@ -279,8 +311,9 @@ class App extends React.Component {
             </body>
           <footer>
               <Container>
-                  <br/><br/>
-              <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
+                <br/><br/>
+                <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
+                <br/>
               </Container>
           </footer>
       </div>
