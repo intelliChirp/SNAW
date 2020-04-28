@@ -91,15 +91,17 @@ def classify_file( audio_file, all_models ) :
                     max_value_index = index
                     max_value = predicted[0,index]
 
+            max_value_perc = int(max_value * 100)
+
             # Output the prediction
             if max_value < 0.5:
                 if( PREDICTION_VERBOSE ):
                     print("GUESS: Nothing")
-                classification['data'].append( { "category" : "NO", "time" : start_sec } )
+                classification['data'].append( { "category" : "NO", "time" : start_sec, "pred" : max_value_perc } )
             else:
                 if( PREDICTION_VERBOSE ):
                     print('\n\nGUESS: ', labels[max_value_index])
-                classification['data'].append( { "category" : labels[max_value_index], "time" : start_sec } )
+                classification['data'].append( { "category" : labels[max_value_index], "time" : start_sec, "pred" : max_value_perc } )
     if( PREDICTION_VERBOSE ):
         print(classify_dict)
 
