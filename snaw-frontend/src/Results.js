@@ -19,7 +19,7 @@ import $ from 'jquery';
 import Button from "@material-ui/core/Button";
 import 'react-h5-audio-player/lib/styles.css';
 import {createArrayCsvStringifier, createArrayCsvWriter} from "csv-writer";
-import {createMuiTheme} from "@material-ui/core";
+import {createMuiTheme, ListItemText} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 
 //Surely a better way to do this other than global variable.
@@ -51,10 +51,12 @@ var finalInfoDictionary;
  *-------------------------------------------------------------*/
 
 let fileName = 0;
+let ANALYSIS_ERROR_PRESENT = 1;
 let fileSpectro = 1;
 let fileAudio = 2;
 let fileData = 3;
 let fileAcoustics = 4;
+let ACOUSTIC_INDICES_ERROR_PRESENT = 4;
 
 
 const useStyles = makeStyles(theme => ({
@@ -296,13 +298,13 @@ function Results() {
                                 </Container>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
-                        )})}
+                        )}})}
             </Container>
             </body>
             <footer>
                 <Container>
-                    <br/><br/>
-                    <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
+                    <br/>
+                     <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
                     <br/>
                 </Container>
             </footer>
