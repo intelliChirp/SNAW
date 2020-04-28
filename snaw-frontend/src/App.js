@@ -51,6 +51,14 @@ class App extends React.Component {
                   submitAudioFilesButton: true,
                   deleteButton: false};
     this.submitHandler.bind(this)
+
+      $(window).on('beforeunload', function() {
+          $.ajax({
+              contentType: 'application/json;charset=UTF-8',
+              type: 'POST',
+              url: '/removeUserFolder',
+          })
+      });
   }
 
   fileSelectedHandler = event => {
@@ -175,6 +183,7 @@ class App extends React.Component {
   }
 
   removeFile(file, filename){
+
       console.log(file);
       let currentFiles = this.state.selectedFile;
       let newFileList = [];
