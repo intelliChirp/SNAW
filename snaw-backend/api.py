@@ -13,6 +13,7 @@ import traceback
 import random
 import shutil
 
+
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
 DEBUG_FLAG = False
@@ -36,7 +37,6 @@ hit refresh upon uploading a file.
 '''
 @app.route('/')
 def home():
-    getUserFolder()
     return render_template("index.html")
 
 
@@ -56,7 +56,10 @@ and saves the files one at a time to the folder 'instance/upload'
 '''
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
+
+   # Check for user folder.
    getUserFolder()
+
    if request.method == 'POST':
         # Request.Files comes in a immutable multi-dictionary.
         # MutableList uses a method to convert the imm. multi-dict to a mutable list.
@@ -99,7 +102,6 @@ def didFileUpload():
 def removeFile():
    file = request.get_json()
    if(file['file'] not in os.listdir('instance/upload/user'+session['id'])):
-        print("HELLO")
         return redirect('', 204)
    else:
        os.remove('instance/upload/user' + session['id']+'/'+file['file'])
@@ -159,12 +161,21 @@ def run_analysis():
             print("[SUCCESS] Spectrogram images have been created - api.py")
 
 
-        for file in os.listdir('instance/upload/user' + session['id']):
-            os.remove('instance/upload/user' + session['id']+'/'+file)
+        shutil.rmtree('instance/upload/user' + session['id'])
+
 
         return result
     except Exception as e:
         return str(e)
 
+@app.route('/removeUserFolder', methods=['GET', 'POST'])
+def closeUserFolder():
+    shutil.rmtree('instance/upload/user' + session['id'])
+    return redirect('', 204)
+
+
+
 #print('Starting Flask!')
 app.run(debug=True)
+
+

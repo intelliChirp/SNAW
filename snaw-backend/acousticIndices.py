@@ -603,9 +603,6 @@ class AcousticIndices(object):
 
     def get_acoustic_indices(self):
         feature_vector = []
-
-        feature_vector.append(self.get_average_signal_amplitude())
-        feature_vector.append(self.get_background_noise())
         feature_vector.append(self.get_snr())
         feature_vector.append(self.get_acoustic_activity())
         feature_vector.append(self.get_acoustic_activity_count())
@@ -617,7 +614,6 @@ class AcousticIndices(object):
         feature_vector.append(self.get_acoustic_complexity_index())
         feature_vector.append(self.get_shannon_index())
         feature_vector.append(self.get_median_amplitude_envelope())
-        feature_vector.append(self.get_mid_band_activity())
         feature_vector.append(self.get_spectral_maxima_entropy())
         feature_vector.extend(self.get_spectral_average_variance_entropy())
         #feature_vector.extend(self.get_spectral_diversity_persistance())
@@ -627,8 +623,6 @@ class AcousticIndices(object):
     @staticmethod
     def get_acoustic_indices_headers():
         feature_headers = []
-        feature_headers.append("Average Signal Amplitude")
-        feature_headers.append("Background Noise")
         feature_headers.append("SNR")
         feature_headers.append("Acoustic Activity")
         feature_headers.append("Acoustic Activity Count")
@@ -640,7 +634,6 @@ class AcousticIndices(object):
         feature_headers.append("Acoustic Complexity Index")
         feature_headers.append("Shannon Index")
         feature_headers.append("Median Of Amplitude Envelope")
-        feature_headers.append("Mid Band Activity")
         feature_headers.append("Entropy Of Spectral Maxima")
         feature_headers.append("Entropy Of Spectral Average")
         feature_headers.append("Entropy Of Spectral Variance")
@@ -652,23 +645,20 @@ class AcousticIndices(object):
     @staticmethod
     def get_acoustic_indices_descs():
         feature_descs = []
-        feature_descs.append("Average Signal Amplitude Desc")
-        feature_descs.append("Background Noise Desc")
-        feature_descs.append("SNR Desc")
-        feature_descs.append("Acoustic Activity Desc")
-        feature_descs.append("Acoustic Activity Count Desc")
-        feature_descs.append("Acoustic Events Average Duration Desc")
-        feature_descs.append("Temporal Entropy Desc")
-        feature_descs.append("Spectral Entropy Desc")
-        feature_descs.append("Acoustic Entropy Desc")
-        feature_descs.extend(["Anthrophony Desc","Biophony Desc","Normalized Difference Soundscape Index Desc"])
-        feature_descs.append("Acoustic Complexity Index Desc")
-        feature_descs.append("Shannon Index Desc")
-        feature_descs.append("Median Of Amplitude Envelope Desc")
-        feature_descs.append("Mid Band Activity Desc")
-        feature_descs.append("Entropy Of Spectral Maxima Desc")
-        feature_descs.append("Entropy Of Spectral Average Desc")
-        feature_descs.append("Entropy Of Spectral Variance Desc")
+        feature_descs.append("The decibel difference of the highest amplitude acoustic event and the background noise.")
+        feature_descs.append("Fraction of frames where the signal is >3dB above background. ")
+        feature_descs.append("The number of times acoustic activity events occurred. ")
+        feature_descs.append("The mean length of acoustic activity events. ")
+        feature_descs.append("[Ht] Complex amplitude signal - tends towards 1 and is sensitive to consistent sound. ")
+        feature_descs.append("[Hs] or [Hf] complex frequency signal - tends towards 1 and is sensitive to consistent sound. ")
+        feature_descs.append("[H] assessment of pure to random noise: [Hs] x [Ht]. ")
+        feature_descs.extend(["Anthrophony Desc","Biophony Desc","ratio of human to biotic sound - values of 1 equate to no human sound. "])
+        feature_descs.append("Heterogeneity in sound intensity - high values represent more dynamically changing sounds. ")
+        feature_descs.append("Entropy of frequency - noisy will tend towards 1. ")
+        feature_descs.append("Linearly related to number of animal vocalizations, part of acoustic richness. ")
+        feature_descs.append("Indicator of species richness. ")
+        feature_descs.append("Entropy Of Spectral Average Desc. ")
+        feature_descs.append("Indicator of species richness. ")
         #feature_descs.append("Spectral Diversity")
         #feature_descs.append("Spectral Persistence")
 
