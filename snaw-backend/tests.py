@@ -3,6 +3,7 @@ import unittest
 from analysis.classification_cnn import classify_file as class_run
 from analysis.classification_cnn import classify_file as class_driver
 from analysis.get_spectrogram import runScript as spectro_driver
+from analysis.acousticIndices import getAcousticIndices as indices_driver
 from keras.models import load_model
 import audioread
 
@@ -26,8 +27,13 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def testspectrogram(self):
         self.assertTrue( spectro_driver(self.good, 0, self.good, class_driver(self.good, self.models) ) )
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
             spectro_driver(self.good, 0, self.good, {} )
+
+    def testindices(self):
+        self.assertTrue( indices_driver( self.good ) )
+        with self.assertRaises(RuntimeError) :
+            indices_driver( self.bad )
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestSequenceFunctions)
 unittest.TextTestRunner(verbosity=2).run(suite)

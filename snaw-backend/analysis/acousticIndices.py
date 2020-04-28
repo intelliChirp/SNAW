@@ -732,7 +732,6 @@ def getAcousticIndices(audiofile):
         print(track)
         singleResultArray = "ERROR_PRESENT"
 
-
     if( DEBUG_FLAG ):
         print("[SUCCESS] Calculated acoustic indices - acousticIndices.py")
     return singleResultArray
