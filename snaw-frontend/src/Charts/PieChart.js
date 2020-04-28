@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {Cell, Legend, Pie, PieChart, Tooltip,} from 'recharts';
 import {Container} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 
 // TODO:: Dynamically add data to graphs from json request Issue #7
 
@@ -78,14 +79,15 @@ export default class Example extends PureComponent {
 
     return (
         <Grid container spacing={3}>
-            <Grid item>
-                <PieChart width={250} height={250}>
+            <Grid item xs>
+                <Paper>
+                <PieChart width={350} height={350}>
                     <Pie
                       data={ant_pie_data}
-                      cx={100}
-                      cy={100}
+                      cx={175}
+                      cy={175}
                       labelLine={false}
-                      outerRadius={60}
+                      outerRadius={100}
                       fill="#8884d8"
                       dataKey="value"
                       label
@@ -97,15 +99,17 @@ export default class Example extends PureComponent {
                     <Tooltip/>
                     <Legend/>
                 </PieChart>
+                </Paper>
             </Grid>
-            <Grid item>
-                <PieChart width={250} height={250}>
+            <Grid item xs>
+                <Paper>
+                <PieChart width={350} height={350}>
                     <Pie
                         data={bio_pie_data}
-                        cx={100}
-                        cy={100}
+                        cx={175}
+                        cy={175}
                         labelLine={false}
-                        outerRadius={60}
+                        outerRadius={100}
                         fill="#8884d8"
                         dataKey="value"
                         label
@@ -117,15 +121,17 @@ export default class Example extends PureComponent {
                     <Tooltip/>
                     <Legend/>
                 </PieChart>
+                </Paper>
             </Grid>
-            <Grid item>
-                <PieChart width={250} height={250}>
+            <Grid item xs>
+                <Paper>
+                <PieChart width={350} height={350}>
                     <Pie
                         data={geo_pie_data}
-                        cx={100}
-                        cy={100}
+                        cx={175}
+                        cy={175}
                         labelLine={false}
-                        outerRadius={60}
+                        outerRadius={100}
                         fill="#8884d8"
                         dataKey="value"
                         label
@@ -137,6 +143,7 @@ export default class Example extends PureComponent {
                     <Tooltip/>
                     <Legend/>
                 </PieChart>
+                </Paper>
             </Grid>
         </Grid>
     );
