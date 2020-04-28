@@ -240,76 +240,122 @@ function Results() {
                 <Divider middle/>
                 <br/>
                 {Object.entries(finalInfoDictionary).map(([key, value]) => {
-                    return (
-                        <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon/>}
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header">
-                                <Typography className={classes.heading}>Results of</Typography>
-                                <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Container>
-                                    <Paper>
-                                    <br/>
-                                    <Spectrogram ant_img={value[fileSpectro][0]}
-                                                 bio_img={value[fileSpectro][1]}
-                                                 geo_img={value[fileSpectro][2]}/>
-                                    <br/>
-                                    </Paper>
-                                    <br/>
-                                    <Typography variant='subtitle1'>Playback Audio File</Typography>
-                                    <audio controls src={value[fileAudio]}/>
-                                    <br/>
-                                    <br/>
-                                    <Typography variant='subtitle1'>Results from the Anthrophony, Geophony and Biophony Classification
-                                        Models</Typography>
-                                    <br/>
-                                    <Grid container spacing={2}>
-                                        <Grid item linechart>
-                                            <Paper><LineChart series={value[fileData]}/></Paper>
+                    if(value.includes("ERROR_PRESENT")) {
+                        let listOfProblems = [];
+                        for (let i = 1; i < value.length; i++) {
+                            if (value[i] == "ERROR_PRESENT") {
+                                switch (i) {
+                                    case 1:
+                                        listOfProblems.push("**Spectrogram couldn't be created**");
+                                        continue
+                                    case 2:
+                                        listOfProblems.push("**Audio playback couldn't be collected**");
+                                        continue
+                                    case 3:
+                                        listOfProblems.push("**Analysis couldn't be run on the file**");
+                                        continue
+                                    case 4:
+                                        listOfProblems.push("**Acoustic Indices couldn't be calculated on the file**")
+                                        continue
+                                }
+                            }
+                        }
+                        return (
+                            <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header">
+                                    <Typography className={classes.heading}>An error has occurred with the following file:  </Typography>
+                                    <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Container>
+                                        <Paper>
+                                            <Typography>
+                                                <h3>It seems something went wrong with this file! Here's what we ran into:</h3>
+                                                <ListItemText>
+                                                    {listOfProblems.map(item => <p><h4>{item}</h4></p>)}
+                                                </ListItemText>
+                                                <br/>
+                                                <h3>If this problem persists, please contact [support@example.com]</h3>
+                                            </Typography>
+                                        </Paper>
+                                    </Container>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        )}
+                    else{
+                        return (
+                            <ExpansionPanel expanded={expanded === key} onChange={handleChange(key)}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon/>}
+                                    aria-controls="panel1bh-content"
+                                    id="panel1bh-header">
+                                    <Typography className={classes.heading}>Results of</Typography>
+                                    <Typography className={classes.secondaryHeading}>{value[fileName]}</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Container>
+                                        <Paper>
+                                            <br/>
+                                            <Spectrogram ant_img={value[fileSpectro][0]}
+                                                         bio_img={value[fileSpectro][1]}
+                                                         geo_img={value[fileSpectro][2]}/>
+                                            <br/>
+                                        </Paper>
+                                        <br/>
+                                        <Typography variant='subtitle1'>Playback Audio File</Typography>
+                                        <audio controls src={value[fileAudio]}/>
+                                        <br/>
+                                        <br/>
+                                        <Typography variant='subtitle1'>Results from the Anthrophony, Geophony and Biophony Classification
+                                            Models</Typography>
+                                        <br/>
+                                        <Grid container spacing={2}>
+                                            <Grid item linechart>
+                                                <Paper><LineChart series={value[fileData]}/></Paper>
+                                            </Grid>
+                                            <Grid item piechart>
+                                                <Paper><PieChart series={value[fileData]}/></Paper>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item piechart>
-                                            <Paper><PieChart series={value[fileData]}/></Paper>
-                                        </Grid>
-                                    </Grid>
-                                    <br/>
-                                    <ClassificationTable series={value[fileData]}/>
-                                    <br/>
-                                    <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                    >
-                                        <Typography className={classes.heading}>Click to View Acoustic Indices Calculations</Typography>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <AcousticIndiceTable indices={value[fileAcoustics]}/>
-                                    </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                    <br/>
-                                    <Paper>
-                                        <Button onClick={function () {
-                                            downloadCSVFile(key)
-                                        }} variant="contained" className={classes.button}>Export Neural Network Classification</Button>
-                                    </Paper>
-                                </Container>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                                        <br/>
+                                        <ClassificationTable series={value[fileData]}/>
+                                        <br/>
+                                        <ExpansionPanel>
+                                            <ExpansionPanelSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <Typography className={classes.heading}>Click to View Acoustic Indices Calculations</Typography>
+                                            </ExpansionPanelSummary>
+                                            <ExpansionPanelDetails>
+                                                <AcousticIndiceTable indices={value[fileAcoustics]}/>
+                                            </ExpansionPanelDetails>
+                                        </ExpansionPanel>
+                                        <br/>
+                                        <Paper>
+                                            <Button onClick={function () {
+                                                downloadCSVFile(key)
+                                            }} variant="contained" className={classes.button}>Export Neural Network Classification</Button>
+                                        </Paper>
+                                    </Container>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
                         )}})}
             </Container>
             </body>
             <footer>
                 <Container>
                     <br/>
-                     <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
+                    <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
                     <br/>
                 </Container>
             </footer>
         </div>
-            )
-        }
+    )
+}
 
 export default Results;
