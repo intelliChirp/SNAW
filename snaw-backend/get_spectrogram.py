@@ -57,69 +57,99 @@ def logscale_spec(spec, sr=44100, factor=20.):
 
 """ plot spectrogram"""
 def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
-    # initialize variables
-    size = len(data)
-    x_labels = []
-    x_cats = []
-    currCat = ""
+    if data:
+        # initialize variables
+        size = len(data)
+        x_labels = []
+        x_cats = []
+        currCat = ""
 
-    # enumerate on the classified data
-    for index, row in enumerate(data) :
-     # set value to the current category at index
-     currCat = row['category']
-     # set prediction value from data, cast to string and add percent symbol
-     pred = str(row['pred']) + "%"
+        # enumerate on the classified data
+        for index, row in enumerate(data) :
+         # set value to the current category at index
+         currCat = row['category']
+         # set prediction value from data, cast to string and add percent symbol
+         pred = str(row['pred']) + "%"
 
-     # if, this isnt the first run and the last seen category is the same as the current category
-     #   only append the prediction value
-     # else, we are on a new category, or first run
-     #   append new category and prediction value
-     if(len(x_cats) > 0 and x_cats[-1][:-4] == currCat) : x_labels.append(" " + pred), x_cats.append(currCat+" "+pred)
-     else : x_labels.append(currCat + " " + pred), x_cats.append(currCat + " " + pred)
+         # if, this isnt the first run and the last seen category is the same as the current category
+         #   only append the prediction value
+         # else, we are on a new category, or first run
+         #   append new category and prediction value
+         if(len(x_cats) > 0 and x_cats[-1][:-4] == currCat) : x_labels.append(" " + pred), x_cats.append(currCat+" "+pred)
+         else : x_labels.append(currCat + " " + pred), x_cats.append(currCat + " " + pred)
 
-    # load audio file and get sample rates
-    samplerate, samples = wav.read(audiopath)
-    s = stft(samples, binsize)
-    # get frequency of audio data
-    sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
-    ims = 20.*np.log10(np.abs(sshow)/10e-6) # amplitude to decibel
-    timebins, freqbins = np.shape(ims)
+        # load audio file and get sample rates
+        samplerate, samples = wav.read(audiopath)
+        s = stft(samples, binsize)
+        # get frequency of audio data
+        sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
+        ims = 20.*np.log10(np.abs(sshow)/10e-6) # amplitude to decibel
+        timebins, freqbins = np.shape(ims)
 
-    # calc number of seconds
-    seconds = int(len(samples) / samplerate)
+        # calc number of seconds
+        seconds = int(len(samples) / samplerate)
 
-    plt.figure(figsize=(15, 7.5))
-    plt.imshow(np.transpose(ims), origin="lower", aspect="auto", interpolation="none")
+        plt.figure(figsize=(15, 7.5))
+        plt.imshow(np.transpose(ims), origin="lower", aspect="auto", interpolation="none")
 
-    plt.xlabel("time (s)")
-    plt.ylabel("frequency (hz)")
-    plt.xlim([0, timebins-1])
-    plt.ylim([0, freqbins])
+        plt.xlabel("time (s)")
+        plt.ylabel("frequency (hz)")
+        plt.xlim([0, timebins-1])
+        plt.ylim([0, freqbins])
 
-    x_size = int(timebins / seconds)
+        x_size = int(timebins / seconds)
 
-    xlocs = np.float32(np.linspace(0, timebins-1, seconds))
-    plt.xticks(xlocs, x_labels, rotation=45)
-    ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
-    plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
+        xlocs = np.float32(np.linspace(0, timebins-1, seconds))
+        plt.xticks(xlocs, ["%.f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
+        ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
+        plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
 
-    index = 0
-    annotate_size = 1/seconds
+        index = 1
+        annotate_size = 1/seconds
 
-    # draw classification boxes
-    for x, cat in zip(xlocs, x_cats):
-     if(cat[:-4] != 'NO') :
-         # get prediction value from label, divide by 100 to get percent, divide by 3 to get reasonable opacity level
-         alpha_val = int(cat[-3:-1]) / 100 / 3
-         plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'b', alpha=alpha_val)
-     else :
-        # get prediction value from label, divide by 100 to get percent,
-        #   multiply by negative and add .33 to get reasonable opacity level
-        alpha_val = int(cat[-3:-1]) / 100 * -1 + .5
-        print(alpha_val)
-        print(int(cat[-3:-1]))
-        plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'r', alpha=alpha_val)
-     index += 1
+        # draw classification boxes
+        for x, cat in zip(xlocs, x_cats):
+         if(cat[:-4] != 'NO') :
+             # get prediction value from label, divide by 100 to get percent, divide by 3 to get reasonable opacity level
+             alpha_val = int(cat[-3:-1]) / 100 / 3
+             plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'b', alpha=alpha_val)
+             plt.text(x+5, 5, cat[-3:], rotation=90, color="white")
+             plt.text(x+5, 40, cat[:-4], rotation=90, color="white")
+         else :
+            # get prediction value from label, divide by 100 to get percent,
+            #   multiply by negative and add .33 to get reasonable opacity level
+            alpha_val = int(cat[-3:-1]) / 100 * -1 + .5
+            print(alpha_val)
+            print(int(cat[-3:-1]))
+            plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'r', alpha=alpha_val)
+            plt.text(x+5, 5, cat[-3:], rotation=90, color="white")
+            plt.text(x+5, 40, cat[:-4], rotation=90, color="white")
+         index += 1
+    else :
+        #load audio file and get sample rates
+        samplerate, samples = wav.read(audiopath)
+        s = stft(samples, binsize)
+        # get frequency of audio data
+        sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
+        ims = 20.*np.log10(np.abs(sshow)/10e-6) # amplitude to decibel
+        timebins, freqbins = np.shape(ims)i
+        # calc number of seconds
+        seconds = int(len(samples) / samplerate)
+
+        plt.figure(figsize=(15, 7.5))
+        plt.imshow(np.transpose(ims), origin="lower", aspect="auto", interpolation="none")
+
+        plt.xlabel("time (s)")
+        plt.ylabel("frequency (hz)")
+        plt.xlim([0, timebins-1])
+        plt.ylim([0, freqbins])
+
+        x_size = int(timebins / seconds)
+
+        xlocs = np.float32(np.linspace(0, timebins-1, seconds))
+        plt.xticks(xlocs, ["%.f" % l for l in ((xlocs*len(samples)/timebins)+(0.5*binsize))/samplerate])
+        ylocs = np.int16(np.round(np.linspace(0, freqbins-1, 10)))
+        plt.yticks(ylocs, ["%.02f" % freq[i] for i in ylocs])
 
     if plotpath:
      plt.savefig(plotpath, bbox_inches="tight")
@@ -164,11 +194,14 @@ def runScript(filename, fileCount, audiofile, data):
         encode_ant, wavEncode = encoding( data[0]['data'], audiofile, path ) # wavEncode only needed from one, all same
         encode_bio, _ = encoding( data[1]['data'], audiofile, path )
         encode_geo, _ = encoding( data[2]['data'], audiofile, path )
+        encode_none, _ = encoding( None, audiofile, path )
+
         try:
             # save lise of pictures
             image_list = ['data:image/png;base64,' + encode_ant.decode("utf-8"),
                           'data:image/png;base64,' + encode_bio.decode("utf-8"),
-                          'data:image/png;base64,' + encode_geo.decode("utf-8")]
+                          'data:image/png;base64,' + encode_geo.decode("utf-8"),
+                          'data:image/png;base64,' + encode_none.decode("utf-8")]
         except:
             image_list = ERROR
 
