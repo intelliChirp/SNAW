@@ -132,7 +132,7 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
         # get frequency of audio data
         sshow, freq = logscale_spec(s, factor=1.0, sr=samplerate)
         ims = 20.*np.log10(np.abs(sshow)/10e-6) # amplitude to decibel
-        timebins, freqbins = np.shape(ims)i
+        timebins, freqbins = np.shape(ims)
         # calc number of seconds
         seconds = int(len(samples) / samplerate)
 
