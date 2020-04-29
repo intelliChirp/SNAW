@@ -38,6 +38,8 @@ const customtheme = createMuiTheme({
     }
 })
 
+toast.configure()
+
 class App extends React.Component {
 
   constructor(props) {
@@ -259,7 +261,7 @@ class App extends React.Component {
                                                />
                                         <Typography variant='body2' style={{color:"#6C7D72"}}>
                                             <div class="form-group">
-                                                <ToastContainer />
+                                                {/*<ToastContainer />*/}
                                             </div>
                                             <br/> Selected File's: <br/> (Accepted File Format: WAV, File Limit: 10) <br/><br/>
                                             {this.state.selectedFile.map(function(file, index){
