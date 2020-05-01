@@ -308,7 +308,8 @@ function Results() {
                                     <br/>
                                     <Spectrogram ant_img={value[fileSpectro][0]}
                                                  bio_img={value[fileSpectro][1]}
-                                                 geo_img={value[fileSpectro][2]}/>
+                                                 geo_img={value[fileSpectro][2]}
+                                                 non_img={value[fileSpectro][3]}/>
                                     <br/>
                                     </Paper>
                                     <br/>

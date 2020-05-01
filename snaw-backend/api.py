@@ -23,7 +23,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 DEBUG_FLAG = True
-count = 0
 '''
 ###------------------------------------------------------###
 App Routing: '/'
