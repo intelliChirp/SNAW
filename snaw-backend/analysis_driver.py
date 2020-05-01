@@ -28,8 +28,8 @@ def run_driver(personalID) :
 
     if DEBUG_FLAG : print("[WORKING] Loading CNN Models..")
     all_models = [ load_model('model\\anthro\\ant_cnn_model.h5'),
-                    load_model('model\\bio\\bio_cnn_model.h5'),
-                    load_model('model\\geo\\geo_cnn_model.h5') ]
+                   load_model('model\\bio\\bio_cnn_model.h5'),
+                   load_model('model\\geo\\geo_cnn_model.h5') ]
     if DEBUG_FLAG : print("[SUCCESS] Loaded CNN Models..")
 
     try:

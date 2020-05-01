@@ -170,7 +170,8 @@ def run_analysis():
 
 @app.route('/removeUserFolder', methods=['GET', 'POST'])
 def closeUserFolder():
-    shutil.rmtree('instance/upload/user' + session['id'])
+    if os.path.isdir('instance/upload/user'+session['id']):
+        shutil.rmtree('instance/upload/user' + session['id'])
     return redirect('', 204)
 
 

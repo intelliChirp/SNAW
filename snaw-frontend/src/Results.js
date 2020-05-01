@@ -151,12 +151,13 @@ function downloadCSVFile(fileNumber){
     const element = document.createElement("a");
 
     var infoDictKeys = finalInfoDictionary[fileNumber][fileData][0]['data'];
-
+    var acousticDictLength = finalInfoDictionary[fileNumber][fileAcoustics].length;
+    var acousticCount = 0;
     const csvWriter = createArrayCsvStringifier({
         header : ['CATEGORY', 'TIME'],
         path : "classification_"+finalInfoDictionary[fileNumber][fileName]+"_results.csv"
     });
-    const data = [['Anthrophony Model:', ' ', ' ', 'Biophony Model:', ' ', ' ', 'Geophony Model:', ' ', ' '], ['CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)']];
+    const data = [['Anthrophony Model:', ' ', ' ', 'Biophony Model:', ' ', ' ', 'Geophony Model:', ' ', ' ', 'Acoustic Indices:'], ['CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'CATEGORY', 'TIMESTAMP (sec)', ' ', 'Index', 'Value', 'Description']];
     for(var  keys = 0; keys < infoDictKeys.length; keys++) {
         var csvArray = [];
         for (var dictCount = 0; dictCount < 3; dictCount++) {
@@ -166,9 +167,21 @@ function downloadCSVFile(fileNumber){
             csvArray.push(' ');
 
         }
+
+        if(keys < acousticDictLength) {
+            csvArray.push(finalInfoDictionary[fileNumber][fileAcoustics][acousticCount]['index']);
+            csvArray.push(finalInfoDictionary[fileNumber][fileAcoustics][acousticCount]['value']);
+            csvArray.push(finalInfoDictionary[fileNumber][fileAcoustics][acousticCount]['desc']);
+            acousticCount++;
+        }
         data.push(csvArray);
 
     }
+        for(acousticCount; acousticCount < acousticDictLength; acousticCount++) {
+            data.push([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', finalInfoDictionary[fileNumber][fileAcoustics][acousticCount]['index'], finalInfoDictionary[fileNumber][fileAcoustics][acousticCount]['value'], finalInfoDictionary[fileNumber][fileAcoustics][acousticCount]['desc']]);
+
+        }
+
 
     //csvWriter.writeRecords(data).then(r => console.log("Done"));
    //Fnd proper finalInfoDictionary traversing at top of file
@@ -301,7 +314,8 @@ function Results() {
                                     <br/>
                                     <Spectrogram ant_img={value[fileSpectro][0]}
                                                  bio_img={value[fileSpectro][1]}
-                                                 geo_img={value[fileSpectro][2]}/>
+                                                 geo_img={value[fileSpectro][2]}
+                                                 non_img={value[fileSpectro][3]}/>
                                     <br/>
                                     </Paper>
                                     <br/>
