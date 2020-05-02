@@ -16,22 +16,11 @@ def classify_file( audiofile, model, model_type, model_color ):
         frames = f.getnframes()
         rate = f.getframerate()
         duration = frames / float(rate)
-        print(duration)
-
-    # only used for console output, can be removed to speed up runtime
-    #   function will throw error because of true flag at end,
-    #   console log is still displayed in spite of
-    #try:
-    #    aS.mtFileClassification(audiofile, model,"svm", True)
-    #except TypeError:
-    #    print("TypeError")
+        if( DEBUG_FLAG ):
+            print(duration)
 
     # pulls all the data given from the classification function
     [flagsInd, classesAll, acc, CM] = aS.mtFileClassification(audiofile, model,"svm")
-    # print( flagsInd )
-    # print( classesAll )
-    # print( acc )
-    # print( CM )
 
     flag_len = len(flagsInd) # amount of segments made
     segment = duration / flag_len # length of each time segment
@@ -56,17 +45,14 @@ def classify_file( audiofile, model, model_type, model_color ):
     return classify_dict
 
 def anthro_model():
-    # for filename in os.listdir('model/anthro'):
     modelfile = 'model/anthro/svmAnthroClassModel'
     return modelfile
 
 def bio_model():
-   # for filename in os.listdir('model/bio'):
    modelfile = 'model/bio/svmBioClassModel'
    return modelfile
 
 def geo_model():
-    #for filename in os.listdir('model/geo'):
     modelfile = 'model/geo/svmGeoClassModel'
     return modelfile
 
@@ -75,8 +61,8 @@ def runScript():
     if( DEBUG_FLAG ):
         print("[WORKING] Attempting to run SVM classification calculator - classification_svm.py")
     # Create dictionary for storing return information
-    # Create a counter for files
     finalResult = {}
+    # Create a counter for files
     fileCount = 0
 
     try:
