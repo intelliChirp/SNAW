@@ -346,7 +346,7 @@ function Results() {
                                     <Paper>
                                         <Button onClick={function () {
                                             downloadCSVFile(key)
-                                        }} variant="contained" className={classes.button}>Export Neural Network Classification</Button>
+                                        }} variant="contained" className={classes.button}>Export Classification</Button>
                                     </Paper>
                                 </Container>
                             </ExpansionPanelDetails>
