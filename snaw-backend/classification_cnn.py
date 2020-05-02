@@ -1,10 +1,3 @@
-from keras.models import load_model
-import keras
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, LSTM, Activation
-from keras.utils import to_categorical
-import wandb
-from wandb.keras import WandbCallback
 import matplotlib.pyplot as plt
 import sklearn.metrics as metrics
 import librosa
@@ -13,11 +6,8 @@ import traceback
 import os
 import json
 
-DEBUG_FLAG = True
+DEBUG_FLAG = False
 PREDICTION_VERBOSE = False
-
-def get_category( label ) :
-    switch
 
 def get_category( label ):
     return {
@@ -44,8 +34,6 @@ def get_category( label ):
     }.get(label, "Label Missing")
 
 def classify_file( audio_file, all_models ) :
-    # load the models
-
 
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
@@ -64,9 +52,9 @@ def classify_file( audio_file, all_models ) :
 
     ## Running the models
 
-    n_mfcc = 128 # bucket size !!SUBJECT TO CHANGE!!
-    max_len = 32 # max_len size !!SUBJECT TO CHANGE!!
-    channels = 1 # channels !!SUBJECT TO CHANGE!!
+    n_mfcc = 128 # bucket size
+    max_len = 32 # max_len size
+    channels = 1 # channels
 
     # convert file to wav2mfcc
     # Mel-frequency cepstral coefficients

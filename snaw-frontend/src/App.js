@@ -38,6 +38,7 @@ const customtheme = createMuiTheme({
     }
 })
 
+// Configure toast (notifications on top-right corner of web application)
 toast.configure()
 
 class App extends React.Component {
@@ -162,7 +163,6 @@ class App extends React.Component {
      })
   }
 
-
   getFileByteSize(size){
       let result = 0;
       if(size >= 1024 && size < 1048576){
@@ -172,12 +172,10 @@ class App extends React.Component {
       else if(size >= 1048576 && size < 1073741824){
           result = Number.parseFloat(String(size/1048576)).toFixed(2);
           return String(result + " MB")
-
       }
       else if(size >= 1073741824){
           result = Number.parseFloat(String(size/1073741824)).toFixed(2);
           return String(result + " GB")
-
       }
       else{
           return 0;
@@ -185,8 +183,6 @@ class App extends React.Component {
   }
 
   removeFile(file, filename){
-
-      console.log(file);
       let currentFiles = this.state.selectedFile;
       let newFileList = [];
       console.log("REMOVING FILE....");
