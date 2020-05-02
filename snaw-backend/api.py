@@ -12,7 +12,7 @@ from analysis_driver import run_driver
 import traceback
 import random
 import shutil
-
+from keras.models import load_model
 
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
@@ -23,6 +23,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 DEBUG_FLAG = True
+
 '''
 ###------------------------------------------------------###
 App Routing: '/'
@@ -172,8 +173,6 @@ def run_analysis():
 def closeUserFolder():
     shutil.rmtree('instance/upload/user' + session['id'])
     return redirect('', 204)
-
-
 
 #print('Starting Flask!')
 app.run(debug=True)

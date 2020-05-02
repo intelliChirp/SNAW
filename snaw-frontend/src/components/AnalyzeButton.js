@@ -5,6 +5,7 @@ import { withStyles} from "@material-ui/core/styles";
 import { withRouter } from 'react-router-dom';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import Tooltip from "recharts/lib/component/Tooltip";
+import { ToastContainer, toast } from 'react-toastify';
 
 const useStyles = theme => ({
     button: {
@@ -30,6 +31,7 @@ const useStyles = theme => ({
  * disabled.
  *-----------------------------------------------------*/
 class AnalyzeButton extends React.Component {
+    notify = () => toast.info("Now Analyzing your Files ")
 
     showLoadingImage = event => {
         event.preventDefault();
@@ -47,7 +49,8 @@ class AnalyzeButton extends React.Component {
                             <Link to={'/results'} onClick={this.showLoadingImage} style={{ textDecoration: 'none' }}>
                                     <Button disabled={false}
                                             variant="contained"
-                                            className={classes.button}>
+                                            className={classes.button}
+                                            onClick={this.notify}>
                                         Analyze Audio File(s)
                                     </Button>
                             </Link>

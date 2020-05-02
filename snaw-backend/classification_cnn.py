@@ -16,13 +16,41 @@ import json
 DEBUG_FLAG = True
 PREDICTION_VERBOSE = False
 
+def get_category( label ) :
+    switch
+
+def get_category( label ):
+    return {
+        "AAT" : "Air  Traffic",
+        "AHV" : "Human Voice",
+        "AMU" : "Music",
+        "AMA" : "Machinery",
+        "ART" : "Rail Traffic",
+        "ASI" : "Siren",
+        "AVH" : "Vehicle Horn",
+        "AVT" : "Vehicle Traffic",
+        "AVB" : "Vehicle Braking",
+        "BAM" : "Amphibian",
+        "BBI" : "Bird",
+        "BMA" : "Mammal",
+        "BIN" : "Insect",
+        "GOC" : "Ocean",
+        "GRA" : "Rain",
+        "GST" : "Stream",
+        "GWG" : "Wind Gust",
+        "GWC" : "Wind Constant",
+        "OPI" : "Physical Interference",
+        "OQU" : "Quiet"
+    }.get(label, "Label Missing")
+
 def classify_file( audio_file, all_models ) :
     # load the models
 
 
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
-                   ["GOC", "GRA", "GST","GWG", "GWC"] ]
+                   ["GOC", "GRA", "GST","GWG", "GWC"],
+                    ["OPI", "OQU"] ]
 
     classify_dict = [ {'name' : 'Anthrophony',
                      'color' : '#0088FE',
@@ -101,7 +129,7 @@ def classify_file( audio_file, all_models ) :
             else:
                 if( PREDICTION_VERBOSE ):
                     print('\n\nGUESS: ', labels[max_value_index])
-                classification['data'].append( { "category" : labels[max_value_index], "time" : start_sec, "pred" : max_value_perc } )
+                classification['data'].append( { "category" : get_category(labels[max_value_index]), "time" : start_sec, "pred" : max_value_perc } )
     if( PREDICTION_VERBOSE ):
         print(classify_dict)
 
