@@ -21,28 +21,27 @@ def get_category( label ) :
 
 def get_category( label ):
     return {
-        'a': 1,
-        'b': 2,
         "AAT" : "Air  Traffic",
-        "AHV" : "N/A",
+        "AHV" : "Human Voice",
+        "AMU" : "Music",
         "AMA" : "Machinery",
         "ART" : "Rail Traffic",
         "ASI" : "Siren",
         "AVH" : "Vehicle Horn",
         "AVT" : "Vehicle Traffic",
-        "BRA" : "N/A",
+        "AVB" : "Vehicle Braking",
         "BAM" : "Amphibian",
         "BBI" : "Bird",
         "BMA" : "Mammal",
         "BIN" : "Insect",
-        "GOC" : "N/A",
+        "GOC" : "Ocean",
         "GRA" : "Rain",
-        "GST" : "N/A",
+        "GST" : "Stream",
         "GWG" : "Wind Gust",
         "GWC" : "Wind Constant",
         "OPI" : "Physical Interference",
         "OQU" : "Quiet"
-    }.get(label, "N/A")
+    }.get(label, "Label Missing")
 
 def classify_file( audio_file, all_models ) :
     # load the models
