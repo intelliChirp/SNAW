@@ -8,9 +8,13 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Box from "@material-ui/core/Box";
 import nn_arch from './img/nn.png';
-import confusionmatrix from './img/confusionmatrix.png';
-import roccurve from './img/roccurve.png';
 import CardMedia from "@material-ui/core/CardMedia";
+import roc_ant from './img/roc_ant.png';
+import roc_bio from './img/roc_bio.png';
+import roc_geo from './img/roc_geo.png';
+import conf_ant from './img/conf_ant.png';
+import conf_bio from './img/conf_bio.png';
+import conf_geo from './img/conf_geo.png';
 
 const customtheme = createMuiTheme({
     palette : {
@@ -94,6 +98,15 @@ function Information() {
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         Architecture
                                     </Typography>
+                                    <Typography>Conv2D            (None, 116, 28, 109)</Typography>
+                                    <Typography>MaxPooling2D      (None, 58, 14, 109)</Typography>
+                                    <Typography>Conv2D            (None, 56, 12, 81)</Typography>
+                                    <Typography>MaxPooling2D      (None, 28, 6, 81)</Typography>
+                                    <Typography>Flatten           (None, 16224)</Typography>
+                                    <Typography>Dropout           (None, 16224)</Typography>
+                                    <Typography>Dense             (None, 118)</Typography>
+                                    <Typography>Dropout           (None, 118)</Typography>
+                                    <Typography>Dense             (None, 7)</Typography>
                                     <Divider/>
                                     <CardMedia id="nn_arch" component='img' image={nn_arch}
                                                className={classes.images}/>
@@ -102,18 +115,52 @@ function Information() {
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         Confusion Matrix
                                     </Typography>
+                                    <Grid container spacing={3}>
+                                        <Grid item>
+                                            <Typography variant='subtitle1'>
+                                                Anthrophony
+                                            </Typography>
+                                            <CardMedia id="nn_arch" component='img' image={conf_ant}
+                                                       className={classes.images}/>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant='subtitle1'>
+                                                Biophony
+                                            </Typography>
+                                            <CardMedia id="nn_arch" component='img' image={conf_bio}
+                                                       className={classes.images}/>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant='subtitle1'>
+                                                Geophony
+                                            </Typography>
+                                            <CardMedia id="nn_arch" component='img' image={conf_geo}
+                                                       className={classes.images}/>
+                                        </Grid>
+                                    </Grid>
                                     <Divider/>
-                                    <CardMedia id="nn_arch" component='img' image={confusionmatrix}
-                                               className={classes.images}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         ROC Curves
                                     </Typography>
                                     <Divider/>
-                                    <CardMedia id="nn_arch" component='img' image={roccurve}
-                                               className={classes.images}/>
-                                    <Divider/>
+                                    <Typography variant='subtitle1'>
+                                        Anthrophony
+                                    </Typography>
+                                    <CardMedia id="nn_arch" component='img' image={roc_ant}
+                                    className={classes.images}/>
+                                    <Typography variant='subtitle1'>
+                                        Biophony
+                                    </Typography>
+                                    <CardMedia id="nn_arch" component='img' image={roc_bio}
+                                    className={classes.images}/>
+
+                                    <Typography variant='subtitle1'>
+                                        Geophony
+                                    </Typography>
+                                    <CardMedia id="nn_arch" component='img' image={roc_geo}
+                                    className={classes.images}/>
                                 </Grid>
                             </Box>
                         </Paper>

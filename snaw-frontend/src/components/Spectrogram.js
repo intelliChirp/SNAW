@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles} from "@material-ui/core/styles";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = theme => ({
     non_button: {
@@ -85,30 +86,38 @@ class Spectrogram extends React.Component {
                            className="classes.media"/>
                            <Typography varient='subtitle1'>Toggle Classification Overlay Below</Typography>
                            <div>
+                               <Tooltip title={'Spectrogram without an overlay.'}>
                 <Button disabled={false}
                         variant="contained"
                         className={classes.non_button}
                         onClick={this.toggleNonImage}>
                     None
                 </Button>
+                               </Tooltip>
+                               <Tooltip title={'Sounds made by Humans.'}>
                 <Button disabled={false}
                         variant="contained"
                         className={classes.ant_button}
                         onClick={this.toggleAntImage}>
                     Anthrophony
                 </Button>
+                               </Tooltip>
+                <Tooltip title={'Sounds made by Animals.'}>
                 <Button disabled={false}
                         variant="contained"
                         className={classes.bio_button}
                         onClick={this.toggleBioImage}>
                     Biophony
                 </Button>
+            </Tooltip>
+            <Tooltip title={'Sounds made by Nature.'}>
                 <Button disabled={false}
                         variant="contained"
                         className={classes.geo_button}
                         onClick={this.toggleGeoImage}>
                     Geophony
                 </Button>
+                </Tooltip>
                            </div>
             </div>
         )
