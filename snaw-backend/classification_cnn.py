@@ -6,7 +6,7 @@ import traceback
 import os
 import json
 
-DEBUG_FLAG = False
+DEBUG_FLAG = True
 PREDICTION_VERBOSE = False
 
 def get_category( label ):
@@ -34,6 +34,8 @@ def get_category( label ):
     }.get(label, "Label Missing")
 
 def classify_file( audio_file, all_models ) :
+    # load the models
+
 
     all_labels = [ ["AAT", "AHV", "AMA", "ART", "ASI", "AVH", "AVT"],
                    ["BRA", "BAM", "BBI", "BMA", "BIN"],
@@ -52,9 +54,9 @@ def classify_file( audio_file, all_models ) :
 
     ## Running the models
 
-    n_mfcc = 128 # bucket size
-    max_len = 32 # max_len size
-    channels = 1 # channels
+    n_mfcc = 118 # bucket size !!SUBJECT TO CHANGE!!
+    max_len = 30 # max_len size !!SUBJECT TO CHANGE!!
+    channels = 1 # channels !!SUBJECT TO CHANGE!!
 
     # convert file to wav2mfcc
     # Mel-frequency cepstral coefficients
@@ -107,6 +109,8 @@ def classify_file( audio_file, all_models ) :
                     max_value_index = index
                     max_value = predicted[0,index]
 
+            if(max_value == 1) : max_value = .99
+            if(max_value < .1) : max_value = .1
             max_value_perc = int(max_value * 100)
 
             # Output the prediction
@@ -117,6 +121,7 @@ def classify_file( audio_file, all_models ) :
             else:
                 if( PREDICTION_VERBOSE ):
                     print('\n\nGUESS: ', labels[max_value_index])
+
                 classification['data'].append( { "category" : get_category(labels[max_value_index]), "time" : start_sec, "pred" : max_value_perc } )
     if( PREDICTION_VERBOSE ):
         print(classify_dict)

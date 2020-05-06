@@ -16,7 +16,7 @@ import shutil
 
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
-DEBUG_FLAG = False
+DEBUG_FLAG = True
 app = Flask("__main__")
 app.config["DEBUG"] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -166,7 +166,8 @@ def run_analysis():
 
         return result
     except Exception as e:
-        return str(e)
+        track = traceback.format_exc()
+        print(track)
 
 @app.route('/removeUserFolder', methods=['GET', 'POST'])
 def closeUserFolder():
