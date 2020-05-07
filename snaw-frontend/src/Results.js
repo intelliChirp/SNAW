@@ -111,7 +111,6 @@ function fileInserted(){
         type: "GET",
         async: false,
         success: function(response){
-            console.log(response);
             result = response;
         },
         error: function(error){
@@ -218,7 +217,6 @@ function runAnalysis() {
             //resultDictionary[i].push(classification);
         //    resultDictionary[i].push(indices[i])
         //}
-        console.log(analysis_results);
         return analysis_results;
 }
 

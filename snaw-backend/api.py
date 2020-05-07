@@ -100,6 +100,7 @@ def didFileUpload():
 @app.route('/removeFile', methods = ['POST'])
 def removeFile():
    file = request.get_json()
+   getUserFolder()
    if(file['file'] not in os.listdir('instance/upload/user'+session['id'])):
         return redirect('', 204)
    else:
@@ -132,11 +133,8 @@ def getUserFolder():
             while('user'+ personID in os.listdir('instance/upload/')):
                  personID = str(random.randint(0, 999999999999))
 
-
-
             if('user'+ str(session['id']) not in os.listdir('instance/upload/')):
                 session['id'] =  personID
-
 
             if not os.path.isdir('instance/upload/user'+session['id']):
                 os.makedirs('instance/upload/user'+session['id'])
