@@ -5,7 +5,6 @@ import os
 import sys
 import subprocess
 from get_spectrogram import runScript as get_spectrogram
-from classification import runScript as get_svm_classification
 from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
 from analysis_driver import run_driver
@@ -16,7 +15,7 @@ import shutil
 
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
-DEBUG_FLAG = False
+DEBUG_FLAG = True
 app = Flask("__main__")
 app.config["DEBUG"] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -166,7 +165,8 @@ def run_analysis():
 
         return result
     except Exception as e:
-        return str(e)
+        track = traceback.format_exc()
+        print(track)
 
 @app.route('/removeUserFolder', methods=['GET', 'POST'])
 def closeUserFolder():
