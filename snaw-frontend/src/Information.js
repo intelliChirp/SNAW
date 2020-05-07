@@ -99,29 +99,29 @@ function Information() {
                                 The accuracies for each category are listed below:
                                 <br/><br/>
                                 <b>Anthrophony Accuracies:</b><br/>
-                                Air Traffic (AAT): n/a%<br/>
-                                Vehicle Horn (AVH): n/a%<br/>
-                                Vehicle Traffic (AVT): n/a%<br/>
-                                Rail Traffic (ART): n/a%<br/>
-                                Siren (ASI): n/a%<br/>
-                                Machinery (AMA): n/a%<br/>
-                                Human Voice (AHV): n/a%<br/>
-                                Music (AMU): n/a%<br/>
-                                Physical Interference (OPI): n/a%<br/>
-                                Quiet (OQU): n/a%<br/>
+                                Air Traffic (AAT): 64%<br/>
+                                Vehicle Traffic (AVT): 79%<br/>
+                                Rail Traffic (ART): 35%<br/>
+                                Siren (ASI): 73%<br/>
+                                Machinery (AMA): 10%<br/>
+                                Physical Interference (OPI): 37%<br/>
+                                Quiet (OQU): 95%<br/>
                                 <br/>
                                 <b>Biophony Accuracies:</b><br/>
-                                Birds (BBI): n/a%<br/>
-                                Insects (BIN): n/a%<br/>
-                                Amphibians (BAM): n/a%<br/> 
-                                Mammals (BMA): n/a%<br/> 
+                                Birds (BBI): 81%<br/>
+                                Insects (BIN): 57%<br/>
+                                Amphibians (BAM): 88%<br/>
+                                Physical Interference (OPI): 26%<br/>
+                                Quiet (OQU): 86%<br/>
                                 <br/>
                                 <b>Geophony Accuracies:</b><br/>
-                                Rain (GRA): n/a%<br/>
-                                Constant Wind (GWC): n/a%<br/>
-                                Gust of Wind (GWG): n/a%<br/>
-                                Stream (GST): n/a%<br/>
-                                Ocean (GOC): n/a%<br/>
+                                Rain (GRA): 51%<br/>
+                                Constant Wind (GWC): 19%<br/>
+                                Gust of Wind (GWG): 45%<br/>
+                                Stream (GST): 10%<br/>
+                                Ocean (GOC): 90%<br/>
+                                Physical Interference (OPI): 30%<br/>
+                                Quiet (OQU): 78%<br/>
                                 </Typography>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
