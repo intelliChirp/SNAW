@@ -56,7 +56,7 @@ and saves the files one at a time to the folder 'instance/upload'
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
 
-    # Check for user folder.
+    # Check for user folder
     getUserFolder()
 
     if request.method == 'POST':
@@ -96,11 +96,22 @@ def didFileUpload():
         return "False"
 
 
-
+'''
+###------------------------------------------------------###
+App Routing: '/removeFile'
+Function: removeFile()
+Caller: App.js
+###------------------------------------------------------###
+Removes a file from the list of files that will be uploaded.
+###------------------------------------------------------###
+'''
 @app.route('/removeFile', methods = ['POST'])
 def removeFile():
    file = request.get_json()
+   
+   # Check for user folder.
    getUserFolder()
+   
    if(file['file'] not in os.listdir('instance/upload/user'+session['id'])):
         return redirect('', 204)
    else:
@@ -170,6 +181,15 @@ def run_analysis():
         track = traceback.format_exc()
         print(track)
 
+'''
+###------------------------------------------------------###
+App Routing: '/removeUserFolder'
+Function: closeUserFolder()
+Caller: App.js
+###------------------------------------------------------###
+Removes the users folder along with any files uploaded.
+###------------------------------------------------------###
+'''
 @app.route('/removeUserFolder', methods=['GET', 'POST'])
 def closeUserFolder():
     if os.path.isdir('instance/upload/user'+session['id']):
