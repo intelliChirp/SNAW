@@ -5,7 +5,6 @@ import os
 import sys
 import subprocess
 from get_spectrogram import runScript as get_spectrogram
-from classification import runScript as get_svm_classification
 from classification_cnn import runScript as get_cnn_classification
 from acousticIndices import getAcousticIndices as get_acoustic_indices
 from analysis_driver import run_driver

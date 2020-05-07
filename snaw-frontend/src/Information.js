@@ -63,12 +63,12 @@ function Information() {
                                         What is SNAW
                                     </Typography>
                                     <Divider middle></Divider>
-                                    <Typography className={classes.padding}>Using a Convolutional Neural Network, the Soundscape Noise Analysis Workbench
+                                    <Typography className={classes.padding}>Using Convolutional Neural Networks (CNNs), the Soundscape Noise Analysis Workbench
                                     allows biodiversity researchers and volunteers to easily, quickly, and automatically
-                                    identify individual sound components from their uploaded soundscape files.
+                                    identify individual sound components from their uploaded soundscape files using machine learning.
                                     </Typography>
-                                    <Typography><br/>SNAW identifies sounds in three categories:</Typography>
                                     <List>
+                                    <Typography className={classes.padding}>SNAW identifies sounds in three categories:</Typography>
                                         <ListItem>
                                             <ListItemText
                                                 primary='Anthrophony'
@@ -86,18 +86,44 @@ function Information() {
                                         </ListItem>
                                     </List>
                                 </Grid>
-                                SNAW uses a Convolutional Neural Network for each of the 3 categories above. The accuracies for each category are listed below:
+                                <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
+                                    Model Accuracy
+                                </Typography>
+                                <Divider middle></Divider>
+                                <Typography className={classes.padding}>
+                                The accuracies for each category are listed below:
                                 <br/><br/>
-                                Anthrophony: X%
+                                <b>Anthrophony Accuracies:</b><br/>
+                                Air Traffic (AAT): n/a%<br/>
+                                Vehicle Horn (AVH): n/a%<br/>
+                                Vehicle Traffic (AVT): n/a%<br/>
+                                Rail Traffic (ART): n/a%<br/>
+                                Siren (ASI): n/a%<br/>
+                                Machinery (AMA): n/a%<br/>
+                                Human Voice (AHV): n/a%<br/>
+                                Music (AMU): n/a%<br/>
+                                Physical Interference (OPI): n/a%<br/>
+                                Quiet (OQU): n/a%<br/>
                                 <br/>
-                                Biophony: X%
+                                <b>Biophony Accuracies:</b><br/>
+                                Birds (BBI): n/a%<br/>
+                                Insects (BIN): n/a%<br/>
+                                Amphibians (BAM): n/a%<br/> 
+                                Mammals (BMA): n/a%<br/> 
                                 <br/>
-                                Geophony: X%
-                                <br/><br/>
+                                <b>Geophony Accuracies:</b><br/>
+                                Rain (GRA): n/a%<br/>
+                                Constant Wind (GWC): n/a%<br/>
+                                Gust of Wind (GWG): n/a%<br/>
+                                Stream (GST): n/a%<br/>
+                                Ocean (GOC): n/a%<br/>
+                                </Typography>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         Architecture
                                     </Typography>
+                                    <Divider middle></Divider>
+                                    <Typography className={classes.padding}> Below is the architecture that we used to train each of the Convolutional Neural Networks.</Typography>
                                     <Typography>Conv2D            (None, 116, 28, 109)</Typography>
                                     <Typography>MaxPooling2D      (None, 58, 14, 109)</Typography>
                                     <Typography>Conv2D            (None, 56, 12, 81)</Typography>
@@ -107,7 +133,6 @@ function Information() {
                                     <Typography>Dense             (None, 118)</Typography>
                                     <Typography>Dropout           (None, 118)</Typography>
                                     <Typography>Dense             (None, 7)</Typography>
-                                    <Divider/>
                                     <CardMedia id="nn_arch" component='img' image={nn_arch}
                                                className={classes.images}/>
                                 </Grid>
@@ -115,52 +140,75 @@ function Information() {
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         Confusion Matrix
                                     </Typography>
+                                    <Divider middle></Divider>
                                     <Grid container spacing={3}>
                                         <Grid item>
-                                            <Typography variant='subtitle1'>
-                                                Anthrophony
+                                            <Typography variant='subtitle1' className={classes.padding}>
+                                                <CardMedia id="nn_arch" component='img' image={conf_ant}
+                                                    className={classes.images} alignItems="center"/>
+                                                <b>Anthrophony</b>
+                                                <br/>
+                                                0 - Air Traffic (AAT)<br/>
+                                                1 - Machinery (AMA)<br/>
+                                                2 - Rail Traffic (ART)<br/>
+                                                3 - Siren (ASI)<br/>
+                                                4 - Vehicle Horn (AVT)<br/>
+                                                5 - Physical Interference (OPI)<br/>
+                                                6 - Quiet (OQU)
                                             </Typography>
-                                            <CardMedia id="nn_arch" component='img' image={conf_ant}
-                                                       className={classes.images}/>
                                         </Grid>
                                         <Grid item>
-                                            <Typography variant='subtitle1'>
-                                                Biophony
+                                            <Typography variant='subtitle1' className={classes.padding}>
+                                                <CardMedia id="nn_arch" component='img' image={conf_bio}
+                                                    className={classes.images}/>
+                                                <b>Biophony</b>
+                                                <br/>
+                                                0 - Amphibians (BAM))<br/>
+                                                1 - Birds (BBI))<br/>
+                                                2 - Insects (BIN)<br/>
+                                                3 - Physical Interference (OPI)<br/>
+                                                4 - Quiet (OQU)
                                             </Typography>
-                                            <CardMedia id="nn_arch" component='img' image={conf_bio}
-                                                       className={classes.images}/>
                                         </Grid>
                                         <Grid item>
-                                            <Typography variant='subtitle1'>
-                                                Geophony
+                                            <Typography variant='subtitle1' className={classes.padding}>
+                                                <CardMedia id="nn_arch" component='img' image={conf_geo}
+                                                    className={classes.images}/>
+                                                <b>Geophony</b>
+                                                <br/>
+                                                0 - Ocean (GOC)<br/>
+                                                1 - Rain (GRA)<br/>
+                                                2 - Stream (GST)<br/>
+                                                3 - Gust of Wind (GWG)<br/>
+                                                4 - Constant Wind (GWC)<br/>
+                                                5 - Physical Interference (OPI)<br/>
+                                                6 - Quiet (OQU)
                                             </Typography>
-                                            <CardMedia id="nn_arch" component='img' image={conf_geo}
-                                                       className={classes.images}/>
+                                            <br/>
                                         </Grid>
                                     </Grid>
-                                    <Divider/>
                                 </Grid>
                                 <Grid item>
                                     <Typography variant='h3' style={{color:customtheme.palette.primary.dark}}>
                                         ROC Curves
                                     </Typography>
                                     <Divider/>
-                                    <Typography variant='subtitle1'>
-                                        Anthrophony
+                                    <Typography className={classes.padding}> ROC (Receiver Operating Characteristics) Curves<br/>These graphs plot TPR (True Positive Rate) against the FPR (False Positive Rate).</Typography>
+                                    <Typography variant='subtitle1' className={classes.padding}>
+                                        <CardMedia id="nn_arch" component='img' image={roc_ant}
+                                            className={classes.images}/>
+                                        <b>Anthrophony</b>
                                     </Typography>
-                                    <CardMedia id="nn_arch" component='img' image={roc_ant}
-                                    className={classes.images}/>
-                                    <Typography variant='subtitle1'>
-                                        Biophony
+                                    <Typography variant='subtitle1' className={classes.padding}>
+                                        <CardMedia id="nn_arch" component='img' image={roc_bio}
+                                            className={classes.images}/>
+                                        <b>Biophony</b>
                                     </Typography>
-                                    <CardMedia id="nn_arch" component='img' image={roc_bio}
-                                    className={classes.images}/>
-
-                                    <Typography variant='subtitle1'>
-                                        Geophony
+                                    <Typography variant='subtitle1' className={classes.padding}>
+                                        <CardMedia id="nn_arch" component='img' image={roc_geo}
+                                            className={classes.images}/>
+                                        <b>Geophony</b>
                                     </Typography>
-                                    <CardMedia id="nn_arch" component='img' image={roc_geo}
-                                    className={classes.images}/>
                                 </Grid>
                             </Box>
                         </Paper>
