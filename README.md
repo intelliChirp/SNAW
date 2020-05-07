@@ -23,7 +23,7 @@ https://www.python.org/downloads/release/python-374/2.
 
 Make sure Pip is up-to-date. Run command: 
 ~~~~
-py -m pip install --upgrade pip3
+py -m pip install --upgrade pip
 ~~~~
 
 Navigate to the directory where you would like to install the virtual environment. Run command:
@@ -78,9 +78,9 @@ Type the command
 ~~~~
 py api.py
 ~~~~
-This will start the server on your machine. The last line printed to the terminal should show:‘Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)’
+This will start the server on your machine. The last line printed to the terminal should show:‘Running on [URL-PATH] (Press CTRL+C to quit)’
 
-Open a web browser, and paste ‘​http://127.0.0.1:5000/​’ into the URL.
+Open a web browser, and paste the URL path into a browsers address bar.
 
 You should now be at the homepage of SNAW
 
