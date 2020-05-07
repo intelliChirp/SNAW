@@ -4,6 +4,7 @@ import { withStyles} from "@material-ui/core/styles";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
+import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = theme => ({
     non_button: {
@@ -81,7 +82,14 @@ class Spectrogram extends React.Component {
 
         return (
             <div>
-                <Typography variant='subtitle1'>{titleName}</Typography>
+                <Typography variant='h6'>
+                    Spectrogram Visualization
+                    <br/>
+                </Typography>
+                <Typography variant='subtitle1'>
+                    Overlay Toggled: <b>{titleName}</b>
+                    <Tooltip title={'In each spectrogram overlay, predictions will be labelled with a category and a confidence percentage. The percentage is how confident the model is that the category is correct. For example: 75% Insects (The model is 75% confident that insects are present in that portion of the audio file)'}><Button><InfoIcon/></Button></Tooltip>
+                </Typography>
                 <CardMedia id="spectrogram" component='img' image={imageName}
                            className="classes.media"/>
                            <Typography varient='subtitle1'>Toggle Classification Overlay Below</Typography>

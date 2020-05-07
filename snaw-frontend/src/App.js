@@ -1,17 +1,13 @@
 import React from 'react';
-import logo from './img/logo_small.png';
 import './App.css';
 import AnalyzeButton from './components/AnalyzeButton';
 import ApplicationBar from "./components/ApplicationBar";
 import Footer from "./components/Footer";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
 import {createMuiTheme, MuiThemeProvider, Typography} from "@material-ui/core";
-import CardMedia from "@material-ui/core/CardMedia";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper"
-import { withStyles} from "@material-ui/core/styles";
 import Divider from '@material-ui/core/Divider'
 import Box from '@material-ui/core/Box'
 import loading from './img/loading.gif'
@@ -22,7 +18,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import DeleteIcon from '@material-ui/icons/Delete';
 import $ from 'jquery';
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 
@@ -294,6 +290,7 @@ class App extends React.Component {
                             <Grid item>
                                 <br/>
                                 {<AnalyzeButton bool={this.state.filesInserted}/>}
+                                <br/>
                             </Grid>
                             <Grid item>
                                 <Divider middle/><br/>
