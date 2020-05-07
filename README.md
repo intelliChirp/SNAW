@@ -23,7 +23,7 @@ https://www.python.org/downloads/release/python-374/2.
 
 Make sure Pip is up-to-date. Run command: 
 ~~~~
-py -m pip install --upgrade pip3
+py -m pip install --upgrade pip
 ~~~~
 
 Navigate to the directory where you would like to install the virtual environment. Run command:
