@@ -56,10 +56,10 @@ and saves the files one at a time to the folder 'instance/upload'
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
 
-   # Check for user folder.
-   getUserFolder()
+    # Check for user folder.
+    getUserFolder()
 
-   if request.method == 'POST':
+    if request.method == 'POST':
         # Request.Files comes in a immutable multi-dictionary.
         # MutableList uses a method to convert the imm. multi-dict to a mutable list.
         mutableList = request.files.copy()
@@ -117,6 +117,10 @@ Assigns a user a unique id and creates a folder for usage.
 def getUserFolder():
         if('id' not in session):
             session['id'] = 0
+
+        # Create 'instance/upload/' folder if not present
+        if(os.path.isdir('instance/upload/') == False):
+            os.makedirs('instance/upload/')
 
         if('user' + str(session['id']) in os.listdir('instance/upload/')):
             for file in os.listdir('instance/upload/user' + session['id']):

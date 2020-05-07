@@ -14,6 +14,7 @@ import Spectrogram from "./components/Spectrogram";
 import ClassificationTable from "./components/ClassificationTable";
 import AcousticIndiceTable from "./components/AcousticIndiceTable";
 import ApplicationBar from "./components/ApplicationBar";
+import Footer from "./components/Footer";
 import Grid from '@material-ui/core/Grid';
 import $ from 'jquery';
 import Button from "@material-ui/core/Button";
@@ -22,7 +23,6 @@ import {createArrayCsvStringifier, createArrayCsvWriter} from "csv-writer";
 import {createMuiTheme, ListItemText} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 
-//Surely a better way to do this other than global variable.
 /* This is currently done to ensure that the panels are accessible after
  * the analysis completes. Without it, all the panels disappear after
  * clicking on one of them.
@@ -354,13 +354,7 @@ function Results() {
                         )}})}
             </Container>
             </body>
-            <footer>
-                <Container>
-                    <br/>
-                     <Typography variant='subtitle1' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50px'}}>Created by NAU Capstone Team IntelliChirp · <a href="https://www.ceias.nau.edu/capstone/projects/CS/2020/IntelliChirp-S20/">Visit project website</a> · <a href="https://soundscapes2landscapes.org/">Visit our sponsor</a></Typography>
-                    <br/>
-                </Container>
-            </footer>
+            <Footer />
         </div>
             )
         }
