@@ -321,8 +321,11 @@ function Results() {
                                     <audio controls src={value[fileAudio]}/>
                                     <br/>
                                     <br/>
-                                    <Typography variant='subtitle1'>Results from the Anthrophony, Geophony and Biophony Classification
-                                        Models</Typography>
+                                    <Typography variant='subtitle1'>
+                                        <b>Results from the Anthrophony, Geophony and Biophony Classification Models</b>
+                                        <br/>
+                                        (Each pie chart displays the total number of seconds that each category occured in the file)
+                                    </Typography>
                                     <br/>
                                     <Paper><PieChart series={value[fileData]}/></Paper>
                                     <br/>

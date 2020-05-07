@@ -79,8 +79,6 @@ export default function ClassificationTable(props) {
       percent : (Math.floor((bio_total / total_secs)*100)).toString() + "%" },
     { name : 'Geophony', value : geo_total.toString() + "s",
       percent : (Math.floor((geo_total / total_secs)*100)).toString() + "%" },
-    { name: 'None', value : none_total.toString() + "s",
-      percent : (Math.floor((none_total / total_secs)*100)).toString() + "%"}
   ];
 
   return (
