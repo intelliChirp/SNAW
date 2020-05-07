@@ -33,13 +33,18 @@ const useStyles = makeStyles(theme => ({
     images: {
         width: '55%',
     },
+    container: {
+        textAlign: 'center',
+    }
 }));
 
 function Information() {
     const classes = useStyles();
     return (
         <div className="Information">
+            <div className={classes.container}>
             <ApplicationBar title={'Information about SNAW'}/>
+            </div>
             <Container>
                 <MuiThemeProvider theme={customtheme}>
                     <Grid container spacing={5} direction='column'>
