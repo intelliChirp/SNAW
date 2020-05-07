@@ -99,7 +99,7 @@ function Information() {
                                 The accuracies for each category are listed below:
                                 <br/><br/>
                                 <b>Anthrophony Accuracies:</b><br/>
-                                Air Traffic (AAT): 64%<br>
+                                Air Traffic (AAT): 64%<br/>
                                 Vehicle Traffic (AVT): 79%<br/>
                                 Rail Traffic (ART): 35%<br/>
                                 Siren (ASI): 73%<br/>
