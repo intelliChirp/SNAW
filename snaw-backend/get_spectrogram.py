@@ -109,7 +109,6 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
 
         # draw classification boxes
         for x, cat in zip(xlocs, x_cats):
-         print("cat", cat)
          if(cat[:-4] != 'NO') :
              # get prediction value from label, divide by 100 to get percent, divide by 3 to get reasonable opacity level
              alpha_val = int(cat[-3:-1]) / 100 / 3
@@ -124,7 +123,6 @@ def plotstft(data, audiopath, binsize=2**10, plotpath=None, colormap="jet"):
                 print(alpha_val)
                 print(int(cat[-3:-1]))
             plt.fill([x,x+x_size,x+x_size,x], [0,0,freqbins,freqbins], 'r', alpha=alpha_val)
-            print(cat)
             plt.text(x+5, 5, cat[-3:], rotation=90, color="white")
             plt.text(x+5, 40, cat[:-4], rotation=90, color="white")
          index += 1
