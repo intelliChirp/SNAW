@@ -11,17 +11,16 @@ from analysis_driver import run_driver
 import traceback
 import random
 import shutil
-
+from waitress import serve
 
 UPLOAD_FOLDER = 'instance/upload/'
 ALLOWED_EXTENSIONS = {'wav'}
-DEBUG_FLAG = True
+DEBUG_FLAG = False
 app = Flask("__main__")
 app.config["DEBUG"] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-DEBUG_FLAG = False
 '''
 ###------------------------------------------------------###
 App Routing: '/'
@@ -197,7 +196,10 @@ def closeUserFolder():
     return redirect('', 204)
 
 
+# For running without waitress
+# app.run(debug=True)
 
-app.run(debug=True)
+# For serving app through waitress
+serve(app, host='0.0.0.0')
 
 
